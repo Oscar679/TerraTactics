@@ -24,6 +24,10 @@ Create a branch for each feature.
 ```bash
 git checkout -b <feature-name>
 ```
+Example:
+```bash
+git checkout -b healthbar
+```
 
 ## Push A Branch To The Repository
 ```bash
@@ -31,12 +35,18 @@ git add .
 git commit -m "Describe your change"
 git push -u origin <feature-name>
 ```
-
+Example:
+```bash
+git add .
+git commit -m "Added healthbar to character"
+git push -u origin healthbar
+```
 ## Create A Pull Request
 
 1. Push your branch to GitHub.
 2. Open the repository on GitHub.
-3. Click `Compare & pull request`.
-4. Add a title and description of your changes.
-5. Create the pull request.
-6. After review, merge the pull request into `main`.
+3. Click on `Pull Requests`.![alt text](image-2.png)
+4. Click `New pull request`.
+5. Choose your branch.
+6. Create the pull request.
+7. After review, merge the pull request into `main`.

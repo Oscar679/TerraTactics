@@ -44,6 +44,7 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
     console.log("MainMenu init");
+    console.log("MainMenu scene loaded");
 
     var background = new rune.display.Sprite(
         0,
