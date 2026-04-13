@@ -41,15 +41,12 @@ git add .
 git commit -m "Added healthbar to character"
 git push -u origin healthbar
 ```
-
-
 ## Create A Pull Request
 
 1. Push your branch to GitHub.
 2. Open the repository on GitHub.
-3. Click on `Pull Requests`.
-![alt text](image-2.png)
-4. Click `Compare & pull request`.
-5. Add a title and description of your changes.
+3. Click on `Pull Requests`.![alt text](image-2.png)
+4. Click `New pull request`.
+5. Choose your branch.
 6. Create the pull request.
 7. After review, merge the pull request into `main`.
