@@ -43,6 +43,8 @@ TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
 TerraTactics.scene.MainMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
+    console.log("MainMenu scene loaded");
+
     var background = new rune.display.Sprite(
         0,
         0,
