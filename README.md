@@ -48,5 +48,5 @@ git push -u origin healthbar
 3. Click on `Pull Requests`.![alt text](image-2.png)
 4. Click `New pull request`.
 5. Choose your branch.
-6. Create the pull request.
+6. Click `Create pull request`.
 7. After review, merge the pull request into `main`.
