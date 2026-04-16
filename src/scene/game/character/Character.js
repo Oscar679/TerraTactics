@@ -29,7 +29,6 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_velocityY = 0;
     this.m_gravity = 0.35;
     this.m_jumpStrength = 6;
-    this.m_collided = null;
 
     this.animation.create("idle", [0], 1, true);
     this.animation.create("jump", [0, 1], 1, false);

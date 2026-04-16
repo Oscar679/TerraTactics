@@ -47,20 +47,15 @@ TerraTactics.scene.Game.prototype.constructor = TerraTactics.scene.Game;
 TerraTactics.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
+    // add background image with rune.display.Graphic
 
     this.stage.m_map.load("map");
 
     console.log(this.stage.m_map.back);
 
-    console.log(this.stage.m_map.getTilePropertiesOf(1));
-    console.log(this.stage.m_map.getTilePropertiesOf(2));
-    console.log(this.stage.m_map.getTilePropertiesOf(3));
-    console.log(this.stage.m_map.getTilePropertiesOf(13));
-    console.log(this.stage.m_map.getTilePropertiesOf(14));
-    console.log(this.stage.m_map.getTilePropertiesOf(15));
+    console.log(this);
 
-
-    this.m_player = new TerraTactics.scene.Character(50, 50);
+    this.m_player = new TerraTactics.scene.Character(100, 10);
 
     this.m_player.scaleY = 0.3;
     this.m_player.scaleX = 0.3
@@ -90,7 +85,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     if (this.keyboard.pressed("SPACE") && this.m_player.m_grounded) {
-
         this.m_player.m_grounded = false;
         this.m_player.m_velocityY = -this.m_player.m_jumpStrength;
     }
@@ -114,7 +108,11 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         }
 
         if (props.leftEdge === false && props.rightEdge === false) {
+            this.m_player.m_grounded = true;
             this.m_player.m_collided = this.m_player.hitTestAndSeparateTilemapLayer(this.stage.m_map.back);
+        } else {
+            this.m_player.m_grounded = false;
+            this.m_player.m_collided = false;
         }
 
     }
