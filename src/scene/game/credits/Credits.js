@@ -11,9 +11,9 @@
  * @class
  * @classdesc
  * 
- * MainMenu scene.
+ * Credits scene.
  */
-TerraTactics.scene.MainMenu = function () {
+TerraTactics.scene.Credits = function () {
 
 
     // Super call
@@ -29,22 +29,8 @@ TerraTactics.scene.MainMenu = function () {
 // Inheritance
 //------------------------------------------------------------------------------
 
-TerraTactics.scene.MainMenu.prototype = Object.create(rune.scene.Scene.prototype);
-TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
-TerraTactics.scene.MainMenu.prototype.m_onMenuSelect = function (e) {
-    console.log(e.text);
-
-    var m_this = this;
-
-    var obj = {
-        "Start Game": new TerraTactics.scene.Game(),
-        "Options": new TerraTactics.scene.Options(),
-        "Credits": new TerraTactics.scene.Credits(),
-        //"Exit": 
-    };
-
-    m_this.application.scenes.load([obj[e.text]]);
-};
+TerraTactics.scene.Credits.prototype = Object.create(rune.scene.Scene.prototype);
+TerraTactics.scene.Credits.prototype.constructor = TerraTactics.scene.Credits;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -56,7 +42,7 @@ TerraTactics.scene.MainMenu.prototype.m_onMenuSelect = function (e) {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.MainMenu.prototype.init = function () {
+TerraTactics.scene.Credits.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
 
@@ -73,10 +59,10 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 
     this.m_menu = new rune.ui.VTMenu();
 
-    this.m_menu.add("Start Game");
-    this.m_menu.add("Options");
-    this.m_menu.add("Credits");
-    this.m_menu.add("Exit");
+    this.m_menu.add("Master Volume");
+    this.m_menu.add("Music Volume");
+    this.m_menu.add("SFX Volume");
+    this.m_menu.add("Back");
 
     this.m_menu.centerX = this.application.screen.centerX;
     this.m_menu.y = 90;
@@ -94,7 +80,7 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.MainMenu.prototype.update = function (step) {
+TerraTactics.scene.Credits.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
     if (this.keyboard.justPressed("UP")) {
@@ -118,9 +104,6 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.MainMenu.prototype.dispose = function () {
-    window.removeEventListener("keydown", this.m_onKeyDown);
-    this.m_onKeyDown = null;
-
+TerraTactics.scene.Credits.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };
