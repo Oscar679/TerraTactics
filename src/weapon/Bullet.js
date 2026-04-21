@@ -1,3 +1,4 @@
+
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
@@ -6,29 +7,37 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.scene.Scene
+ * @extends rune.display.Sprite
  *
  * @class
  * @classdesc
  * 
- * Intro scene.
+ * Options scene.
  */
-TerraTactics.scene.Intro = function () {
+TerraTactics.scene.Bullet = function (x, y, vx, vy) {
+
+
     // Super call
     //--------------------------------------------------------------------------
 
     /**
      * Calls the constructor method of the super class.
      */
-    rune.scene.Scene.call(this);
+    rune.display.Sprite.call(this, x, y, 1280, 1280, "bullet");
+    this.scaleX = 0.005;
+    this.scaleY = 0.005;
+
+    this.m_velocityX = vx;
+    this.m_velocityY = vy;
+    this.m_gravity = 0.1;
 };
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-TerraTactics.scene.Intro.prototype = Object.create(rune.scene.Scene.prototype);
-TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
+TerraTactics.scene.Bullet.prototype = Object.create(rune.display.Sprite.prototype);
+TerraTactics.scene.Bullet.prototype.constructor = TerraTactics.scene.Bullet;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -40,35 +49,8 @@ TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.init = function () {
-    rune.scene.Scene.prototype.init.call(this);
-
-    this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
-    this.stage.addChild(this.bg);
-
-    var text = new rune.text.BitmapField("WELCOME TO TERRATACTICS!");
-    text.autoSize = true;
-    text.center = this.application.screen.center;
-
-    var text2 = new rune.text.BitmapField("PRESS ANY KEY TO CONTINUE");
-
-    text2.autoSize = true;
-    text2.scaleX = 1.5;
-    text2.scaleY = 1.5;
-    text2.center = this.application.screen.center;
-    text2.y += 50;
-
-    var m_this = this;
-
-    this.m_onKeyDown = function (e) {
-        console.log(e.key);
-        m_this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
-    }
-
-    window.addEventListener("keydown", this.m_onKeyDown);
-
-    this.stage.addChild(text);
-    this.stage.addChild(text2);
+TerraTactics.scene.Bullet.prototype.init = function () {
+    rune.display.Sprite.prototype.init.call(this);
 };
 
 /**
@@ -79,9 +61,12 @@ TerraTactics.scene.Intro.prototype.init = function () {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.update = function (step) {
-    rune.scene.Scene.prototype.update.call(this, step);
+TerraTactics.scene.Bullet.prototype.update = function (step) {
+    rune.display.Sprite.prototype.update.call(this, step);
 
+    this.x += this.m_velocityX;
+    this.y += this.m_velocityY;
+    this.m_velocityY += this.m_gravity;
 };
 
 /**
@@ -92,9 +77,6 @@ TerraTactics.scene.Intro.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.dispose = function () {
-    window.removeEventListener("keydown", this.m_onKeyDown);
-    this.m_onKeyDown = null;
-
-    rune.scene.Scene.prototype.dispose.call(this);
+TerraTactics.scene.Bullet.prototype.dispose = function () {
+    rune.display.Sprite.prototype.dispose.call(this);
 };

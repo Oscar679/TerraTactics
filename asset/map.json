@@ -5,7 +5,8 @@
     "height": 14,
     "tileWidth": 16,
     "tileHeight": 16,
-    "back": [
+    "back": [],
+    "front": [
         0,
         0,
         0,
@@ -357,34 +358,74 @@
         26,
         27
     ],
-    "front": [],
     "tiles": [
         {
             "value": 1,
             "collision": "0x1111",
             "rightEdge": false,
-            "leftEdge": true
+            "leftEdge": true,
+            "bottomEdge": true
         },
         {
             "value": 2,
             "collision": "0x1111",
             "rightEdge": false,
-            "leftEdge": false
+            "leftEdge": false,
+            "bottomEdge": true
         },
         {
             "value": 3,
             "collision": "0x1111",
             "rightEdge": true,
-            "leftEdge": false
+            "leftEdge": false,
+            "bottomEdge": true
         },
         {
-            "value": 13
+            "value": 17,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
         },
         {
-            "value": 14
+            "value": 19,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": true,
+            "bottomEdge": true
         },
         {
-            "value": 15
+            "value": 20,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 21,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 22,
+            "collision": "0x1111",
+            "rightEdge": true,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 25,
+            "collision": "0x1111"
+        },
+        {
+            "value": 26,
+            "collision": "0x1111"
+        },
+        {
+            "value": 27,
+            "collision": "0x1111"
         }
     ]
 }

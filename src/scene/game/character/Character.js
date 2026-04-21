@@ -19,7 +19,7 @@ TerraTactics.scene.Character = function (x, y) {
     // Super call
     //--------------------------------------------------------------------------
 
-    rune.display.Sprite.call(this, x, y, 64, 64, "character_64x64");
+    rune.display.Sprite.call(this, x, y, 25, 18, "character_2_25x18");
 
     //--------------------------------------------------------------------------
     // Private properties
@@ -27,11 +27,11 @@ TerraTactics.scene.Character = function (x, y) {
 
     this.m_grounded = false;
     this.m_velocityY = 0;
-    this.m_gravity = 0.35;
-    this.m_jumpStrength = 6;
+    this.m_gravity = 0.2;
+    this.m_jumpStrength = 3.5;
 
     this.animation.create("idle", [0], 1, true);
-    this.animation.create("jump", [0, 1], 1, false);
+    this.animation.create("jump", [0], 1, false);
 
 };
 
@@ -56,15 +56,17 @@ TerraTactics.scene.Character.prototype.constructor = TerraTactics.scene.Characte
  */
 TerraTactics.scene.Character.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
-
     if (!this.m_grounded) {
         this.m_velocityY += this.m_gravity;
-        this.animation.gotoAndPlay("jump", 0);
+        if (!this.animation.current || this.animation.current.name !== "jump") {
+            this.animation.gotoAndPlay("jump", 0);
+        }
     } else {
         this.m_velocityY = 0;
-        this.animation.gotoAndStop("idle", 0);
+        if (!this.animation.current || this.animation.current.name !== "idle") {
+            this.animation.gotoAndStop("idle", 0);
+        }
     }
 
     this.y += this.m_velocityY;
-
 };
