@@ -172,14 +172,18 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     if (this.m_inActivePlayer.m_health <= 0) {
-        console.log('dead');
+        this.m_stage.removeChild(this.m_inActivePlayer);
+        this.m_stage.removeChild(this.m_inActivePlayer.m_healthBar);
+    } else if (this.m_activePlayer.m_health <= 0) {
+        this.m_stage.removeChild(this.m_activePlayer);
+        this.m_stage.removeChild(this.m_activePlayer.m_healthBar);
     }
+
 
     this.m_characters.update(this.stage.m_map.front);
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayer = this.m_characters.getInactive();
-
 
 };
 

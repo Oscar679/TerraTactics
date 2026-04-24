@@ -16,7 +16,10 @@ TerraTactics.scene.Characters = function (stage) {
     };
 
     this.m_stage.addChild(this.m_players.player1.character);
+    this.m_stage.addChild(this.m_players.player1.character.m_healthBar);
+
     this.m_stage.addChild(this.m_players.player2.character);
+    this.m_stage.addChild(this.m_players.player2.character.m_healthBar);
 };
 
 TerraTactics.scene.Characters.prototype.getActive = function () {

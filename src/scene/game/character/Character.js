@@ -30,7 +30,12 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_gravity = 0.2;
     this.m_jumpStrength = 3.5;
     this.m_collided = false;
-    this.m_health = 100;
+
+    this.m_maxHealth = 100;
+    this.m_health = this.m_maxHealth;
+
+    this.m_healthBar = new rune.ui.Progressbar(20, 3, "#000000", "#ff004d");
+    this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
     this.hitbox.set(12, 0, 2, 12);
     this.hitbox.debug = true;
@@ -143,4 +148,8 @@ TerraTactics.scene.Character.prototype.update = function (step) {
     }
 
     this.y += this.m_velocityY;
+
+    this.m_healthBar.x = this.x + 2;
+    this.m_healthBar.y = this.y - 5;
+    this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 };
