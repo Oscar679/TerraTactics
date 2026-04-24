@@ -1,4 +1,5 @@
 
+
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
@@ -7,14 +8,14 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.display.Sprite
+ * @extends TerraTactics.scene.Weapon
  *
  * @class
  * @classdesc
  * 
- * Options scene.
+ * Rifle Class Extends Weapon.
  */
-TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
+TerraTactics.scene.Rifle = function () {
 
 
     // Super call
@@ -23,25 +24,20 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
     /**
      * Calls the constructor method of the super class.
      */
-    rune.display.Sprite.call(this, x, y - 5, 1280, 1280, "bullet");
-    this.scaleX = 0.004;
-    this.scaleY = 0.002;
+    TerraTactics.scene.Weapon.call(this);
 
-    this.hitbox.debug = true;
-
-    this.m_velocityX = vx;
-    this.m_velocityY = vy;
-    this.m_gravity = 0.1;
-    this.m_damage = damage;
-    this.m_knockback = knockback;
+    this.m_speed = 0.1; // Magic Number
+    this.m_damage = 50; // Magic Number
+    this.m_knockback = 3; // Magic Number
+    this.m_cooldown = 1; // Magic Number
 };
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-TerraTactics.scene.Bullet.prototype = Object.create(rune.display.Sprite.prototype);
-TerraTactics.scene.Bullet.prototype.constructor = TerraTactics.scene.Bullet;
+TerraTactics.scene.Rifle.prototype = Object.create(TerraTactics.scene.Weapon.prototype);
+TerraTactics.scene.Rifle.prototype.constructor = TerraTactics.scene.Rifle;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -53,8 +49,19 @@ TerraTactics.scene.Bullet.prototype.constructor = TerraTactics.scene.Bullet;
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Bullet.prototype.init = function () {
+TerraTactics.scene.Rifle.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
+};
+
+TerraTactics.scene.Rifle.m_fireProjectile = function (player, targetX, targetY) {
+    this.m_speed = 0.05; // Magic Number
+    var dx = targetX - player.centerX;
+    var dy = targetY - player.centerY;
+    var vx = dx * this.m_speed;
+    var vy = dy * this.m_speed;
+
+    var bullet = new TerraTactics.scene.Bullet(player.centerX, player.centerY, vx, vy, this.m_damage, this.m_knockback);
+    return bullet;
 };
 
 /**
@@ -65,11 +72,8 @@ TerraTactics.scene.Bullet.prototype.init = function () {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Bullet.prototype.update = function (step) {
+TerraTactics.scene.Rifle.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
-    this.x += this.m_velocityX;
-    this.y += this.m_velocityY;
-    this.m_velocityY += this.m_gravity;
 };
 
 /**
@@ -80,6 +84,6 @@ TerraTactics.scene.Bullet.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Bullet.prototype.dispose = function () {
+TerraTactics.scene.Rifle.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
 };

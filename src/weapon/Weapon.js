@@ -1,4 +1,5 @@
 
+
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
@@ -12,9 +13,9 @@
  * @class
  * @classdesc
  * 
- * Options scene.
+ * Abstract base class for all weapons.
  */
-TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
+TerraTactics.scene.Weapon = function () {
 
 
     // Super call
@@ -23,25 +24,25 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
     /**
      * Calls the constructor method of the super class.
      */
-    rune.display.Sprite.call(this, x, y - 5, 1280, 1280, "bullet");
-    this.scaleX = 0.004;
-    this.scaleY = 0.002;
+    rune.display.Sprite.call(this);
 
-    this.hitbox.debug = true;
 
-    this.m_velocityX = vx;
-    this.m_velocityY = vy;
-    this.m_gravity = 0.1;
-    this.m_damage = damage;
-    this.m_knockback = knockback;
+    this.m_damage = null;
+    this.m_speed = null;
+    this.m_knockback = null;
+    this.m_cooldown = null;
+
+    if (this.constructor === TerraTactics.scene.Weapon) {
+        throw new Error("Abstract classes cannot be instantiated.");
+    }
 };
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-TerraTactics.scene.Bullet.prototype = Object.create(rune.display.Sprite.prototype);
-TerraTactics.scene.Bullet.prototype.constructor = TerraTactics.scene.Bullet;
+TerraTactics.scene.Weapon.prototype = Object.create(rune.display.Sprite.prototype);
+TerraTactics.scene.Weapon.prototype.constructor = TerraTactics.scene.Weapon;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -53,8 +54,12 @@ TerraTactics.scene.Bullet.prototype.constructor = TerraTactics.scene.Bullet;
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Bullet.prototype.init = function () {
-    rune.display.Sprite.prototype.init.call(this);
+TerraTactics.scene.Weapon.prototype.init = function () {
+    throw new Error("Child classes must implement this method.");
+};
+
+TerraTactics.scene.Weapon.m_fireProjectile = function () {
+    throw new Error("Child classes must implement this method.");
 };
 
 /**
@@ -65,11 +70,8 @@ TerraTactics.scene.Bullet.prototype.init = function () {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Bullet.prototype.update = function (step) {
-    rune.display.Sprite.prototype.update.call(this, step);
-    this.x += this.m_velocityX;
-    this.y += this.m_velocityY;
-    this.m_velocityY += this.m_gravity;
+TerraTactics.scene.Weapon.prototype.update = function (step) {
+    throw new Error("Child classes must implement this method.");
 };
 
 /**
@@ -80,6 +82,6 @@ TerraTactics.scene.Bullet.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Bullet.prototype.dispose = function () {
-    rune.display.Sprite.prototype.dispose.call(this);
+TerraTactics.scene.Weapon.prototype.dispose = function () {
+    throw new Error("Child classes must implement this method.");
 };

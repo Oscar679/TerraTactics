@@ -29,10 +29,29 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_velocityY = 0;
     this.m_gravity = 0.2;
     this.m_jumpStrength = 3.5;
+    this.m_collided = false;
+    this.m_health = 100;
+
+    this.hitbox.set(12, 0, 2, 12);
+    this.hitbox.debug = true;
+    this.hitbox.debugColor = "green";
+
+    this.debug = true;
 
     this.animation.create("idle", [0], 1, true);
     this.animation.create("jump", [0], 1, false);
 
+    this.m_guns = TerraTactics.data.Weapons;
+
+    this.m_weaponState = {
+        "currentWeapon": "pistol",
+        cooldowns: {
+            "pistol": 0,
+            "rifle": 0,
+            "grenade": 0,
+            "melee": 0
+        }
+    }
 };
 
 //------------------------------------------------------------------------------
@@ -41,6 +60,61 @@ TerraTactics.scene.Character = function (x, y) {
 
 TerraTactics.scene.Character.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.Character.prototype.constructor = TerraTactics.scene.Character;
+
+TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
+    if (this.m_weaponState.cooldowns[weapon] === 0) {
+        console.log('can fire');
+        return true;
+    } else {
+        return false;
+    }
+}
+
+TerraTactics.scene.Character.prototype.m_setWeapon = function (weapon) {
+    this.m_weaponState.currentWeapon = weapon;
+}
+
+TerraTactics.scene.Character.prototype.m_getWeapon = function () {
+    console.log(this.m_weaponState.currentWeapon);
+    return this.m_weaponState.currentWeapon;
+}
+
+TerraTactics.scene.Character.prototype.m_setCooldown = function (weapon) {
+    switch (weapon) {
+        case "pistol":
+            this.m_weaponState.cooldowns[weapon] = 0;
+            break;
+        case "rifle":
+            this.m_weaponState.cooldowns[weapon] = 1;
+            break;
+        case "grenade":
+            this.m_weaponState.cooldowns[weapon] = 2;
+            break;
+        case "melee":
+            this.m_weaponState.cooldowns[weapon] = 3;
+            break;
+        default:
+            throw new Error("Invalid weapon");
+    }
+}
+
+TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, targetY) {
+    var weaponClass = this.m_guns[this.m_weaponState.currentWeapon];
+
+    if (!weaponClass || !weaponClass.m_fireProjectile) {
+        throw new Error("Invalid weapon");
+    }
+
+    return weaponClass.m_fireProjectile(this, targetX, targetY);
+};
+
+TerraTactics.scene.Character.prototype.m_getCollided = function () {
+    return this.m_collided;
+}
+
+TerraTactics.scene.Character.prototype.m_setCollided = function (value) {
+    this.m_collided = value;
+}
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
