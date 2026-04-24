@@ -1,3 +1,5 @@
+
+
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
@@ -6,29 +8,36 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.scene.Scene
+ * @extends TerraTactics.scene.Weapon
  *
  * @class
  * @classdesc
  * 
- * Intro scene.
+ * Grenade Class Extends Weapon.
  */
-TerraTactics.scene.Intro = function () {
+TerraTactics.scene.Grenade = function () {
+
+
     // Super call
     //--------------------------------------------------------------------------
 
     /**
      * Calls the constructor method of the super class.
      */
-    rune.scene.Scene.call(this);
+    TerraTactics.scene.Weapon.call(this);
+
+    this.m_speed = 0.1; // Magic Number
+    this.m_damage = 50; // Magic Number
+    this.m_knockback = 5; // Magic Number
+    this.m_cooldown = 2; // Magic Number
 };
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-TerraTactics.scene.Intro.prototype = Object.create(rune.scene.Scene.prototype);
-TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
+TerraTactics.scene.Grenade.prototype = Object.create(TerraTactics.scene.Weapon.prototype);
+TerraTactics.scene.Grenade.prototype.constructor = TerraTactics.scene.Grenade;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -40,35 +49,19 @@ TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.init = function () {
-    rune.scene.Scene.prototype.init.call(this);
+TerraTactics.scene.Grenade.prototype.init = function () {
+    rune.display.Sprite.prototype.init.call(this);
+};
 
-    this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
-    this.stage.addChild(this.bg);
+TerraTactics.scene.Grenade.m_fireProjectile = function (player, targetX, targetY) {
+    this.m_speed = 0.05; // Magic Number
+    var dx = targetX - player.centerX;
+    var dy = targetY - player.centerY;
+    var vx = dx * this.m_speed;
+    var vy = dy * this.m_speed;
 
-    var text = new rune.text.BitmapField("WELCOME TO TERRATACTICS!");
-    text.autoSize = true;
-    text.center = this.application.screen.center;
-
-    var text2 = new rune.text.BitmapField("PRESS ANY KEY TO CONTINUE");
-
-    text2.autoSize = true;
-    text2.scaleX = 1.5;
-    text2.scaleY = 1.5;
-    text2.center = this.application.screen.center;
-    text2.y += 50;
-
-    var m_this = this;
-
-    this.m_onKeyDown = function (e) {
-        console.log(e.key);
-        m_this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
-    }
-
-    window.addEventListener("keydown", this.m_onKeyDown);
-
-    this.stage.addChild(text);
-    this.stage.addChild(text2);
+    var bullet = new TerraTactics.scene.Bullet(player.centerX, player.centerY, vx, vy, this.m_damage, this.m_knockback);
+    return bullet;
 };
 
 /**
@@ -79,9 +72,8 @@ TerraTactics.scene.Intro.prototype.init = function () {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.update = function (step) {
-    rune.scene.Scene.prototype.update.call(this, step);
-
+TerraTactics.scene.Grenade.prototype.update = function (step) {
+    rune.display.Sprite.prototype.update.call(this, step);
 };
 
 /**
@@ -92,9 +84,6 @@ TerraTactics.scene.Intro.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.dispose = function () {
-    window.removeEventListener("keydown", this.m_onKeyDown);
-    this.m_onKeyDown = null;
-
-    rune.scene.Scene.prototype.dispose.call(this);
+TerraTactics.scene.Grenade.prototype.dispose = function () {
+    rune.display.Sprite.prototype.dispose.call(this);
 };

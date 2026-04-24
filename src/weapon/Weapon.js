@@ -1,3 +1,5 @@
+
+
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
@@ -6,29 +8,41 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.scene.Scene
+ * @extends rune.display.Sprite
  *
  * @class
  * @classdesc
  * 
- * Intro scene.
+ * Abstract base class for all weapons.
  */
-TerraTactics.scene.Intro = function () {
+TerraTactics.scene.Weapon = function () {
+
+
     // Super call
     //--------------------------------------------------------------------------
 
     /**
      * Calls the constructor method of the super class.
      */
-    rune.scene.Scene.call(this);
+    rune.display.Sprite.call(this);
+
+
+    this.m_damage = null;
+    this.m_speed = null;
+    this.m_knockback = null;
+    this.m_cooldown = null;
+
+    if (this.constructor === TerraTactics.scene.Weapon) {
+        throw new Error("Abstract classes cannot be instantiated.");
+    }
 };
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-TerraTactics.scene.Intro.prototype = Object.create(rune.scene.Scene.prototype);
-TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
+TerraTactics.scene.Weapon.prototype = Object.create(rune.display.Sprite.prototype);
+TerraTactics.scene.Weapon.prototype.constructor = TerraTactics.scene.Weapon;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -40,35 +54,12 @@ TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.init = function () {
-    rune.scene.Scene.prototype.init.call(this);
+TerraTactics.scene.Weapon.prototype.init = function () {
+    throw new Error("Child classes must implement this method.");
+};
 
-    this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
-    this.stage.addChild(this.bg);
-
-    var text = new rune.text.BitmapField("WELCOME TO TERRATACTICS!");
-    text.autoSize = true;
-    text.center = this.application.screen.center;
-
-    var text2 = new rune.text.BitmapField("PRESS ANY KEY TO CONTINUE");
-
-    text2.autoSize = true;
-    text2.scaleX = 1.5;
-    text2.scaleY = 1.5;
-    text2.center = this.application.screen.center;
-    text2.y += 50;
-
-    var m_this = this;
-
-    this.m_onKeyDown = function (e) {
-        console.log(e.key);
-        m_this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
-    }
-
-    window.addEventListener("keydown", this.m_onKeyDown);
-
-    this.stage.addChild(text);
-    this.stage.addChild(text2);
+TerraTactics.scene.Weapon.m_fireProjectile = function () {
+    throw new Error("Child classes must implement this method.");
 };
 
 /**
@@ -79,9 +70,8 @@ TerraTactics.scene.Intro.prototype.init = function () {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.update = function (step) {
-    rune.scene.Scene.prototype.update.call(this, step);
-
+TerraTactics.scene.Weapon.prototype.update = function (step) {
+    throw new Error("Child classes must implement this method.");
 };
 
 /**
@@ -92,9 +82,6 @@ TerraTactics.scene.Intro.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.Intro.prototype.dispose = function () {
-    window.removeEventListener("keydown", this.m_onKeyDown);
-    this.m_onKeyDown = null;
-
-    rune.scene.Scene.prototype.dispose.call(this);
+TerraTactics.scene.Weapon.prototype.dispose = function () {
+    throw new Error("Child classes must implement this method.");
 };

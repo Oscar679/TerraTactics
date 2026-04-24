@@ -23,8 +23,6 @@ TerraTactics.scene.Game = function () {
      * Calls the constructor method of the super class.
      */
     rune.scene.Scene.call(this);
-
-    this.m_player = null;
 };
 
 //------------------------------------------------------------------------------
@@ -46,22 +44,101 @@ TerraTactics.scene.Game.prototype.constructor = TerraTactics.scene.Game;
  */
 TerraTactics.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+    console.log(rune.display.Graphic);
+    this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
+    this.stage.addChild(this.bg);
 
-    // add background image with rune.display.Graphic
 
+    // load tilemap
     this.stage.m_map.load("map");
+    console.log(this.stage.m_map.m_bufferB.m_tmpTile);
 
-    console.log(this.stage.m_map.back);
+    // create & add player
+    this.m_players = TerraTactics.data.Characters;
 
-    console.log(this);
+    this.m_players.forEach(player => {
+        this.stage.addChild(player);
+    });
 
-    this.m_player = new TerraTactics.scene.Character(100, 10);
+    this.m_artboard = new rune.display.Artboard(0, 0, 400, 225);
+    this.stage.addChild(this.m_artboard);
 
-    this.m_player.scaleY = 0.3;
-    this.m_player.scaleX = 0.3
+    window.addEventListener("mousemove", function (e) {
+        this.m_mouseX = e.offsetX * (400 / e.target.clientWidth);
+        this.m_mouseY = e.offsetY * (225 / e.target.clientHeight);
+    }.bind(this));
 
-    this.m_player.debug = true;
-    this.stage.addChild(this.m_player);
+    window.addEventListener("mousedown", function (e) {
+        if (this.m_bullet === null) {
+            this.m_mouseDown = true;
+            this.m_mouseX = e.offsetX * (400 / e.target.clientWidth);
+            this.m_mouseY = e.offsetY * (225 / e.target.clientHeight);
+        }
+    }.bind(this));
+
+    window.addEventListener("mouseup", function () {
+        // im thinking i'll add animation/drawing for the bullet here?
+        if (this.m_activePlayer.m_canFire(this.m_activePlayer.m_getWeapon())) {
+            this.m_bullet = this.m_activePlayer.m_fireProjectile(this.m_mouseX, this.m_mouseY);
+            this.m_activePlayer.m_setCooldown(this.m_activePlayer.m_getWeapon());
+            this.stage.addChild(this.m_bullet);
+        }
+        this.m_mouseDown = false;
+    }.bind(this));
+
+    this.m_bullet = null;
+
+    this.m_players = {
+        player1: {
+            id: "p1",
+            character: this.m_players["p1"],
+            active: true
+        },
+        player2: {
+            id: "p2",
+            character: this.m_players["p2"],
+            active: false
+        }
+    };
+
+    this.m_activePlayer = null;
+    this.m_inActivePlayer = null;
+
+    this.m_round = 1;
+};
+
+TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
+    this.stage.addChild(this.m_bullet);
+};
+
+TerraTactics.scene.Game.prototype.m_knockback = function (player, source) {
+    console.log(source);
+    if (player.centerX < source.centerX) {
+        player.x -= source.m_knockback;
+    } else {
+        player.x += source.m_knockback;
+    }
+    player.m_grounded = false;
+    player.m_velocityY = -2;
+};
+
+TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
+    var angle = Math.atan2(this.m_mouseY - source.centerY, this.m_mouseX - source.centerX);
+    var aimLength = 30;
+
+    var endX = source.centerX + Math.cos(angle) * aimLength;
+    var endY = source.centerY + Math.sin(angle) * aimLength;
+
+    this.m_artboard.canvas.clear();
+    this.m_artboard.canvas.drawLine(
+        source.centerX,
+        source.centerY,
+        endX,
+        endY,
+        "red",
+        3,
+        1
+    );
 };
 
 /**
@@ -74,48 +151,60 @@ TerraTactics.scene.Game.prototype.init = function () {
  */
 TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
+    this.m_artboard.canvas.clear();
 
+    // check what player is active
+    for (var player in this.m_players) {
+        if (this.m_players[player].active) {
+            this.m_activePlayer = this.m_players[player].character;
+        } else {
+            this.m_inActivePlayer = this.m_players[player].character;
+
+            this.m_inActivePlayer.m_grounded = true;
+        }
+    }
+    if (this.m_mouseDown) {
+        this.m_drawArc(this.m_activePlayer);
+    }
 
     if (this.keyboard.pressed("LEFT")) {
-        this.m_player.x -= 1;
+
+        this.m_activePlayer.x -= 1;
     }
 
     if (this.keyboard.pressed("RIGHT")) {
-        this.m_player.x += 1;
+        this.m_activePlayer.x += 1;
     }
 
-    if (this.keyboard.pressed("SPACE") && this.m_player.m_grounded) {
-        this.m_player.m_grounded = false;
-        this.m_player.m_velocityY = -this.m_player.m_jumpStrength;
+    if (this.keyboard.pressed("UP") && this.m_activePlayer.m_grounded) {
+        this.m_activePlayer.m_grounded = false;
+        this.m_activePlayer.m_velocityY = -this.m_activePlayer.m_jumpStrength;
     }
 
-    var index = this.stage.m_map.back.getTileIndexOf(this.m_player.bottomLeft.x, this.m_player.bottomLeft.y);
-    var value = this.stage.m_map.back.getTileValueAt(index);
-    var props = this.stage.m_map.getTilePropertiesOf(value);
-
-    if (props !== null) {
-        if (props.leftEdge === true) {
-            console.log("left edge island");
-            this.m_player.m_grounded = true;
-            this.m_player.hitTestAndSeparate(this.stage.m_map.back)
-            //apply sprite collision
+    if (this.m_bullet !== null) {
+        if (this.m_bullet.hitTestTilemapLayer(this.stage.m_map.front)) {
+            console.log('hit');
+            this.stage.removeChild(this.m_bullet);
+            this.m_bullet = null;
         }
-        if (props.rightEdge === true) {
-            console.log("right edge island");
-            this.m_player.m_grounded = true;
-            this.m_player.hitTestAndSeparate(this.stage.m_map.back)
-            //apply sprite collision
-        }
-
-        if (props.leftEdge === false && props.rightEdge === false) {
-            this.m_player.m_grounded = true;
-            this.m_player.m_collided = this.m_player.hitTestAndSeparateTilemapLayer(this.stage.m_map.back);
-        } else {
-            this.m_player.m_grounded = false;
-            this.m_player.m_collided = false;
-        }
-
     }
+
+    if (this.m_bullet !== null) {
+        if (this.m_bullet.hitTest(this.m_inActivePlayer)) {
+            this.m_activePlayer.m_health -= this.m_bullet.m_damage;
+            console.log(this.m_activePlayer.m_health);
+            this.m_knockback(this.m_inActivePlayer, this.m_bullet);
+            this.stage.removeChild(this.m_bullet);
+            this.m_bullet = null;
+        }
+    }
+
+    if (this.m_activePlayer.m_health <= 0) {
+        console.log('dead');
+    }
+
+    this.m_player.m_grounded = this.m_player.hitTestAndSeparateTilemapLayer(this.stage.m_map.front);
+    this.m_player2.m_grounded = this.m_player2.hitTestAndSeparateTilemapLayer(this.stage.m_map.front);
 
 };
 
