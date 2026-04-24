@@ -23,9 +23,7 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
     /**
      * Calls the constructor method of the super class.
      */
-    rune.display.Sprite.call(this, x, y - 5, 1280, 1280, "bullet");
-    this.scaleX = 0.004;
-    this.scaleY = 0.002;
+    rune.display.Sprite.call(this, x, y - 5, 6, 6, "bullet");
 
     this.hitbox.debug = true;
 

@@ -48,17 +48,9 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
     this.stage.addChild(this.bg);
 
-
     // load tilemap
     this.stage.m_map.load("map");
     console.log(this.stage.m_map.m_bufferB.m_tmpTile);
-
-    // create & add player
-    this.m_players = TerraTactics.data.Characters;
-
-    this.m_players.forEach(player => {
-        this.stage.addChild(player);
-    });
 
     this.m_artboard = new rune.display.Artboard(0, 0, 400, 225);
     this.stage.addChild(this.m_artboard);
@@ -88,23 +80,10 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_bullet = null;
 
-    this.m_players = {
-        player1: {
-            id: "p1",
-            character: this.m_players["p1"],
-            active: true
-        },
-        player2: {
-            id: "p2",
-            character: this.m_players["p2"],
-            active: false
-        }
-    };
+    this.m_characters = new TerraTactics.scene.Characters(this.stage);
 
-    this.m_activePlayer = null;
-    this.m_inActivePlayer = null;
-
-    this.m_round = 1;
+    this.m_activePlayer = this.m_characters.getActive();
+    this.m_inActivePlayer = this.m_characters.getInactive();
 };
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
@@ -153,22 +132,11 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
 
-    // check what player is active
-    for (var player in this.m_players) {
-        if (this.m_players[player].active) {
-            this.m_activePlayer = this.m_players[player].character;
-        } else {
-            this.m_inActivePlayer = this.m_players[player].character;
-
-            this.m_inActivePlayer.m_grounded = true;
-        }
-    }
     if (this.m_mouseDown) {
         this.m_drawArc(this.m_activePlayer);
     }
 
     if (this.keyboard.pressed("LEFT")) {
-
         this.m_activePlayer.x -= 1;
     }
 
@@ -186,25 +154,32 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             console.log('hit');
             this.stage.removeChild(this.m_bullet);
             this.m_bullet = null;
+
+            this.m_characters.switchTurn();
         }
     }
 
     if (this.m_bullet !== null) {
         if (this.m_bullet.hitTest(this.m_inActivePlayer)) {
-            this.m_activePlayer.m_health -= this.m_bullet.m_damage;
-            console.log(this.m_activePlayer.m_health);
+            this.m_inActivePlayer.m_health -= this.m_bullet.m_damage;
+            console.log(this.m_inActivePlayer.m_health);
             this.m_knockback(this.m_inActivePlayer, this.m_bullet);
             this.stage.removeChild(this.m_bullet);
             this.m_bullet = null;
+
+            this.m_characters.switchTurn();
         }
     }
 
-    if (this.m_activePlayer.m_health <= 0) {
+    if (this.m_inActivePlayer.m_health <= 0) {
         console.log('dead');
     }
 
-    this.m_player.m_grounded = this.m_player.hitTestAndSeparateTilemapLayer(this.stage.m_map.front);
-    this.m_player2.m_grounded = this.m_player2.hitTestAndSeparateTilemapLayer(this.stage.m_map.front);
+    this.m_characters.update(this.stage.m_map.front);
+
+    this.m_activePlayer = this.m_characters.getActive();
+    this.m_inActivePlayer = this.m_characters.getInactive();
+
 
 };
 
