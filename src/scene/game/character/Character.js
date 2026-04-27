@@ -153,3 +153,7 @@ TerraTactics.scene.Character.prototype.update = function (step) {
     this.m_healthBar.y = this.y - 5;
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 };
+
+TerraTactics.scene.Character.prototype.dispose = function () {
+    rune.display.Sprite.prototype.dispose.call(this);
+};
