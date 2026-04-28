@@ -78,6 +78,18 @@ TerraTactics.scene.Game.prototype.init = function () {
         this.m_mouseDown = false;
     }.bind(this));
 
+    this.attack1 = new TerraTactics.scene.Attacks(100, 10, "attack1");
+    this.stage.addChild(this.attack1);
+
+    this.attack2 = new TerraTactics.scene.Attacks(135, 10, "attack2");
+    this.stage.addChild(this.attack2);
+
+    this.attack3 = new TerraTactics.scene.Attacks(170, 10, "attack3");
+    this.stage.addChild(this.attack3);
+
+    this.attack4 = new TerraTactics.scene.Attacks(205, 10, "attack4");
+    this.stage.addChild(this.attack4);
+
     this.m_bullet = null;
 
     this.m_characters = new TerraTactics.scene.Characters(this.stage);
