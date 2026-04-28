@@ -96,6 +96,8 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayer = this.m_characters.getInactive();
+
+    this.m_counter = 0;
 };
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
@@ -166,9 +168,10 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         this.m_activePlayer.x += 1;
     }
 
-    if (this.keyboard.pressed("UP") && this.m_activePlayer.m_grounded) {
-        this.m_activePlayer.m_grounded = false;
+    if (this.keyboard.justPressed("UP") && this.m_counter < 2) {
         this.m_activePlayer.m_velocityY = -this.m_activePlayer.m_jumpStrength;
+        this.m_activePlayer.m_grounded = false;
+        this.m_counter++;
     }
 
     if (this.m_bullet !== null) {
@@ -191,6 +194,10 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
             this.m_characters.switchTurn();
         }
+    }
+
+    if (this.m_activePlayer.m_grounded) {
+        this.m_counter = 0;
     }
 
     this.m_characters.update(this.stage.m_map.front);
