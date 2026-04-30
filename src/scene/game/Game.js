@@ -61,7 +61,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     }.bind(this));
 
     window.addEventListener("mousedown", function (e) {
-        if (this.m_bullet === null) {
+        if (this.m_activePlayer !== null && this.m_bullet === null) {
             this.m_mouseDown = true;
             this.m_mouseX = e.offsetX * (400 / e.target.clientWidth);
             this.m_mouseY = e.offsetY * (225 / e.target.clientHeight);
@@ -70,7 +70,7 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     window.addEventListener("mouseup", function () {
         // im thinking i'll add animation/drawing for the bullet here?
-        if (this.m_activePlayer.m_canFire(this.m_activePlayer.m_getWeapon())) {
+        if (this.m_activePlayer !== null && this.m_bullet === null && this.m_activePlayer.m_canFire(this.m_activePlayer.m_getWeapon())) {
             this.m_bullet = this.m_activePlayer.m_fireProjectile(this.m_mouseX, this.m_mouseY);
             this.m_activePlayer.m_setCooldown(this.m_activePlayer.m_getWeapon());
             this.stage.addChild(this.m_bullet);
@@ -78,12 +78,26 @@ TerraTactics.scene.Game.prototype.init = function () {
         this.m_mouseDown = false;
     }.bind(this));
 
+    this.attack1 = new TerraTactics.scene.Attacks(100, 10, "attack1");
+    this.stage.addChild(this.attack1);
+
+    this.attack2 = new TerraTactics.scene.Attacks(135, 10, "attack2");
+    this.stage.addChild(this.attack2);
+
+    this.attack3 = new TerraTactics.scene.Attacks(170, 10, "attack3");
+    this.stage.addChild(this.attack3);
+
+    this.attack4 = new TerraTactics.scene.Attacks(205, 10, "attack4");
+    this.stage.addChild(this.attack4);
+
     this.m_bullet = null;
 
     this.m_characters = new TerraTactics.scene.Characters(this.stage);
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayer = this.m_characters.getInactive();
+
+    this.m_counter = 0;
 };
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
@@ -102,6 +116,11 @@ TerraTactics.scene.Game.prototype.m_knockback = function (player, source) {
 };
 
 TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
+
+    if (source === null || source.m_health <= 0) {
+        return;
+    }
+
     var angle = Math.atan2(this.m_mouseY - source.centerY, this.m_mouseX - source.centerX);
     var aimLength = 30;
 
@@ -132,6 +151,11 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
 
+    if (this.m_activePlayer === null || this.m_inActivePlayer === null) {
+        this.m_mouseDown = false;
+        return;
+    }
+
     if (this.m_mouseDown) {
         this.m_drawArc(this.m_activePlayer);
     }
@@ -144,9 +168,10 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         this.m_activePlayer.x += 1;
     }
 
-    if (this.keyboard.pressed("UP") && this.m_activePlayer.m_grounded) {
-        this.m_activePlayer.m_grounded = false;
+    if (this.keyboard.justPressed("UP") && this.m_counter < 2) {
         this.m_activePlayer.m_velocityY = -this.m_activePlayer.m_jumpStrength;
+        this.m_activePlayer.m_grounded = false;
+        this.m_counter++;
     }
 
     if (this.m_bullet !== null) {
@@ -171,15 +196,14 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         }
     }
 
-    if (this.m_inActivePlayer.m_health <= 0) {
-        console.log('dead');
+    if (this.m_activePlayer.m_grounded) {
+        this.m_counter = 0;
     }
 
     this.m_characters.update(this.stage.m_map.front);
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayer = this.m_characters.getInactive();
-
 
 };
 

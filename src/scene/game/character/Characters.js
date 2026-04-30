@@ -16,7 +16,10 @@ TerraTactics.scene.Characters = function (stage) {
     };
 
     this.m_stage.addChild(this.m_players.player1.character);
+    this.m_stage.addChild(this.m_players.player1.character.m_healthBar);
+
     this.m_stage.addChild(this.m_players.player2.character);
+    this.m_stage.addChild(this.m_players.player2.character.m_healthBar);
 };
 
 TerraTactics.scene.Characters.prototype.getActive = function () {
@@ -37,12 +40,41 @@ TerraTactics.scene.Characters.prototype.getInactive = function () {
 
 
 TerraTactics.scene.Characters.prototype.switchTurn = function () {
+    if (this.m_players.player1.character === null || this.m_players.player2.character === null) {
+        return;
+    }
+
     this.m_players.player1.active = !this.m_players.player1.active;
     this.m_players.player2.active = !this.m_players.player2.active;
 };
 
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
-    this.getActive().m_grounded = this.getActive().hitTestAndSeparateTilemapLayer(tilemapLayer);
+    for (var playerId in this.m_players) {
+        var playerEntry = this.m_players[playerId];
+        var character = playerEntry.character;
 
-    this.getInactive().m_grounded = this.getInactive().hitTestAndSeparateTilemapLayer(tilemapLayer);
+        if (character !== null && character.m_health <= 0) {
+            this.m_disposeCharacter(playerEntry);
+        }
+    }
+
+    for (var playerId in this.m_players) {
+        var playerEntry = this.m_players[playerId];
+        var character = playerEntry.character;
+
+        if (character !== null) {
+            character.m_grounded = character.hitTestAndSeparateTilemapLayer(tilemapLayer);
+        }
+    }
+};
+
+TerraTactics.scene.Characters.prototype.m_disposeCharacter = function (playerEntry) {
+    var character = playerEntry.character;
+
+    this.m_stage.removeChild(character);
+    this.m_stage.removeChild(character.m_healthBar);
+    character.dispose();
+
+    playerEntry.character = null;
+    playerEntry.active = false;
 };
