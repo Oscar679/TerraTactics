@@ -29,7 +29,7 @@ TerraTactics.scene.Melee = function (damage, speed, knockback, cooldown) {
     var speed = 0.05; // Magic Number
 
     this.m_damage = 30; // Magic Number
-    this.m_knockback = 1; // Magic Number
+    this.m_knockback = 20; // Magic Number
     this.m_cooldown = 0; // Magic Number
 
 };
@@ -55,7 +55,7 @@ TerraTactics.scene.Melee.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
-TerraTactics.scene.Melee.m_fireProjectile = function (player, targetX, targetY) {
+TerraTactics.scene.Melee.prototype.m_fireProjectile = function (player, targetX, targetY) {
     var speed = 0.05; // Magic Number
     var dx = targetX - player.centerX;
     var dy = targetY - player.centerY;

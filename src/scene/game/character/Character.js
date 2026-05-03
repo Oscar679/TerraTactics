@@ -104,13 +104,13 @@ TerraTactics.scene.Character.prototype.m_setCooldown = function (weapon) {
 }
 
 TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, targetY) {
-    var weaponClass = this.m_guns[this.m_weaponState.currentWeapon];
+    var weapon = this.m_guns[this.m_weaponState.currentWeapon];
 
-    if (!weaponClass || !weaponClass.m_fireProjectile) {
+    if (!weapon || !weapon.m_fireProjectile) {
         throw new Error("Invalid weapon");
     }
 
-    return weaponClass.m_fireProjectile(this, targetX, targetY);
+    return weapon.m_fireProjectile(this, targetX, targetY);
 };
 
 TerraTactics.scene.Character.prototype.m_getCollided = function () {
