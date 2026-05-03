@@ -78,17 +78,16 @@ TerraTactics.scene.Game.prototype.init = function () {
         this.m_mouseDown = false;
     }.bind(this));
 
-    this.attack1 = new TerraTactics.scene.Attacks(100, 10, "attack1");
-    this.stage.addChild(this.attack1);
+    var selectWeapon = function (weapon) {
+        if (this.m_activePlayer !== null) {
+            this.m_activePlayer.m_setWeapon(weapon);
+        }
+    }.bind(this);
 
-    this.attack2 = new TerraTactics.scene.Attacks(135, 10, "attack2");
-    this.stage.addChild(this.attack2);
-
-    this.attack3 = new TerraTactics.scene.Attacks(170, 10, "attack3");
-    this.stage.addChild(this.attack3);
-
-    this.attack4 = new TerraTactics.scene.Attacks(205, 10, "attack4");
-    this.stage.addChild(this.attack4);
+    this.attack1 = new TerraTactics.scene.Attacks(100, 10, "pistol", selectWeapon);
+    this.attack2 = new TerraTactics.scene.Attacks(135, 10, "rifle", selectWeapon);
+    this.attack3 = new TerraTactics.scene.Attacks(170, 10, "grenade", selectWeapon);
+    this.attack4 = new TerraTactics.scene.Attacks(205, 10, "melee", selectWeapon);
 
     this.m_bullet = null;
 
@@ -192,6 +191,20 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             this.stage.removeChild(this.m_bullet);
             this.m_bullet = null;
 
+            this.m_characters.switchTurn();
+        }
+    }
+
+    // if bullet goes outside of screen, its disposed, and turn switched
+    if (this.m_bullet !== null) {
+        if (
+            this.m_bullet.x < 0 ||
+            this.m_bullet.x > 400 ||
+            this.m_bullet.y < 0 ||
+            this.m_bullet.y > 225
+        ) {
+            this.stage.removeChild(this.m_bullet);
+            this.m_bullet = null;
             this.m_characters.switchTurn();
         }
     }

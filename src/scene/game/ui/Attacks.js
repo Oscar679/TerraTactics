@@ -1,5 +1,4 @@
 
-
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
@@ -8,71 +7,43 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.display.Sprite
- *
  * @class
  * @classdesc
  * 
  * UI class for switching attacks.
  */
-TerraTactics.scene.Attacks = function (x, y, attack) {
-
-
-    // Super call
-    //--------------------------------------------------------------------------
-
+TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
     /**
-     * Calls the constructor method of the super class.
+     * @type {HTMLDivElement}
+     * @private
      */
-    rune.display.Sprite.call(this, x, y, 8, 8, "attacks");
-    this.attack1 = this.animation.create("attack1", [0], 1);
-    this.attack2 = this.animation.create("attack2", [1], 1);
-    this.attack3 = this.animation.create("attack3", [2], 1);
-    this.attack4 = this.animation.create("attack4", [3], 1);
+    this.m_element = document.createElement("div");
+    this.m_element.className = "weapon-button " + weapon;
+    this.m_element.id = weapon;
+    this.m_element.style.position = "absolute";
+    this.m_element.style.left = x + "px";
+    this.m_element.style.top = y + "px";
+    this.m_element.style.width = "30px"; // Example size, adjust as needed
+    this.m_element.style.height = "30px"; // Example size, adjust as needed
+    this.m_element.style.backgroundColor = "gray"; // Example background, replace with actual styling
+    this.m_element.style.color = "white";
+    this.m_element.style.textAlign = "center";
+    this.m_element.style.lineHeight = "30px";
+    this.m_element.textContent = weapon.charAt(0).toUpperCase(); // Display first letter of weapon
 
-    this.animation.gotoAndStop(attack, 0);
-};
+    document.body.appendChild(this.m_element); // Add to the DOM
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
+    //remove global window event listeners
+    this.m_element.addEventListener("mousedown", function (event) {
+        event.stopPropagation();
+    });
 
-TerraTactics.scene.Attacks.prototype = Object.create(rune.display.Sprite.prototype);
-TerraTactics.scene.Attacks.prototype.constructor = TerraTactics.scene.Attacks;
+    this.m_element.addEventListener("mouseup", function (event) {
+        event.stopPropagation();
+    });
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
-
-/**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
- *
- * @returns {undefined}
- */
-TerraTactics.scene.Attacks.prototype.init = function () {
-    rune.display.Sprite.prototype.init.call(this);
-};
-
-/**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
- *
- * @param {number} step Fixed time step.
- *
- * @returns {undefined}
- */
-TerraTactics.scene.Attacks.prototype.update = function (step) {
-    rune.display.Sprite.prototype.update.call(this, step);
-};
-
-/**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
- *
- * @returns {undefined}
- */
-TerraTactics.scene.Attacks.prototype.dispose = function () {
+    this.m_element.addEventListener("click", function (event) {
+        event.stopPropagation();
+        onClick(weapon);
+    });
 };

@@ -46,6 +46,17 @@ TerraTactics.scene.Characters.prototype.switchTurn = function () {
 
     this.m_players.player1.active = !this.m_players.player1.active;
     this.m_players.player2.active = !this.m_players.player2.active;
+    this.adjustCooldowns(this.getActive());
+};
+
+TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
+    for (var cd in character.m_weaponState.cooldowns) {
+        if (character.m_weaponState.cooldowns.hasOwnProperty(cd)) {
+            if (character.m_weaponState.cooldowns[cd] > 0) {
+                character.m_weaponState.cooldowns[cd]--;
+            }
+        }
+    }
 };
 
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
