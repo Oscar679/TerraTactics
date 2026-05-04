@@ -98,33 +98,54 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_counter = 0;
 
-    this.m_roundTimer = this.timers.create({
-        duration: 10000, onComplete: this.m_onRoundComplete, scope: this
-    });
+    this.m_roundTimer = null;
+    this.m_startRoundTimer();
 
     this.m_gameEnd = false;
+
+    this.m_time = 0;
+
+    this.m_timeString = new rune.text.BitmapField("0");
+    this.m_timeString.scaleX = 2;
+    this.m_timeString.scaleY = 2;
+    this.m_timeString.center = this.application.screen.center;
+    this.m_timeString.top = 10;
+    this.stage.addChild(this.m_timeString);
+
+    this.m_globalTimer = this.timers.create({
+        duration: 1000,
+        repeat: 999999,
+        onTick: function () {
+            this.m_time++;
+            console.log('1 second passed');
+            this.m_timeString.text = this.m_time.toString();
+        },
+        scope: this
+    });
 };
 
-TerraTactics.scene.Game.prototype.m_onRoundComplete = function () {
-    console.log('round complete');
-    this.m_roundTimer = null;
-
-    this.m_endTurn();
-};
-
-TerraTactics.scene.Game.prototype.m_endTurn = function () {
+TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
     if (this.m_roundTimer !== null) {
         this.timers.remove(this.m_roundTimer);
         this.m_roundTimer = null;
     }
 
-    this.m_characters.switchTurn();
-
     this.m_roundTimer = this.timers.create({
-        duration: 10000, onComplete: this.m_onRoundComplete, scope: this
+        duration: 10000,
+        onComplete: this.m_onRoundTimerComplete,
+        scope: this
     });
 };
 
+TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
+    this.m_roundTimer = null;
+    this.m_endTurn();
+};
+
+TerraTactics.scene.Game.prototype.m_endTurn = function () {
+    this.m_characters.switchTurn();
+    this.m_startRoundTimer();
+};
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
     this.stage.addChild(this.m_bullet);
@@ -191,6 +212,21 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         return;
     }
 
+    var winnerText = this.m_characters.getWinnerText();
+    if (winnerText !== null && this.m_gameEnd === false) {
+        this.m_gameEnd = true;
+        this.timers.remove(this.m_globalTimer);
+        this.m_globalTimer = null;
+        this.stage.removeChild(this.m_timeString);
+        if (this.m_roundTimer !== null) {
+            this.timers.remove(this.m_roundTimer);
+            this.m_roundTimer = null;
+        }
+
+        this.m_displayWinner(winnerText);
+        return;
+    }
+
     if (this.m_mouseDown) {
         this.m_drawArc(this.m_activePlayer);
     }
@@ -251,18 +287,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     this.m_characters.update(this.stage.m_map.front);
 
-    var winnerText = this.m_characters.getWinnerText();
-    if (winnerText !== null && this.m_gameEnd === false) {
-        this.m_gameEnd = true;
-
-        if (this.m_roundTimer !== null) {
-            this.timers.remove(this.m_roundTimer);
-            this.m_roundTimer = null;
-        }
-
-        this.m_displayWinner(winnerText);
-        return;
-    }
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayer = this.m_characters.getInactive();
