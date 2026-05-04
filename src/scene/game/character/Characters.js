@@ -20,6 +20,8 @@ TerraTactics.scene.Characters = function (stage) {
 
     this.m_stage.addChild(this.m_players.player2.character);
     this.m_stage.addChild(this.m_players.player2.character.m_healthBar);
+
+    this.m_winnerText = null;
 };
 
 TerraTactics.scene.Characters.prototype.getActive = function () {
@@ -59,12 +61,31 @@ TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
     }
 };
 
+TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
+    switch (playerEntry.id) {
+        case "p1":
+            this.m_winnerText = "Player 2 Wins!";
+            break;
+        case "p2":
+            this.m_winnerText = "Player 1 Wins!";
+            break;
+        default:
+            this.m_winnerText = "Draw!";
+            break;
+    }
+};
+
+TerraTactics.scene.Characters.prototype.getWinnerText = function () {
+    return this.m_winnerText;
+}
+
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
     for (var playerId in this.m_players) {
         var playerEntry = this.m_players[playerId];
         var character = playerEntry.character;
 
         if (character !== null && character.m_health <= 0) {
+            this.m_setWinnerText(playerEntry);
             this.m_disposeCharacter(playerEntry);
         }
     }

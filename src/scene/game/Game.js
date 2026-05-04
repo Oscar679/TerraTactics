@@ -97,7 +97,34 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_inActivePlayer = this.m_characters.getInactive();
 
     this.m_counter = 0;
+
+    this.m_roundTimer = this.timers.create({
+        duration: 10000, onComplete: this.m_onRoundComplete, scope: this
+    });
+
+    this.m_gameEnd = false;
 };
+
+TerraTactics.scene.Game.prototype.m_onRoundComplete = function () {
+    console.log('round complete');
+    this.m_roundTimer = null;
+
+    this.m_endTurn();
+};
+
+TerraTactics.scene.Game.prototype.m_endTurn = function () {
+    if (this.m_roundTimer !== null) {
+        this.timers.remove(this.m_roundTimer);
+        this.m_roundTimer = null;
+    }
+
+    this.m_characters.switchTurn();
+
+    this.m_roundTimer = this.timers.create({
+        duration: 10000, onComplete: this.m_onRoundComplete, scope: this
+    });
+};
+
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
     this.stage.addChild(this.m_bullet);
@@ -136,6 +163,15 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
         3,
         1
     );
+};
+
+TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
+    var winnerText = new rune.text.BitmapField(text);
+    winnerText.scaleX = 2;
+    winnerText.scaleY = 2;
+    winnerText.center = this.application.screen.center;
+
+    this.stage.addChild(winnerText);
 };
 
 /**
@@ -179,7 +215,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             this.stage.removeChild(this.m_bullet);
             this.m_bullet = null;
 
-            this.m_characters.switchTurn();
+            this.m_endTurn();
         }
     }
 
@@ -191,7 +227,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             this.stage.removeChild(this.m_bullet);
             this.m_bullet = null;
 
-            this.m_characters.switchTurn();
+            this.m_endTurn();
         }
     }
 
@@ -205,7 +241,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         ) {
             this.stage.removeChild(this.m_bullet);
             this.m_bullet = null;
-            this.m_characters.switchTurn();
+            this.m_endTurn();
         }
     }
 
@@ -214,6 +250,19 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     this.m_characters.update(this.stage.m_map.front);
+
+    var winnerText = this.m_characters.getWinnerText();
+    if (winnerText !== null && this.m_gameEnd === false) {
+        this.m_gameEnd = true;
+
+        if (this.m_roundTimer !== null) {
+            this.timers.remove(this.m_roundTimer);
+            this.m_roundTimer = null;
+        }
+
+        this.m_displayWinner(winnerText);
+        return;
+    }
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayer = this.m_characters.getInactive();
