@@ -105,7 +105,7 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_time = 0;
 
-    this.m_timeString = new rune.text.BitmapField("0");
+    this.m_timeString = new rune.text.BitmapField("00:00");
     this.m_timeString.scaleX = 2;
     this.m_timeString.scaleY = 2;
     this.m_timeString.center = this.application.screen.center;
@@ -118,10 +118,23 @@ TerraTactics.scene.Game.prototype.init = function () {
         onTick: function () {
             this.m_time++;
             console.log('1 second passed');
-            this.m_timeString.text = this.m_time.toString();
+
+            this.m_second = this.m_time % 60;
+            this.m_minute = Math.floor(this.m_time / 60);
+
+            this.m_timeString.text = this.m_padNumber(this.m_minute) + ":" + this.m_padNumber(this.m_second);
+
         },
         scope: this
     });
+};
+
+TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
+    if (number < 10) {
+        return "0" + number;
+    } else {
+        return number;
+    }
 };
 
 TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
