@@ -201,20 +201,23 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
 
 TerraTactics.scene.Game.prototype.m_moveUi = function () {
     var activePlayer = this.m_characters.getActive();
-    var startX = 260;
+    var beginX = 430;
+    var moveToX = 280;
+
     if (activePlayer.id === "p2") {
-        startX = 20;
+        beginX = -100;
+        moveToX = 20;
     }
     console.log(activePlayer);
 
     this.m_attacks.forEachMember(function (attack, index) {
+        attack.x = beginX + index * 25;
         this.tweens.create({
             target: attack,
             scope: this,
-            duration: 1500,
+            duration: 750,
             args: {
-                x: startX + index * 35,
-                y: 10
+                x: moveToX + index * 25,
             }
         });
     }, this);
@@ -260,6 +263,16 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
 };
 
 TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
+    this.timers.remove(this.m_globalTimer);
+    this.m_globalTimer = null;
+    this.stage.removeChild(this.m_timeString);
+    if (this.m_roundTimer !== null) {
+        this.timers.remove(this.m_roundTimer);
+        this.m_roundTimer = null;
+    }
+
+    this.m_attacks.removeMembers(this.m_attacks.members);
+
     var winnerText = new rune.text.BitmapField(text);
 
     winnerText.centerX = 200;
@@ -282,17 +295,13 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
 
-    var winnerText = this.m_characters.getWinnerText();
+    if (this.m_gameEnd === true) {
+        return;
+    }
 
-    if (winnerText !== null) {
-        this.timers.remove(this.m_globalTimer);
-        this.m_globalTimer = null;
-        this.stage.removeChild(this.m_timeString);
-        if (this.m_roundTimer !== null) {
-            this.timers.remove(this.m_roundTimer);
-            this.m_roundTimer = null;
-        }
-        this.m_displayWinner(winnerText);
+    if (this.m_characters.getWinnerText() !== null) {
+        this.m_displayWinner(this.m_characters.getWinnerText());
+        this.m_gameEnd = true;
         return;
     }
 
