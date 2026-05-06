@@ -78,6 +78,8 @@ TerraTactics.scene.Game.prototype.init = function () {
         this.m_mouseDown = false;
     }.bind(this));
 
+    this.m_attacks = new rune.display.DisplayGroup(this.stage);
+
     var selectWeapon = function (weapon) {
         if (this.m_activePlayer !== null) {
             this.m_activePlayer.m_setWeapon(weapon);
@@ -85,10 +87,15 @@ TerraTactics.scene.Game.prototype.init = function () {
     }.bind(this);
 
     this.attack1 = new TerraTactics.scene.Attacks(100, 10, "pistol", selectWeapon);
-    this.attack2 = new TerraTactics.scene.Attacks(135, 10, "rifle", selectWeapon);
-    this.attack3 = new TerraTactics.scene.Attacks(170, 10, "grenade", selectWeapon);
-    this.attack4 = new TerraTactics.scene.Attacks(205, 10, "melee", selectWeapon);
-
+    //this.attack2 = new TerraTactics.scene.Attacks(135, 10, "rifle", selectWeapon);
+    //this.attack3 = new TerraTactics.scene.Attacks(170, 10, "grenade", selectWeapon);
+    //this.attack4 = new TerraTactics.scene.Attacks(205, 10, "melee", selectWeapon);
+    console.log(this.m_attacks);
+    this.m_attacks.addMember(this.attack1);
+    // this.m_attacks.addMember(this.attack2);
+    // this.m_attacks.addMember(this.attack3);
+    //this.m_attacks.addMember(this.attack4);
+    console.log(this.m_attacks);
     this.m_bullet = null;
 
     this.m_characters = new TerraTactics.scene.Characters(this.stage);
@@ -105,11 +112,10 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_time = 0;
 
-    this.m_timeString = new rune.text.BitmapField("00:00");
-    this.m_timeString.scaleX = 2;
-    this.m_timeString.scaleY = 2;
-    this.m_timeString.center = this.application.screen.center;
-    this.m_timeString.top = 10;
+    this.m_timeString = new rune.text.BitmapField("00:00", "timer-font");
+    this.m_timeString.scaleX = 1.75;
+    this.m_timeString.scaleY = 1.75;
+    this.m_timeString.top = 20;
     this.stage.addChild(this.m_timeString);
 
     this.m_globalTimer = this.timers.create({
@@ -133,7 +139,7 @@ TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
     if (number < 10) {
         return "0" + number;
     } else {
-        return number;
+        return number.toString();
     }
 };
 
