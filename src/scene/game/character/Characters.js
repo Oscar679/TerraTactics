@@ -26,17 +26,17 @@ TerraTactics.scene.Characters = function (stage) {
 
 TerraTactics.scene.Characters.prototype.getActive = function () {
     if (this.m_players.player1.active) {
-        return this.m_players.player1.character;
+        return this.m_players.player1;
     } else {
-        return this.m_players.player2.character;
+        return this.m_players.player2;
     }
 };
 
 TerraTactics.scene.Characters.prototype.getInactive = function () {
     if (this.m_players.player1.active) {
-        return this.m_players.player2.character;
+        return this.m_players.player2;
     } else {
-        return this.m_players.player1.character;
+        return this.m_players.player1;
     }
 };
 
@@ -48,7 +48,10 @@ TerraTactics.scene.Characters.prototype.switchTurn = function () {
 
     this.m_players.player1.active = !this.m_players.player1.active;
     this.m_players.player2.active = !this.m_players.player2.active;
-    this.adjustCooldowns(this.getActive());
+
+    this.adjustCooldowns(this.getActive().character);
+    this.m_players.player1.character.m_setWeapon("pistol");
+    this.m_players.player2.character.m_setWeapon("pistol");
 };
 
 TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {

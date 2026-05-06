@@ -55,22 +55,57 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_artboard = new rune.display.Artboard(0, 0, 400, 225);
     this.stage.addChild(this.m_artboard);
 
+    var selectWeapon = this.m_selectWeapon.bind(this);
+
+    this.m_attacks = new rune.display.DisplayGroup(this.stage);
+
+    this.attack1 = new TerraTactics.scene.Attacks(130, 10, "pistol", selectWeapon);
+    this.attack2 = new TerraTactics.scene.Attacks(165, 10, "rifle", selectWeapon);
+    this.attack3 = new TerraTactics.scene.Attacks(200, 10, "grenade", selectWeapon);
+    this.attack4 = new TerraTactics.scene.Attacks(235, 10, "melee", selectWeapon);
+    console.log(this.m_attacks);
+    this.m_attacks.addMember(this.attack1);
+    this.m_attacks.addMember(this.attack2);
+    this.m_attacks.addMember(this.attack3);
+    this.m_attacks.addMember(this.attack4);
+    console.log(this.m_attacks);
+
+    this.m_mouseDown = false;
+    this.m_mouseX = 0;
+    this.m_mouseY = 0;
+
     window.addEventListener("mousemove", function (e) {
         this.m_mouseX = e.offsetX * (400 / e.target.clientWidth);
         this.m_mouseY = e.offsetY * (225 / e.target.clientHeight);
     }.bind(this));
 
     window.addEventListener("mousedown", function (e) {
+        this.m_mouseX = e.offsetX * (400 / e.target.clientWidth);
+        this.m_mouseY = e.offsetY * (225 / e.target.clientHeight);
+
+        var point = new rune.geom.Point(this.m_mouseX, this.m_mouseY);
+        var clickedAttack = null;
+
+        this.m_attacks.forEachMember(function (attack) {
+            if (clickedAttack === null && attack.hitTestPoint(point)) {
+                clickedAttack = attack;
+            }
+        });
+
+        if (clickedAttack !== null) {
+            clickedAttack.m_click();
+            this.m_mouseDown = false;
+            return;
+        }
+
         if (this.m_activePlayer !== null && this.m_bullet === null) {
             this.m_mouseDown = true;
-            this.m_mouseX = e.offsetX * (400 / e.target.clientWidth);
-            this.m_mouseY = e.offsetY * (225 / e.target.clientHeight);
         }
     }.bind(this));
 
     window.addEventListener("mouseup", function () {
         // im thinking i'll add animation/drawing for the bullet here?
-        if (this.m_activePlayer !== null && this.m_bullet === null && this.m_activePlayer.m_canFire(this.m_activePlayer.m_getWeapon())) {
+        if (this.m_mouseDown && this.m_activePlayer !== null && this.m_bullet === null && this.m_activePlayer.m_canFire(this.m_activePlayer.m_getWeapon())) {
             this.m_bullet = this.m_activePlayer.m_fireProjectile(this.m_mouseX, this.m_mouseY);
             this.m_activePlayer.m_setCooldown(this.m_activePlayer.m_getWeapon());
             this.stage.addChild(this.m_bullet);
@@ -78,30 +113,14 @@ TerraTactics.scene.Game.prototype.init = function () {
         this.m_mouseDown = false;
     }.bind(this));
 
-    this.m_attacks = new rune.display.DisplayGroup(this.stage);
-
-    var selectWeapon = function (weapon) {
-        if (this.m_activePlayer !== null) {
-            this.m_activePlayer.m_setWeapon(weapon);
-        }
-    }.bind(this);
-
-    this.attack1 = new TerraTactics.scene.Attacks(100, 10, "pistol", selectWeapon);
-    //this.attack2 = new TerraTactics.scene.Attacks(135, 10, "rifle", selectWeapon);
-    //this.attack3 = new TerraTactics.scene.Attacks(170, 10, "grenade", selectWeapon);
-    //this.attack4 = new TerraTactics.scene.Attacks(205, 10, "melee", selectWeapon);
-    console.log(this.m_attacks);
-    this.m_attacks.addMember(this.attack1);
-    // this.m_attacks.addMember(this.attack2);
-    // this.m_attacks.addMember(this.attack3);
-    //this.m_attacks.addMember(this.attack4);
-    console.log(this.m_attacks);
     this.m_bullet = null;
 
     this.m_characters = new TerraTactics.scene.Characters(this.stage);
 
-    this.m_activePlayer = this.m_characters.getActive();
-    this.m_inActivePlayer = this.m_characters.getInactive();
+    this.m_activePlayer = this.m_characters.getActive().character;
+    this.m_inActivePlayer = this.m_characters.getInactive().character;
+
+    this.m_selectWeapon("pistol");
 
     this.m_counter = 0;
 
@@ -133,6 +152,8 @@ TerraTactics.scene.Game.prototype.init = function () {
         },
         scope: this
     });
+
+    this.m_moveUi();
 };
 
 TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
@@ -142,6 +163,16 @@ TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
         return number.toString();
     }
 };
+
+TerraTactics.scene.Game.prototype.m_selectWeapon = function (weapon) {
+    if (this.m_activePlayer !== null && this.m_activePlayer !== undefined) {
+        this.m_activePlayer.m_setWeapon(weapon);
+    }
+
+    this.m_attacks.forEachMember(function (attack) {
+        attack.m_selected(attack.m_weapon === weapon);
+    });
+}
 
 TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
     if (this.m_roundTimer !== null) {
@@ -164,6 +195,29 @@ TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
 TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_characters.switchTurn();
     this.m_startRoundTimer();
+    this.m_selectWeapon("pistol");
+    this.m_moveUi();
+};
+
+TerraTactics.scene.Game.prototype.m_moveUi = function () {
+    var activePlayer = this.m_characters.getActive();
+    var startX = 260;
+    if (activePlayer.id === "p2") {
+        startX = 20;
+    }
+    console.log(activePlayer);
+
+    this.m_attacks.forEachMember(function (attack, index) {
+        this.tweens.create({
+            target: attack,
+            scope: this,
+            duration: 1500,
+            args: {
+                x: startX + index * 35,
+                y: 10
+            }
+        });
+    }, this);
 };
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
@@ -207,9 +261,11 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
 
 TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
     var winnerText = new rune.text.BitmapField(text);
+
+    winnerText.centerX = 200;
+    winnerText.centerY = 112;
     winnerText.scaleX = 2;
     winnerText.scaleY = 2;
-    winnerText.center = this.application.screen.center;
 
     this.stage.addChild(winnerText);
 };
@@ -226,14 +282,9 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
 
-    if (this.m_activePlayer === null || this.m_inActivePlayer === null) {
-        this.m_mouseDown = false;
-        return;
-    }
-
     var winnerText = this.m_characters.getWinnerText();
-    if (winnerText !== null && this.m_gameEnd === false) {
-        this.m_gameEnd = true;
+
+    if (winnerText !== null) {
         this.timers.remove(this.m_globalTimer);
         this.m_globalTimer = null;
         this.stage.removeChild(this.m_timeString);
@@ -241,10 +292,15 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             this.timers.remove(this.m_roundTimer);
             this.m_roundTimer = null;
         }
-
         this.m_displayWinner(winnerText);
         return;
     }
+
+    if (this.m_activePlayer === null || this.m_inActivePlayer === null) {
+        this.m_mouseDown = false;
+        return;
+    }
+
 
     if (this.m_mouseDown) {
         this.m_drawArc(this.m_activePlayer);
@@ -307,8 +363,8 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     this.m_characters.update(this.stage.m_map.front);
 
 
-    this.m_activePlayer = this.m_characters.getActive();
-    this.m_inActivePlayer = this.m_characters.getInactive();
+    this.m_activePlayer = this.m_characters.getActive().character;
+    this.m_inActivePlayer = this.m_characters.getInactive().character;
 
 };
 
