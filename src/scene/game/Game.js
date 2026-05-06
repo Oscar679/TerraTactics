@@ -70,6 +70,8 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_attacks.addMember(this.attack4);
     console.log(this.m_attacks);
 
+    this.m_attacksVisible = false;
+
     this.m_mouseDown = false;
     this.m_mouseX = 0;
     this.m_mouseY = 0;
@@ -86,11 +88,13 @@ TerraTactics.scene.Game.prototype.init = function () {
         var point = new rune.geom.Point(this.m_mouseX, this.m_mouseY);
         var clickedAttack = null;
 
-        this.m_attacks.forEachMember(function (attack) {
-            if (clickedAttack === null && attack.hitTestPoint(point)) {
-                clickedAttack = attack;
-            }
-        });
+        if (this.m_attacksVisible) {
+            this.m_attacks.forEachMember(function (attack) {
+                if (clickedAttack === null && attack.hitTestPoint(point)) {
+                    clickedAttack = attack;
+                }
+            });
+        }
 
         if (clickedAttack !== null) {
             clickedAttack.m_click();
@@ -132,9 +136,12 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_time = 0;
 
     this.m_timeString = new rune.text.BitmapField("00:00", "timer-font");
-    this.m_timeString.scaleX = 1.75;
-    this.m_timeString.scaleY = 1.75;
-    this.m_timeString.top = 20;
+    this.m_timeString.width = this.m_timeString.textWidth;
+    this.m_timeString.height = this.m_timeString.textHeight;
+    this.m_timeString.scaleX = 1.5;
+    this.m_timeString.scaleY = 1.5;
+    this.m_timeString.centerX = 200;
+    this.m_timeString.y = 10;
     this.stage.addChild(this.m_timeString);
 
     this.m_globalTimer = this.timers.create({
@@ -148,12 +155,28 @@ TerraTactics.scene.Game.prototype.init = function () {
             this.m_minute = Math.floor(this.m_time / 60);
 
             this.m_timeString.text = this.m_padNumber(this.m_minute) + ":" + this.m_padNumber(this.m_second);
-
         },
         scope: this
     });
 
-    this.m_moveUi();
+
+    console.log(this.m_timeString.centerX);
+    console.log(this.m_timeString.globalX);
+
+    this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
+    this.stage.addChild(this.m_lava);
+
+    this.tweens.create({
+        target: this.m_lava,
+        scope: this,
+        duration: 700_000,
+        easing: rune.tween.Linear.easeIn,
+        args: {
+            y: -225
+        }
+    });
+
+    this.m_hideUi();
 };
 
 TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
@@ -196,17 +219,17 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_characters.switchTurn();
     this.m_startRoundTimer();
     this.m_selectWeapon("pistol");
-    this.m_moveUi();
+    this.m_hideUi();
 };
 
 TerraTactics.scene.Game.prototype.m_moveUi = function () {
     var activePlayer = this.m_characters.getActive();
     var beginX = 430;
-    var moveToX = 280;
+    var moveToX = 220;
 
     if (activePlayer.id === "p2") {
         beginX = -100;
-        moveToX = 20;
+        moveToX = 10;
     }
     console.log(activePlayer);
 
@@ -217,11 +240,35 @@ TerraTactics.scene.Game.prototype.m_moveUi = function () {
             scope: this,
             duration: 750,
             args: {
-                x: moveToX + index * 25,
+                x: moveToX + index * 45,
             }
         });
     }, this);
 };
+
+TerraTactics.scene.Game.prototype.m_hideUi = function () {
+    this.m_attacksVisible = false;
+
+    var activePlayer = this.m_characters.getActive();
+    var hideX = 430;
+
+    if (activePlayer.id === "p2") {
+        hideX = -120;
+    }
+
+    this.m_attacks.forEachMember(function (attack, index) {
+        attack.x = hideX + index * 25;
+        this.tweens.create({
+            target: attack,
+            scope: this,
+            duration: 500,
+            args: {
+                x: hideX + index * 25,
+            }
+        });
+    }, this);
+};
+
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
     this.stage.addChild(this.m_bullet);
@@ -296,11 +343,20 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     this.m_artboard.canvas.clear();
 
     if (this.m_gameEnd === true) {
+        this.tweens.clear();
         return;
     }
 
     if (this.m_characters.getWinnerText() !== null) {
         this.m_displayWinner(this.m_characters.getWinnerText());
+        if (this.m_activePlayer !== null) {
+            this.m_activePlayer.m_grounded = true;
+        }
+
+        if (this.m_inActivePlayer !== null) {
+            this.m_inActivePlayer.m_grounded = true;
+        }
+
         this.m_gameEnd = true;
         return;
     }
@@ -371,9 +427,31 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     this.m_characters.update(this.stage.m_map.front);
 
-
     this.m_activePlayer = this.m_characters.getActive().character;
     this.m_inActivePlayer = this.m_characters.getInactive().character;
+
+    if (this.m_activePlayer !== null && this.m_inActivePlayer !== null) {
+        if (this.m_activePlayer.bottom >= this.m_lava.y) {
+            this.m_activePlayer.m_health = 0;
+        }
+
+        if (this.m_inActivePlayer.bottom >= this.m_lava.y) {
+            this.m_inActivePlayer.m_health = 0;
+        }
+    }
+
+    if (this.keyboard.justPressed("Q")) {
+        console.log("show attack ui");
+        this.m_attacksVisible = !this.m_attacksVisible;
+
+        if (this.m_attacksVisible) {
+            this.m_moveUi();
+        } else {
+            this.m_hideUi();
+        }
+        //this is gonna be a gamepad button later.
+    }
+
 
 };
 

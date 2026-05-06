@@ -15,8 +15,10 @@
 TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
     rune.display.Sprite.call(this, x, y, 48, 48, weapon);
 
-    this.scaleX = 0.4;
-    this.scaleY = 0.4;
+    this.scaleX = 0.9;
+    this.scaleY = 0.9;
+
+
 
 
     this.m_weapon = weapon;
