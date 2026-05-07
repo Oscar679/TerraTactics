@@ -9,7 +9,7 @@
   "scripts": {
     "test": "electron ./bin-debug/bootstrap.js",
     "start": "electron ./bin/bootstrap.js",
-    "build": "cd ./scripts/shell/ && ./make.sh"
+    "build": "cd ./scripts/shell && bash ./build.sh"
   },
   "author": "Uncredited Rune developer",
   "license": "MIT",

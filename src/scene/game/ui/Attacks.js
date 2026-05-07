@@ -13,37 +13,38 @@
  * UI class for switching attacks.
  */
 TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
-    /**
-     * @type {HTMLDivElement}
-     * @private
-     */
-    this.m_element = document.createElement("div");
-    this.m_element.className = "weapon-button " + weapon;
-    this.m_element.id = weapon;
-    this.m_element.style.position = "absolute";
-    this.m_element.style.left = x + "px";
-    this.m_element.style.top = y + "px";
-    this.m_element.style.width = "30px"; // Example size, adjust as needed
-    this.m_element.style.height = "30px"; // Example size, adjust as needed
-    this.m_element.style.backgroundColor = "gray"; // Example background, replace with actual styling
-    this.m_element.style.color = "white";
-    this.m_element.style.textAlign = "center";
-    this.m_element.style.lineHeight = "30px";
-    this.m_element.textContent = weapon.charAt(0).toUpperCase(); // Display first letter of weapon
+    rune.display.Sprite.call(this, x, y, 48, 48, weapon);
 
-    document.body.appendChild(this.m_element); // Add to the DOM
+    this.scaleX = 0.9;
+    this.scaleY = 0.9;
 
-    //remove global window event listeners
-    this.m_element.addEventListener("mousedown", function (event) {
-        event.stopPropagation();
-    });
 
-    this.m_element.addEventListener("mouseup", function (event) {
-        event.stopPropagation();
-    });
 
-    this.m_element.addEventListener("click", function (event) {
-        event.stopPropagation();
-        onClick(weapon);
-    });
+
+    this.m_weapon = weapon;
+    this.m_onClick = onClick;
+
+    this.animation.create("idle", [0], 1, true);
+    this.animation.create("selected", [1, 2, 3, 4, 5, 6], 6, true);
+
+    this.animation.gotoAndStop("idle", 0);
+};
+
+//inheritance
+
+TerraTactics.scene.Attacks.prototype = Object.create(rune.display.Sprite.prototype);
+TerraTactics.scene.Attacks.prototype.constructor = TerraTactics.scene.Attacks;
+
+TerraTactics.scene.Attacks.prototype.m_click = function () {
+    if (typeof this.m_onClick === "function") {
+        this.m_onClick(this.m_weapon, this);
+    }
+};
+
+TerraTactics.scene.Attacks.prototype.m_selected = function (selected) {
+    if (selected) {
+        this.animation.gotoAndPlay("selected", 0);
+    } else {
+        this.animation.gotoAndStop("idle", 0);
+    }
 };
