@@ -109,11 +109,10 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     window.addEventListener("mouseup", function () {
         // im thinking i'll add animation/drawing for the bullet here?
-        if (this.m_mouseDown && this.m_activePlayer !== null && this.m_bullet === null && this.m_activePlayer.m_canFire(this.m_activePlayer.m_getWeapon())) {
-            this.m_bullet = this.m_activePlayer.m_fireProjectile(this.m_mouseX, this.m_mouseY);
-            this.m_activePlayer.m_setCooldown(this.m_activePlayer.m_getWeapon());
-            this.stage.addChild(this.m_bullet);
+        if (this.m_mouseDown) {
+            this.m_fireActiveWeapon(this.m_mouseX, this.m_mouseY);
         }
+
         this.m_mouseDown = false;
     }.bind(this));
 
@@ -177,6 +176,11 @@ TerraTactics.scene.Game.prototype.init = function () {
     });
 
     this.m_hideUi();
+
+    this.m_controls = new TerraTactics.util.Controls(0);
+    this.m_weaponNames = ["pistol", "rifle", "grenade", "melee"];
+    this.m_selectedAttackIndex = 0;
+    this.m_gamepadAiming = false;
 };
 
 TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
@@ -195,7 +199,144 @@ TerraTactics.scene.Game.prototype.m_selectWeapon = function (weapon) {
     this.m_attacks.forEachMember(function (attack) {
         attack.m_selected(attack.m_weapon === weapon);
     });
-}
+};
+
+TerraTactics.scene.Game.prototype.m_getWeaponIndex = function (weapon) {
+    for (var i = 0; i < this.m_weaponNames.length; i++) {
+        if (this.m_weaponNames[i] === weapon) {
+            return i;
+        }
+    }
+
+    return 0;
+};
+
+TerraTactics.scene.Game.prototype.m_selectWeaponAt = function (index) {
+    if (index < 0) {
+        index = this.m_weaponNames.length - 1;
+    }
+
+    if (index >= this.m_weaponNames.length) {
+        index = 0;
+    }
+
+    this.m_selectedAttackIndex = index;
+    this.m_selectWeapon(this.m_weaponNames[this.m_selectedAttackIndex]);
+};
+
+TerraTactics.scene.Game.prototype.m_toggleAttackUi = function () {
+    this.m_attacksVisible = !this.m_attacksVisible;
+    this.m_mouseDown = false;
+    this.m_gamepadAiming = false;
+
+    if (this.m_attacksVisible) {
+        this.m_selectedAttackIndex = this.m_getWeaponIndex(this.m_activePlayer.m_getWeapon());
+        this.m_selectWeaponAt(this.m_selectedAttackIndex);
+        this.m_moveUi();
+    } else {
+        this.m_hideUi();
+    }
+};
+
+TerraTactics.scene.Game.prototype.m_fireActiveWeapon = function (targetX, targetY) {
+    var weapon = null;
+
+    if (this.m_activePlayer === null || this.m_bullet !== null) {
+        return;
+    }
+
+    weapon = this.m_activePlayer.m_getWeapon();
+
+    if (this.m_activePlayer.m_canFire(weapon)) {
+        this.m_bullet = this.m_activePlayer.m_fireProjectile(targetX, targetY);
+        this.m_activePlayer.m_setCooldown(weapon);
+        this.stage.addChild(this.m_bullet);
+    }
+};
+
+TerraTactics.scene.Game.prototype.m_updateGamepadAim = function () {
+    var aimLength = 90;
+    var aimX = this.m_controls.aimX;
+    var aimY = this.m_controls.aimY;
+    var isAiming = Math.abs(aimX) > TerraTactics.util.MappingGamepad.AIM_DEADZONE ||
+        Math.abs(aimY) > TerraTactics.util.MappingGamepad.AIM_DEADZONE;
+
+    this.m_gamepadAiming = false;
+
+    if (isAiming && this.m_activePlayer !== null && this.m_bullet === null) {
+        this.m_mouseX = Math.max(0, Math.min(400, this.m_activePlayer.centerX + aimX * aimLength));
+        this.m_mouseY = Math.max(0, Math.min(225, this.m_activePlayer.centerY + aimY * aimLength));
+        this.m_gamepadAiming = true;
+    }
+};
+
+TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
+    if (this.m_controls.firePressed) {
+        this.m_hideUi();
+        if (this.m_mouseDown || this.m_gamepadAiming) {
+            this.m_fireActiveWeapon(this.m_mouseX, this.m_mouseY);
+        }
+        this.m_mouseDown = false;
+        this.m_gamepadAiming = false;
+        return;
+    }
+
+    if (this.m_controls.justLeft) {
+        this.m_selectWeaponAt(this.m_selectedAttackIndex - 1);
+    }
+
+    if (this.m_controls.justRight) {
+        this.m_selectWeaponAt(this.m_selectedAttackIndex + 1);
+    }
+
+    if (this.m_controls.weaponOne) {
+        this.m_selectWeaponAt(0);
+        this.m_hideUi();
+    }
+
+    if (this.m_controls.weaponTwo) {
+        this.m_selectWeaponAt(1);
+        this.m_hideUi();
+    }
+
+    if (this.m_controls.weaponThree) {
+        this.m_selectWeaponAt(2);
+        this.m_hideUi();
+    }
+
+    if (this.m_controls.weaponFour) {
+        this.m_selectWeaponAt(3);
+        this.m_hideUi();
+    }
+
+    if (this.m_controls.confirm) {
+        this.m_hideUi();
+    }
+};
+
+TerraTactics.scene.Game.prototype.m_updatePlayerInput = function () {
+    if (this.m_controls.left) {
+        this.m_activePlayer.x -= 1;
+    }
+
+    if (this.m_controls.right) {
+        this.m_activePlayer.x += 1;
+    }
+
+    if (this.m_controls.jump && this.m_counter < 2) {
+        this.m_activePlayer.m_velocityY = -this.m_activePlayer.m_jumpStrength;
+        this.m_activePlayer.m_grounded = false;
+        this.m_counter++;
+    }
+
+    if (this.m_controls.firePressed) {
+        if (this.m_mouseDown || this.m_gamepadAiming) {
+            this.m_fireActiveWeapon(this.m_mouseX, this.m_mouseY);
+        }
+        this.m_mouseDown = false;
+        this.m_gamepadAiming = false;
+    }
+};
 
 TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
     if (this.m_roundTimer !== null) {
@@ -216,6 +357,8 @@ TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
 };
 
 TerraTactics.scene.Game.prototype.m_endTurn = function () {
+    this.m_mouseDown = false;
+    this.m_gamepadAiming = false;
     this.m_characters.switchTurn();
     this.m_startRoundTimer();
     this.m_selectWeapon("pistol");
@@ -363,26 +506,24 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     if (this.m_activePlayer === null || this.m_inActivePlayer === null) {
         this.m_mouseDown = false;
+        this.m_gamepadAiming = false;
         return;
     }
 
+    this.m_updateGamepadAim();
 
-    if (this.m_mouseDown) {
+    if (this.m_controls.toggleWeapons) {
+        this.m_toggleAttackUi();
+    }
+
+    if (this.m_attacksVisible) {
+        this.m_updateWeaponUiInput();
+    } else {
+        this.m_updatePlayerInput();
+    }
+
+    if (this.m_mouseDown || this.m_gamepadAiming) {
         this.m_drawArc(this.m_activePlayer);
-    }
-
-    if (this.keyboard.pressed("LEFT")) {
-        this.m_activePlayer.x -= 1;
-    }
-
-    if (this.keyboard.pressed("RIGHT")) {
-        this.m_activePlayer.x += 1;
-    }
-
-    if (this.keyboard.justPressed("UP") && this.m_counter < 2) {
-        this.m_activePlayer.m_velocityY = -this.m_activePlayer.m_jumpStrength;
-        this.m_activePlayer.m_grounded = false;
-        this.m_counter++;
     }
 
     if (this.m_bullet !== null) {
@@ -439,19 +580,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             this.m_inActivePlayer.m_health = 0;
         }
     }
-
-    if (this.keyboard.justPressed("Q")) {
-        console.log("show attack ui");
-        this.m_attacksVisible = !this.m_attacksVisible;
-
-        if (this.m_attacksVisible) {
-            this.m_moveUi();
-        } else {
-            this.m_hideUi();
-        }
-        //this is gonna be a gamepad button later.
-    }
-
 
 };
 
