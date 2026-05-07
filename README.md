@@ -50,3 +50,24 @@ git push -u origin healthbar
 5. Choose your branch.
 6. Click `Create pull request`.
 7. After review, merge the pull request into `main`.
+
+# TerraTactics
+
+## Goal
+Defeat the other player before the lava rises.
+
+## Controls
+Left/Right: Move  
+Up: Jump  
+Q: Open/Close weapon menu  
+Mouse: Aim and shoot  
+
+## Gameplay Loop
+Player has 10 Seconds to make a move.
+
+1. Player 1 takes a turn.
+2. Select weapon.
+3. Aim and fire.
+4. Projectile hits terrain/player or leaves screen.
+5. Turn switches.
+6. Game ends when one player reaches 0 health or falls into lava.
