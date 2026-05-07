@@ -32,9 +32,6 @@ TerraTactics.scene.MainMenu = function () {
 TerraTactics.scene.MainMenu.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
 TerraTactics.scene.MainMenu.prototype.m_onMenuSelect = function (e) {
-    console.log(e.text);
-
-    var m_this = this;
 
     var obj = {
         "Start Game": new TerraTactics.scene.Game(),
@@ -43,7 +40,7 @@ TerraTactics.scene.MainMenu.prototype.m_onMenuSelect = function (e) {
         //"Exit": 
     };
 
-    m_this.application.scenes.load([obj[e.text]]);
+    this.application.scenes.load([obj[e.text]]);
 };
 
 //------------------------------------------------------------------------------
@@ -75,7 +72,29 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 
     this.m_menu.onSelect(this.m_onMenuSelect, this);
 
+    console.log(this.m_menu.m_list);
+
     this.stage.addChild(this.m_menu);
+    this.m_scaleItem();
+};
+
+TerraTactics.scene.MainMenu.prototype.m_scaleItem = function () {
+    for (var i = 0; i < this.m_menu.m_list.numChildren; i++) {
+        var item = this.m_menu.m_list.getAt(i);
+
+        var selectedItem = i === this.m_menu.m_index;
+
+        this.tweens.removeFrom(item);
+
+        this.tweens.create({
+            target: item,
+            duration: 100,
+            args: {
+                scaleX: selectedItem ? 1.2 : 1,
+                scaleY: selectedItem ? 1.2 : 1
+            }
+        });
+    }
 };
 
 /**
@@ -91,15 +110,18 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
 
     if (this.keyboard.justPressed("UP")) {
         this.m_menu.up();
+        this.m_scaleItem();
     }
 
     if (this.keyboard.justPressed("DOWN")) {
         this.m_menu.down();
+        this.m_scaleItem();
     }
 
     if (this.keyboard.justPressed("ENTER")) {
         this.m_menu.select();
     }
+
 };
 
 /**
