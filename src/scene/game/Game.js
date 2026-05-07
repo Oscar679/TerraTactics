@@ -169,7 +169,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.tweens.create({
         target: this.m_lava,
         scope: this,
-        duration: 700_000,
+        duration: 700000,
         easing: rune.tween.Linear.easeIn,
         args: {
             y: -225
