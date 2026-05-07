@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Intro scene.
  */
 TerraTactics.scene.Intro = function () {
@@ -30,18 +30,28 @@ TerraTactics.scene.Intro = function () {
 TerraTactics.scene.Intro.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
 
+TerraTactics.scene.Intro.prototype.m_continue = function () {
+    if (this.m_done !== true) {
+        this.m_done = true;
+        this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
+    }
+};
+
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
+ * This method is automatically executed once after the scene is instantiated.
  * The method is used to create objects to be used within the scene.
  *
  * @returns {undefined}
  */
 TerraTactics.scene.Intro.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+
+    this.m_done = false;
+    this.m_controls = new TerraTactics.util.Controls(0);
 
     this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
     this.stage.addChild(this.bg);
@@ -50,7 +60,7 @@ TerraTactics.scene.Intro.prototype.init = function () {
     text.autoSize = true;
     text.center = this.application.screen.center;
 
-    var text2 = new rune.text.BitmapField("PRESS ANY KEY TO CONTINUE");
+    var text2 = new rune.text.BitmapField("PRESS X TO CONTINUE");
 
     text2.autoSize = true;
     text2.scaleX = 1.5;
@@ -62,7 +72,7 @@ TerraTactics.scene.Intro.prototype.init = function () {
 
     this.m_onKeyDown = function (e) {
         console.log(e.key);
-        m_this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
+        m_this.m_continue();
     }
 
     window.addEventListener("keydown", this.m_onKeyDown);
@@ -72,7 +82,7 @@ TerraTactics.scene.Intro.prototype.init = function () {
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
+ * This method is automatically executed once per "tick". The method is used for
  * calculations such as application logic.
  *
  * @param {number} step Fixed time step.
@@ -82,12 +92,21 @@ TerraTactics.scene.Intro.prototype.init = function () {
 TerraTactics.scene.Intro.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
+    if (this.m_controls.confirm ||
+        this.m_controls.firePressed ||
+        this.m_controls.justUp ||
+        this.m_controls.justDown ||
+        this.m_controls.justLeft ||
+        this.m_controls.justRight ||
+        this.m_controls.toggleWeapons) {
+        this.m_continue();
+    }
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
+ * This method is automatically called once just before the scene ends. Use
+ * the method to reset references and remove objects that no longer need to
+ * exist when the scene is destroyed. The process is performed in order to
  * avoid memory leaks.
  *
  * @returns {undefined}

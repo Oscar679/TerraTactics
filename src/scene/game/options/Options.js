@@ -34,7 +34,7 @@ TerraTactics.scene.Options.prototype.constructor = TerraTactics.scene.Options;
 TerraTactics.scene.Options.prototype.m_onMenuSelect = function (e) {
     console.log(e);
 
-    m_this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
+    this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
 };
 
 TerraTactics.scene.Options.prototype.decrease = function (x) {
@@ -65,8 +65,6 @@ TerraTactics.scene.Options.prototype.increase = function (x) {
 TerraTactics.scene.Options.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
-    m_this = this;
-
     this.counter = 0; // counter for keeping track of which menu item is hovered over
 
     var background = new rune.display.Sprite(
@@ -93,6 +91,7 @@ TerraTactics.scene.Options.prototype.init = function () {
     this.m_menu.onSelect(this.m_onMenuSelect, this);
 
     this.stage.addChild(this.m_menu);
+    this.m_controls = new TerraTactics.util.Controls(0);
 };
 
 /**
@@ -106,25 +105,25 @@ TerraTactics.scene.Options.prototype.init = function () {
 TerraTactics.scene.Options.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    if (this.keyboard.justPressed("UP") && this.counter > 0) {
+    if (this.m_controls.justUp && this.counter > 0) {
         this.counter--;
         this.m_menu.up();
     }
 
-    if (this.keyboard.justPressed("DOWN") && this.counter < 3) {
+    if (this.m_controls.justDown && this.counter < 3) {
         this.counter++;
         this.m_menu.down();
     }
 
-    if (this.keyboard.pressed("LEFT") && this.counter !== 3) {
+    if (this.m_controls.left && this.counter !== 3) {
         this.decrease(this.counter); //index of item in menu
     }
 
-    if (this.keyboard.pressed("RIGHT") && this.counter !== 3) {
+    if (this.m_controls.right && this.counter !== 3) {
         this.increase(this.counter); //index of item in menu
     }
 
-    if (this.keyboard.justPressed("ENTER") && this.counter === 3) {
+    if (this.m_controls.confirm && this.counter === 3) {
         this.m_menu.select();
     }
 };

@@ -32,6 +32,12 @@ TerraTactics.scene.Credits = function () {
 TerraTactics.scene.Credits.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.Credits.prototype.constructor = TerraTactics.scene.Credits;
 
+TerraTactics.scene.Credits.prototype.m_onMenuSelect = function (e) {
+    if (e.text === "Back") {
+        this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
+    }
+};
+
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
@@ -70,6 +76,7 @@ TerraTactics.scene.Credits.prototype.init = function () {
     this.m_menu.onSelect(this.m_onMenuSelect, this);
 
     this.stage.addChild(this.m_menu);
+    this.m_controls = new TerraTactics.util.Controls(0);
 };
 
 /**
@@ -83,15 +90,15 @@ TerraTactics.scene.Credits.prototype.init = function () {
 TerraTactics.scene.Credits.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    if (this.keyboard.justPressed("UP")) {
+    if (this.m_controls.justUp) {
         this.m_menu.up();
     }
 
-    if (this.keyboard.justPressed("DOWN")) {
+    if (this.m_controls.justDown) {
         this.m_menu.down();
     }
 
-    if (this.keyboard.justPressed("ENTER")) {
+    if (this.m_controls.confirm) {
         this.m_menu.select();
     }
 };

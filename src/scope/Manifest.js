@@ -55,6 +55,15 @@ var TerraTactics = function() {
      * @since 1.0
      */
     m_this.system = {};
+
+    /**
+     * This package contains shared utility classes.
+     *
+     * @namespace util
+     * @memberof TerraTactics
+     * @since 1.0
+     */
+    m_this.util = {};
     
     //--------------------------------------------------------------------------
     // Return public scope object

@@ -76,6 +76,8 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 
     this.stage.addChild(this.m_menu);
     this.m_scaleItem();
+
+    this.m_controls = new TerraTactics.util.Controls(0);
 };
 
 TerraTactics.scene.MainMenu.prototype.m_scaleItem = function () {
@@ -108,17 +110,17 @@ TerraTactics.scene.MainMenu.prototype.m_scaleItem = function () {
 TerraTactics.scene.MainMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    if (this.keyboard.justPressed("UP")) {
+    if (this.m_controls.justUp) {
         this.m_menu.up();
         this.m_scaleItem();
     }
 
-    if (this.keyboard.justPressed("DOWN")) {
+    if (this.m_controls.justDown) {
         this.m_menu.down();
         this.m_scaleItem();
     }
 
-    if (this.keyboard.justPressed("ENTER")) {
+    if (this.m_controls.confirm) {
         this.m_menu.select();
     }
 
