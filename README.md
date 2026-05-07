@@ -65,7 +65,7 @@ Mouse: Aim and shoot
 ## Gameplay Loop
 Player has 10 Seconds to make a move.
 
-1. Player 1 takes a turn.
+1. Player takes a turn.
 2. Select weapon.
 3. Aim and fire.
 4. Projectile hits terrain/player or leaves screen.
