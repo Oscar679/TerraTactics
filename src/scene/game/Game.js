@@ -102,7 +102,7 @@ TerraTactics.scene.Game.prototype.init = function () {
             return;
         }
 
-        if (this.m_activePlayer !== null && this.m_bullet === null) {
+        if (this.m_activePlayer.character !== null && this.m_bullet === null) {
             this.m_mouseDown = true;
         }
     }.bind(this));
@@ -120,15 +120,14 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_characters = new TerraTactics.scene.Characters(this.stage);
 
-    this.m_activePlayer = this.m_characters.getActive().character;
-    this.m_inActivePlayer = this.m_characters.getInactive().character;
+    this.m_activePlayer = this.m_characters.getActive();
+    this.m_inActivePlayers = this.m_characters.getInactive();
 
     this.m_selectWeapon("pistol");
 
     this.m_counter = 0;
 
     this.m_roundTimer = null;
-    this.m_startRoundTimer();
 
     this.m_gameEnd = false;
 
@@ -158,9 +157,16 @@ TerraTactics.scene.Game.prototype.init = function () {
         scope: this
     });
 
+    this.m_roundTimeString = new rune.text.BitmapField("10", "timer-font");
+    this.m_roundTimeString.width = this.m_roundTimeString.textWidth;
+    this.m_roundTimeString.height = this.m_roundTimeString.textHeight;
+    this.m_roundTimeString.scaleX = 1.5;
+    this.m_roundTimeString.scaleY = 1.5;
+    this.m_roundTimeString.centerX = 40;
+    this.m_roundTimeString.y = 10;
+    this.stage.addChild(this.m_roundTimeString);
 
-    console.log(this.m_timeString.centerX);
-    console.log(this.m_timeString.globalX);
+    this.m_startRoundTimer();
 
     this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
     this.stage.addChild(this.m_lava);
@@ -181,6 +187,13 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_weaponNames = ["pistol", "rifle", "grenade", "melee"];
     this.m_selectedAttackIndex = 0;
     this.m_gamepadAiming = false;
+
+    this.m_currentPlayerText = null;
+
+    this.m_updateActivePlayerText();
+
+    this.m_playGame = new rune.display.Sprite(30, 180, 96, 96, "playgame");
+    this.stage.addChild(this.m_playGame);
 };
 
 TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
@@ -192,8 +205,8 @@ TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
 };
 
 TerraTactics.scene.Game.prototype.m_selectWeapon = function (weapon) {
-    if (this.m_activePlayer !== null && this.m_activePlayer !== undefined) {
-        this.m_activePlayer.m_setWeapon(weapon);
+    if (this.m_activePlayer.character !== null && this.m_activePlayer.character !== undefined) {
+        this.m_activePlayer.character.m_setWeapon(weapon);
     }
 
     this.m_attacks.forEachMember(function (attack) {
@@ -230,11 +243,11 @@ TerraTactics.scene.Game.prototype.m_toggleAttackUi = function () {
     this.m_gamepadAiming = false;
 
     if (this.m_attacksVisible) {
-        this.m_selectedAttackIndex = this.m_getWeaponIndex(this.m_activePlayer.m_getWeapon());
+        this.m_selectedAttackIndex = this.m_getWeaponIndex(this.m_activePlayer.character.m_getWeapon());
         this.m_selectWeaponAt(this.m_selectedAttackIndex);
-        this.m_moveUi();
+        // this.m_moveUi();
     } else {
-        this.m_hideUi();
+        //this.m_hideUi();
     }
 };
 
@@ -245,11 +258,11 @@ TerraTactics.scene.Game.prototype.m_fireActiveWeapon = function (targetX, target
         return;
     }
 
-    weapon = this.m_activePlayer.m_getWeapon();
+    weapon = this.m_activePlayer.character.m_getWeapon();
 
-    if (this.m_activePlayer.m_canFire(weapon)) {
-        this.m_bullet = this.m_activePlayer.m_fireProjectile(targetX, targetY);
-        this.m_activePlayer.m_setCooldown(weapon);
+    if (this.m_activePlayer.character.m_canFire(weapon)) {
+        this.m_bullet = this.m_activePlayer.character.m_fireProjectile(targetX, targetY);
+        this.m_activePlayer.character.m_setCooldown(weapon);
         this.stage.addChild(this.m_bullet);
     }
 };
@@ -263,16 +276,16 @@ TerraTactics.scene.Game.prototype.m_updateGamepadAim = function () {
 
     this.m_gamepadAiming = false;
 
-    if (isAiming && this.m_activePlayer !== null && this.m_bullet === null) {
-        this.m_mouseX = Math.max(0, Math.min(400, this.m_activePlayer.centerX + aimX * aimLength));
-        this.m_mouseY = Math.max(0, Math.min(225, this.m_activePlayer.centerY + aimY * aimLength));
+    if (isAiming && this.m_activePlayer.character !== null && this.m_bullet === null) {
+        this.m_mouseX = Math.max(0, Math.min(400, this.m_activePlayer.character.centerX + aimX * aimLength));
+        this.m_mouseY = Math.max(0, Math.min(225, this.m_activePlayer.character.centerY + aimY * aimLength));
         this.m_gamepadAiming = true;
     }
 };
 
 TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
     if (this.m_controls.firePressed) {
-        this.m_hideUi();
+        //    this.m_hideUi();
         if (this.m_mouseDown || this.m_gamepadAiming) {
             this.m_fireActiveWeapon(this.m_mouseX, this.m_mouseY);
         }
@@ -291,41 +304,48 @@ TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
 
     if (this.m_controls.weaponOne) {
         this.m_selectWeaponAt(0);
-        this.m_hideUi();
+        //      this.m_hideUi();
     }
 
     if (this.m_controls.weaponTwo) {
         this.m_selectWeaponAt(1);
-        this.m_hideUi();
+        //    this.m_hideUi();
     }
 
     if (this.m_controls.weaponThree) {
         this.m_selectWeaponAt(2);
-        this.m_hideUi();
+        //   this.m_hideUi();
     }
 
     if (this.m_controls.weaponFour) {
         this.m_selectWeaponAt(3);
-        this.m_hideUi();
+        //   this.m_hideUi();
     }
 
     if (this.m_controls.confirm) {
-        this.m_hideUi();
+        ///   this.m_hideUi();
     }
 };
 
 TerraTactics.scene.Game.prototype.m_updatePlayerInput = function () {
+    this.m_activePlayer.character.m_movingLeft = false;
+    this.m_activePlayer.character.m_movingRight = false;
+
     if (this.m_controls.left) {
-        this.m_activePlayer.x -= 1;
+        this.m_activePlayer.character.x -= 1;
+        this.m_activePlayer.character.m_movingLeft = true;
+        this.m_activePlayer.character.flippedX = true;
     }
 
     if (this.m_controls.right) {
-        this.m_activePlayer.x += 1;
+        this.m_activePlayer.character.x += 1;
+        this.m_activePlayer.character.m_movingRight = true;
+        this.m_activePlayer.character.flippedX = false;
     }
 
     if (this.m_controls.jump && this.m_counter < 2) {
-        this.m_activePlayer.m_velocityY = -this.m_activePlayer.m_jumpStrength;
-        this.m_activePlayer.m_grounded = false;
+        this.m_activePlayer.character.m_velocityY = -this.m_activePlayer.character.m_jumpStrength;
+        this.m_activePlayer.character.m_grounded = false;
         this.m_counter++;
     }
 
@@ -344,11 +364,21 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
         this.m_roundTimer = null;
     }
 
+    this.m_roundTime = 10;
+    this.m_roundTimeString.text = this.m_roundTime.toString();
+
     this.m_roundTimer = this.timers.create({
-        duration: 10000,
+        duration: 1000,
+        repeat: 10,
+        onTick: function () {
+            this.m_roundTime--;
+            this.m_roundTimeString.text = this.m_roundTime.toString();
+        },
         onComplete: this.m_onRoundTimerComplete,
         scope: this
     });
+
+
 };
 
 TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
@@ -360,9 +390,29 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_mouseDown = false;
     this.m_gamepadAiming = false;
     this.m_characters.switchTurn();
+
+    this.m_activePlayer = this.m_characters.getActive();
+    this.m_inActivePlayers = this.m_characters.getInactive();
+
+    this.m_updateActivePlayerText();
     this.m_startRoundTimer();
     this.m_selectWeapon("pistol");
-    this.m_hideUi();
+    // this.m_hideUi();
+};
+
+TerraTactics.scene.Game.prototype.m_updateActivePlayerText = function () {
+    if (this.m_currentPlayerText !== null) {
+        this.stage.removeChild(this.m_currentPlayerText);
+    }
+
+    this.m_activePlayer = this.m_characters.getActive();
+
+    this.m_currentPlayerText = new rune.text.BitmapField(this.m_activePlayer.id + "'s Turn");
+    this.m_currentPlayerText.centerX = 200;
+    this.m_currentPlayerText.y = 50;
+    this.m_currentPlayerText.scaleX = 1.5;
+    this.m_currentPlayerText.scaleY = 1.5;
+    this.stage.addChild(this.m_currentPlayerText);
 };
 
 TerraTactics.scene.Game.prototype.m_moveUi = function () {
@@ -370,7 +420,7 @@ TerraTactics.scene.Game.prototype.m_moveUi = function () {
     var beginX = 430;
     var moveToX = 220;
 
-    if (activePlayer.id === "p2") {
+    if (activePlayer.id === "player2") {
         beginX = -100;
         moveToX = 10;
     }
@@ -395,7 +445,7 @@ TerraTactics.scene.Game.prototype.m_hideUi = function () {
     var activePlayer = this.m_characters.getActive();
     var hideX = 430;
 
-    if (activePlayer.id === "p2") {
+    if (activePlayer.id === "player2") {
         hideX = -120;
     }
 
@@ -492,19 +542,21 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     if (this.m_characters.getWinnerText() !== null) {
         this.m_displayWinner(this.m_characters.getWinnerText());
-        if (this.m_activePlayer !== null) {
-            this.m_activePlayer.m_grounded = true;
+        if (this.m_activePlayer.character !== null) {
+            this.m_activePlayer.character.m_grounded = true;
         }
 
-        if (this.m_inActivePlayer !== null) {
-            this.m_inActivePlayer.m_grounded = true;
+        for (var i = 0; i < this.m_inActivePlayers.length; i++) {
+            if (this.m_inActivePlayers[i].character !== null) {
+                this.m_inActivePlayers[i].character.m_grounded = true;
+            }
         }
 
         this.m_gameEnd = true;
         return;
     }
 
-    if (this.m_activePlayer === null || this.m_inActivePlayer === null) {
+    if (this.m_activePlayer === null) {
         this.m_mouseDown = false;
         this.m_gamepadAiming = false;
         return;
@@ -523,7 +575,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     if (this.m_mouseDown || this.m_gamepadAiming) {
-        this.m_drawArc(this.m_activePlayer);
+        this.m_drawArc(this.m_activePlayer.character);
     }
 
     if (this.m_bullet !== null) {
@@ -537,14 +589,17 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     if (this.m_bullet !== null) {
-        if (this.m_bullet.hitTest(this.m_inActivePlayer)) {
-            this.m_inActivePlayer.m_health -= this.m_bullet.m_damage;
-            console.log(this.m_inActivePlayer.m_health);
-            this.m_knockback(this.m_inActivePlayer, this.m_bullet);
-            this.stage.removeChild(this.m_bullet);
-            this.m_bullet = null;
+        for (var i = 0; i < this.m_inActivePlayers.length; i++) {
+            if (this.m_inActivePlayers[i].character !== null && this.m_bullet.hitTest(this.m_inActivePlayers[i].character)) {
+                this.m_inActivePlayers[i].character.m_health -= this.m_bullet.m_damage;
+                console.log(this.m_inActivePlayers[i].character.m_health);
+                this.m_knockback(this.m_inActivePlayers[i].character, this.m_bullet);
+                this.stage.removeChild(this.m_bullet);
+                this.m_bullet = null;
 
-            this.m_endTurn();
+                this.m_endTurn();
+                break;
+            }
         }
     }
 
@@ -562,25 +617,37 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         }
     }
 
-    if (this.m_activePlayer.m_grounded) {
+    if (this.m_activePlayer.character.m_grounded) {
         this.m_counter = 0;
     }
 
-    this.m_characters.update(this.stage.m_map.front);
-
-    this.m_activePlayer = this.m_characters.getActive().character;
-    this.m_inActivePlayer = this.m_characters.getInactive().character;
-
-    if (this.m_activePlayer !== null && this.m_inActivePlayer !== null) {
-        if (this.m_activePlayer.bottom >= this.m_lava.y) {
-            this.m_activePlayer.m_health = 0;
-        }
-
-        if (this.m_inActivePlayer.bottom >= this.m_lava.y) {
-            this.m_inActivePlayer.m_health = 0;
+    if (this.m_activePlayer !== null && this.m_activePlayer.character !== null) {
+        if (this.m_activePlayer.character.bottom >= this.m_lava.y) {
+            this.m_activePlayer.character.m_health = 0;
         }
     }
 
+    for (var i = 0; i < this.m_inActivePlayers.length; i++) {
+        if (this.m_inActivePlayers[i].character !== null) {
+            if (this.m_inActivePlayers[i].character.bottom >= this.m_lava.y) {
+                this.m_inActivePlayers[i].character.m_health = 0;
+            }
+        }
+    }
+
+    var oldActivePlayer = this.m_activePlayer;
+
+    this.m_characters.update(this.stage.m_map.front);
+
+    this.m_activePlayer = this.m_characters.getActive();
+    this.m_inActivePlayers = this.m_characters.getInactive();
+
+    if (this.m_activePlayer !== oldActivePlayer) {
+        this.m_updateActivePlayerText();
+        this.m_startRoundTimer();
+        this.m_selectWeapon("pistol");
+        // this.m_hideUi();
+    }
 };
 
 /**

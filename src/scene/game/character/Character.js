@@ -20,7 +20,7 @@ TerraTactics.scene.Character = function (x, y) {
     //--------------------------------------------------------------------------
 
     //rune.display.Sprite.call(this, x, y, 25, 18, "character_2_25x18");
-    rune.display.Sprite.call(this, x, y, 24, 18, "ninja");
+    rune.display.Sprite.call(this, x, y, 24, 48, "ninja-24x48");
 
     //--------------------------------------------------------------------------
     // Private properties
@@ -31,6 +31,8 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_gravity = 0.2;
     this.m_jumpStrength = 3.5;
     this.m_collided = false;
+    this.m_movingLeft = false;
+    this.m_movingRight = false;
 
     this.m_maxHealth = 100;
     this.m_health = this.m_maxHealth;
@@ -39,13 +41,15 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
     this.hitbox.set(12, 0, 2, 12);
-    this.hitbox.debug = true;
-    this.hitbox.debugColor = "green";
+   // this.hitbox.debug = true;
+    //this.hitbox.debugColor = "green";
 
-    this.debug = true;
+   // this.debug = true;
 
-    this.animation.create("idle", [0], 1, true);
-    this.animation.create("jump", [0], 1, false);
+    this.animation.create("idle", [0, 1, 2, 3], 6, true);
+    this.animation.create("walk", [4, 5, 6, 7], 6, true);
+
+    this.animation.gotoAndPlay("idle", 0);
 
     this.m_guns = TerraTactics.data.Weapons;
 
@@ -138,13 +142,16 @@ TerraTactics.scene.Character.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     if (!this.m_grounded) {
         this.m_velocityY += this.m_gravity;
-        if (!this.animation.current || this.animation.current.name !== "jump") {
-            this.animation.gotoAndPlay("jump", 0);
+        // jump & falling animations
+    } else if (this.m_movingLeft || this.m_movingRight) {
+        this.m_velocityY = 0;
+        if (!this.animation.current || this.animation.current.name !== "walk") {
+            this.animation.gotoAndPlay("walk", 0);
         }
     } else {
         this.m_velocityY = 0;
         if (!this.animation.current || this.animation.current.name !== "idle") {
-            this.animation.gotoAndStop("idle", 0);
+            this.animation.gotoAndPlay("idle", 0);
         }
     }
 
