@@ -19,7 +19,8 @@ TerraTactics.scene.Character = function (x, y) {
     // Super call
     //--------------------------------------------------------------------------
 
-    rune.display.Sprite.call(this, x, y, 25, 18, "character_2_25x18");
+    //rune.display.Sprite.call(this, x, y, 25, 18, "character_2_25x18");
+    rune.display.Sprite.call(this, x, y, 24, 18, "ninja");
 
     //--------------------------------------------------------------------------
     // Private properties
