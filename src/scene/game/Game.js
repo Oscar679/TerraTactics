@@ -72,6 +72,8 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_attacksVisible = false;
 
+    //load characters hp bars
+
     this.m_mouseDown = false;
     this.m_mouseX = 0;
     this.m_mouseY = 0;
@@ -120,6 +122,17 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_characters = new TerraTactics.scene.Characters(this.stage);
 
+    //add healthbars to stage
+    for (var playerId in this.m_characters.m_players) {
+        var player = this.m_characters.m_players[playerId];
+        var healthBar = player.healthBar;
+        healthBar.scaleX = 0.6;
+        healthBar.scaleY = 0.40;
+
+        this.stage.addChild(healthBar);
+    }
+
+
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayers = this.m_characters.getInactive();
 
@@ -130,43 +143,6 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_roundTimer = null;
 
     this.m_gameEnd = false;
-
-    this.m_time = 0;
-
-    this.m_timeString = new rune.text.BitmapField("00:00", "timer-font");
-    this.m_timeString.width = this.m_timeString.textWidth;
-    this.m_timeString.height = this.m_timeString.textHeight;
-    this.m_timeString.scaleX = 1.5;
-    this.m_timeString.scaleY = 1.5;
-    this.m_timeString.centerX = 200;
-    this.m_timeString.y = 10;
-    this.stage.addChild(this.m_timeString);
-
-    this.m_globalTimer = this.timers.create({
-        duration: 1000,
-        repeat: 999999,
-        onTick: function () {
-            this.m_time++;
-            console.log('1 second passed');
-
-            this.m_second = this.m_time % 60;
-            this.m_minute = Math.floor(this.m_time / 60);
-
-            this.m_timeString.text = this.m_padNumber(this.m_minute) + ":" + this.m_padNumber(this.m_second);
-        },
-        scope: this
-    });
-
-    this.m_roundTimeString = new rune.text.BitmapField("10", "timer-font");
-    this.m_roundTimeString.width = this.m_roundTimeString.textWidth;
-    this.m_roundTimeString.height = this.m_roundTimeString.textHeight;
-    this.m_roundTimeString.scaleX = 1.5;
-    this.m_roundTimeString.scaleY = 1.5;
-    this.m_roundTimeString.centerX = 40;
-    this.m_roundTimeString.y = 10;
-    this.stage.addChild(this.m_roundTimeString);
-
-    this.m_startRoundTimer();
 
     this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
     this.stage.addChild(this.m_lava);
@@ -192,8 +168,79 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_updateActivePlayerText();
 
-    this.m_playGame = new rune.display.Sprite(30, 180, 96, 96, "playgame");
-    this.stage.addChild(this.m_playGame);
+    this.m_time = 0;
+
+    // round timer string
+    this.m_roundTimeString = new rune.text.BitmapField("10");
+    this.m_roundTimeString.width = this.m_roundTimeString.textWidth;
+    this.m_roundTimeString.height = this.m_roundTimeString.textHeight;
+
+    // global timer string
+    this.m_timeString = new rune.text.BitmapField("00:00");
+    this.m_timeString.width = this.m_timeString.textWidth;
+    this.m_timeString.height = this.m_timeString.textHeight;
+
+    this.m_globalTimer = this.timers.create({
+        duration: 1000,
+        repeat: 999999,
+        onTick: function () {
+            this.m_time++;
+            console.log('1 second passed');
+
+            this.m_second = this.m_time % 60;
+            this.m_minute = Math.floor(this.m_time / 60);
+
+            this.m_timeString.text = this.m_padNumber(this.m_minute) + ":" + this.m_padNumber(this.m_second);
+        },
+        scope: this
+    });
+
+    // create containers
+    this.m_timerContainer = new rune.display.DisplayObjectContainer(246, 8, 190, 148);
+    this.m_globalTimerContainer = new rune.display.DisplayObjectContainer(80, 0, 96, 48);
+    this.m_roundTimerContainer = new rune.display.DisplayObjectContainer(0, 0, 96, 48);
+
+    // create time bars
+    this.totalTimeBar = new TerraTactics.scene.TimeBar(0, 0);
+    this.roundTimeBar = new TerraTactics.scene.TimeBar(0, 0);
+
+    // add containers
+    this.stage.addChild(this.m_timerContainer);
+    this.m_timerContainer.addChild(this.m_globalTimerContainer);
+    this.m_timerContainer.addChild(this.m_roundTimerContainer);
+
+    this.totalTimeBar.scaleX = 0.6;
+    this.totalTimeBar.scaleY = 0.8;
+    this.roundTimeBar.scaleX = 0.6;
+    this.roundTimeBar.scaleY = 0.8;
+
+    this.m_globalTitle = new rune.text.BitmapField("TOTAL");
+    this.m_roundTitle = new rune.text.BitmapField("TURN");
+
+    var globalTimerCenterX = this.totalTimeBar.x + this.totalTimeBar.width * this.totalTimeBar.scaleX / 2;
+    var roundTimerCenterX = this.roundTimeBar.x + this.roundTimeBar.width * this.roundTimeBar.scaleX / 2;
+
+    this.m_timeString.centerX += 14;
+    this.m_timeString.centerY = 25;
+    this.m_roundTimeString.centerX += 20;
+    this.m_roundTimeString.centerY = 25;
+
+    this.m_globalTitle.centerY = 14;
+    this.m_globalTitle.centerX += 14;
+
+    this.m_roundTitle.centerY = 14;
+    this.m_roundTitle.centerX += 14;
+
+    // add bars first, text second
+    this.m_globalTimerContainer.addChild(this.totalTimeBar);
+    this.m_globalTimerContainer.addChild(this.m_timeString);
+    this.m_globalTimerContainer.addChild(this.m_globalTitle);
+
+    this.m_roundTimerContainer.addChild(this.roundTimeBar);
+    this.m_roundTimerContainer.addChild(this.m_roundTimeString);
+    this.m_roundTimerContainer.addChild(this.m_roundTitle);
+
+    this.m_startRoundTimer();
 };
 
 TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
@@ -365,14 +412,14 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
     }
 
     this.m_roundTime = 10;
-    this.m_roundTimeString.text = this.m_roundTime.toString();
+    this.m_roundTimeString.text = this.m_padNumber(this.m_roundTime);
 
     this.m_roundTimer = this.timers.create({
         duration: 1000,
         repeat: 10,
         onTick: function () {
             this.m_roundTime--;
-            this.m_roundTimeString.text = this.m_roundTime.toString();
+            this.m_roundTimeString.text = this.m_padNumber(this.m_roundTime);
         },
         onComplete: this.m_onRoundTimerComplete,
         scope: this
@@ -409,7 +456,7 @@ TerraTactics.scene.Game.prototype.m_updateActivePlayerText = function () {
 
     this.m_currentPlayerText = new rune.text.BitmapField(this.m_activePlayer.id + "'s Turn");
     this.m_currentPlayerText.centerX = 200;
-    this.m_currentPlayerText.y = 50;
+    this.m_currentPlayerText.centerY = 50;
     this.m_currentPlayerText.scaleX = 1.5;
     this.m_currentPlayerText.scaleY = 1.5;
     this.stage.addChild(this.m_currentPlayerText);
@@ -503,9 +550,10 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
 };
 
 TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
-    this.timers.remove(this.m_globalTimer);
-    this.m_globalTimer = null;
-    this.stage.removeChild(this.m_timeString);
+    if (this.m_globalTimer !== null) {
+        this.timers.remove(this.m_globalTimer);
+        this.m_globalTimer = null;
+    }
     if (this.m_roundTimer !== null) {
         this.timers.remove(this.m_roundTimer);
         this.m_roundTimer = null;

@@ -41,10 +41,10 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
     this.hitbox.set(12, 0, 2, 12);
-   // this.hitbox.debug = true;
+    // this.hitbox.debug = true;
     //this.hitbox.debugColor = "green";
 
-   // this.debug = true;
+    // this.debug = true;
 
     this.animation.create("idle", [0, 1, 2, 3], 6, true);
     this.animation.create("walk", [4, 5, 6, 7], 6, true);
@@ -143,6 +143,7 @@ TerraTactics.scene.Character.prototype.update = function (step) {
     if (!this.m_grounded) {
         this.m_velocityY += this.m_gravity;
         // jump & falling animations
+        // this.animation.gotoAndPlay("falling", 0);
     } else if (this.m_movingLeft || this.m_movingRight) {
         this.m_velocityY = 0;
         if (!this.animation.current || this.animation.current.name !== "walk") {
