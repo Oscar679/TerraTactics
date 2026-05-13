@@ -71,6 +71,10 @@ TerraTactics.scene.Character = function (x, y) {
 TerraTactics.scene.Character.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.Character.prototype.constructor = TerraTactics.scene.Character;
 
+TerraTactics.scene.Character.prototype.m_getHealth = function () {
+    return this.m_health;
+}
+
 TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
     if (this.m_weaponState.cooldowns[weapon] === 0) {
         console.log('can fire');

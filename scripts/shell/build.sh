@@ -20,7 +20,7 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/credits/Credits.js" \
 --js "./../../src/scene/game/Game.js" \
 --js "./../../src/scene/game/ui/HealthBar.js" \
---js "./../../src/scene/game/ui/Time.js" \
+--js "./../../src/scene/game/ui/TimeBar.js" \
 --js "./../../src/scene/game/character/Character.js" \
 --js "./../../src/scene/game/character/Characters.js" \
 --js "./../../src/scene/game/ui/Attacks.js" \

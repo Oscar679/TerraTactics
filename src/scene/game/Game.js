@@ -126,12 +126,13 @@ TerraTactics.scene.Game.prototype.init = function () {
     for (var playerId in this.m_characters.m_players) {
         var player = this.m_characters.m_players[playerId];
         var healthBar = player.healthBar;
-        healthBar.scaleX = 0.6;
-        healthBar.scaleY = 0.40;
+        healthBar.scaleX = 0.3;
+        healthBar.scaleY = 0.3;
+
 
         this.stage.addChild(healthBar);
+        this.stage.addChild(healthBar.m_healthBar);
     }
-
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayers = this.m_characters.getInactive();
@@ -166,7 +167,6 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_currentPlayerText = null;
 
-    this.m_updateActivePlayerText();
 
     this.m_time = 0;
 
@@ -197,8 +197,8 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     // create containers
     this.m_timerContainer = new rune.display.DisplayObjectContainer(246, 8, 190, 148);
-    this.m_globalTimerContainer = new rune.display.DisplayObjectContainer(80, 0, 96, 48);
-    this.m_roundTimerContainer = new rune.display.DisplayObjectContainer(0, 0, 96, 48);
+    this.m_globalTimerContainer = new rune.display.DisplayObjectContainer(90, 0, 96, 48);
+    this.m_roundTimerContainer = new rune.display.DisplayObjectContainer(30, 0, 96, 48);
 
     // create time bars
     this.totalTimeBar = new TerraTactics.scene.TimeBar(0, 0);
@@ -239,6 +239,26 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_roundTimerContainer.addChild(this.roundTimeBar);
     this.m_roundTimerContainer.addChild(this.m_roundTimeString);
     this.m_roundTimerContainer.addChild(this.m_roundTitle);
+
+    //add arrows to characters
+    this.m_activeArrow = new rune.display.Sprite(0, 0, 32, 32, "arrow");
+    this.m_activeArrow.scaleX = 0.3;
+    this.m_activeArrow.scaleY = 0.3;
+
+    this.m_bounceValue = { y: 0 };
+
+    this.tweens.create({
+        target: this.m_bounceValue,
+        scope: this,
+        duration: 300,
+        behavior: rune.tween.Tween.REVERSE,
+        cycles: Infinity,
+        args: {
+            y: -2
+        }
+    });
+
+    this.stage.addChild(this.m_activeArrow);
 
     this.m_startRoundTimer();
 };
@@ -441,25 +461,9 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayers = this.m_characters.getInactive();
 
-    this.m_updateActivePlayerText();
     this.m_startRoundTimer();
     this.m_selectWeapon("pistol");
     // this.m_hideUi();
-};
-
-TerraTactics.scene.Game.prototype.m_updateActivePlayerText = function () {
-    if (this.m_currentPlayerText !== null) {
-        this.stage.removeChild(this.m_currentPlayerText);
-    }
-
-    this.m_activePlayer = this.m_characters.getActive();
-
-    this.m_currentPlayerText = new rune.text.BitmapField(this.m_activePlayer.id + "'s Turn");
-    this.m_currentPlayerText.centerX = 200;
-    this.m_currentPlayerText.centerY = 50;
-    this.m_currentPlayerText.scaleX = 1.5;
-    this.m_currentPlayerText.scaleY = 1.5;
-    this.stage.addChild(this.m_currentPlayerText);
 };
 
 TerraTactics.scene.Game.prototype.m_moveUi = function () {
@@ -583,8 +587,11 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
 
+    this.m_activeArrow.centerX = this.m_activePlayer.character.centerX;
+    this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 38 + this.m_bounceValue.y;
+
     if (this.m_gameEnd === true) {
-        this.tweens.clear();
+        // this.tweens.clear();
         return;
     }
 
@@ -691,7 +698,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     this.m_inActivePlayers = this.m_characters.getInactive();
 
     if (this.m_activePlayer !== oldActivePlayer) {
-        this.m_updateActivePlayerText();
         this.m_startRoundTimer();
         this.m_selectWeapon("pistol");
         // this.m_hideUi();
