@@ -52,6 +52,19 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.stage.m_map.load("map");
     console.log(this.stage.m_map.m_bufferB.m_tmpTile);
 
+    this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
+    this.stage.addChild(this.m_lava);
+
+    this.tweens.create({
+        target: this.m_lava,
+        scope: this,
+        duration: 700000,
+        easing: rune.tween.Linear.easeIn,
+        args: {
+            y: -225
+        }
+    });
+
     this.m_artboard = new rune.display.Artboard(0, 0, 400, 225);
     this.stage.addChild(this.m_artboard);
 
@@ -59,18 +72,15 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_attacks = new rune.display.DisplayGroup(this.stage);
 
-    this.attack1 = new TerraTactics.scene.Attacks(130, 10, "pistol", selectWeapon);
-    this.attack2 = new TerraTactics.scene.Attacks(165, 10, "rifle", selectWeapon);
-    this.attack3 = new TerraTactics.scene.Attacks(200, 10, "grenade", selectWeapon);
-    this.attack4 = new TerraTactics.scene.Attacks(235, 10, "melee", selectWeapon);
-    console.log(this.m_attacks);
+    this.attack1 = new TerraTactics.scene.Attacks(110, 180, "grenade", selectWeapon);
+    this.attack2 = new TerraTactics.scene.Attacks(165, 180, "grenade", selectWeapon);
+    this.attack3 = new TerraTactics.scene.Attacks(220, 180, "grenade", selectWeapon);
+    this.attack4 = new TerraTactics.scene.Attacks(275, 180, "grenade", selectWeapon);
+
     this.m_attacks.addMember(this.attack1);
     this.m_attacks.addMember(this.attack2);
     this.m_attacks.addMember(this.attack3);
     this.m_attacks.addMember(this.attack4);
-    console.log(this.m_attacks);
-
-    this.m_attacksVisible = false;
 
     this.m_mouseDown = false;
     this.m_mouseX = 0;
@@ -88,13 +98,11 @@ TerraTactics.scene.Game.prototype.init = function () {
         var point = new rune.geom.Point(this.m_mouseX, this.m_mouseY);
         var clickedAttack = null;
 
-        if (this.m_attacksVisible) {
-            this.m_attacks.forEachMember(function (attack) {
-                if (clickedAttack === null && attack.hitTestPoint(point)) {
-                    clickedAttack = attack;
-                }
-            });
-        }
+        this.m_attacks.forEachMember(function (attack) {
+            if (clickedAttack === null && attack.hitTestPoint(point)) {
+                clickedAttack = attack;
+            }
+        });
 
         if (clickedAttack !== null) {
             clickedAttack.m_click();
@@ -142,21 +150,6 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_roundTimer = null;
 
     this.m_gameEnd = false;
-
-    this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
-    this.stage.addChild(this.m_lava);
-
-    this.tweens.create({
-        target: this.m_lava,
-        scope: this,
-        duration: 700000,
-        easing: rune.tween.Linear.easeIn,
-        args: {
-            y: -225
-        }
-    });
-
-    this.m_hideUi();
 
     this.m_controls = new TerraTactics.util.Controls(0);
     this.m_weaponNames = ["pistol", "rifle", "grenade", "melee"];
@@ -258,6 +251,11 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.stage.addChild(this.m_activeArrow);
 
+    this.test = new rune.display.Sprite(50, 50, 96, 96, "playgame");
+
+    this.test.animation.create("idle", [0, 1, 2], 6, true);
+    this.stage.addChild(this.test);
+
     this.m_startRoundTimer();
 };
 
@@ -302,20 +300,6 @@ TerraTactics.scene.Game.prototype.m_selectWeaponAt = function (index) {
     this.m_selectWeapon(this.m_weaponNames[this.m_selectedAttackIndex]);
 };
 
-TerraTactics.scene.Game.prototype.m_toggleAttackUi = function () {
-    this.m_attacksVisible = !this.m_attacksVisible;
-    this.m_mouseDown = false;
-    this.m_gamepadAiming = false;
-
-    if (this.m_attacksVisible) {
-        this.m_selectedAttackIndex = this.m_getWeaponIndex(this.m_activePlayer.character.m_getWeapon());
-        this.m_selectWeaponAt(this.m_selectedAttackIndex);
-        // this.m_moveUi();
-    } else {
-        //this.m_hideUi();
-    }
-};
-
 TerraTactics.scene.Game.prototype.m_fireActiveWeapon = function (targetX, targetY) {
     var weapon = null;
 
@@ -350,7 +334,6 @@ TerraTactics.scene.Game.prototype.m_updateGamepadAim = function () {
 
 TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
     if (this.m_controls.firePressed) {
-        //    this.m_hideUi();
         if (this.m_mouseDown || this.m_gamepadAiming) {
             this.m_fireActiveWeapon(this.m_mouseX, this.m_mouseY);
         }
@@ -369,26 +352,21 @@ TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
 
     if (this.m_controls.weaponOne) {
         this.m_selectWeaponAt(0);
-        //      this.m_hideUi();
     }
 
     if (this.m_controls.weaponTwo) {
         this.m_selectWeaponAt(1);
-        //    this.m_hideUi();
     }
 
     if (this.m_controls.weaponThree) {
         this.m_selectWeaponAt(2);
-        //   this.m_hideUi();
     }
 
     if (this.m_controls.weaponFour) {
         this.m_selectWeaponAt(3);
-        //   this.m_hideUi();
     }
 
     if (this.m_controls.confirm) {
-        ///   this.m_hideUi();
     }
 };
 
@@ -461,56 +439,7 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
 
     this.m_startRoundTimer();
     this.m_selectWeapon("pistol");
-    // this.m_hideUi();
 };
-
-TerraTactics.scene.Game.prototype.m_moveUi = function () {
-    var activePlayer = this.m_characters.getActive();
-    var beginX = 430;
-    var moveToX = 220;
-
-    if (activePlayer.id === "player2") {
-        beginX = -100;
-        moveToX = 10;
-    }
-    console.log(activePlayer);
-
-    this.m_attacks.forEachMember(function (attack, index) {
-        attack.x = beginX + index * 25;
-        this.tweens.create({
-            target: attack,
-            scope: this,
-            duration: 750,
-            args: {
-                x: moveToX + index * 45,
-            }
-        });
-    }, this);
-};
-
-TerraTactics.scene.Game.prototype.m_hideUi = function () {
-    this.m_attacksVisible = false;
-
-    var activePlayer = this.m_characters.getActive();
-    var hideX = 430;
-
-    if (activePlayer.id === "player2") {
-        hideX = -120;
-    }
-
-    this.m_attacks.forEachMember(function (attack, index) {
-        attack.x = hideX + index * 25;
-        this.tweens.create({
-            target: attack,
-            scope: this,
-            duration: 500,
-            args: {
-                x: hideX + index * 25,
-            }
-        });
-    }, this);
-};
-
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
     this.stage.addChild(this.m_bullet);
@@ -585,6 +514,10 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
 
+    this.m_updatePlayerInput();
+    this.m_updateWeaponUiInput();
+
+
     this.m_activeArrow.centerX = this.m_activePlayer.character.centerX;
     this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 38 + this.m_bounceValue.y;
 
@@ -616,16 +549,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     this.m_updateGamepadAim();
-
-    if (this.m_controls.toggleWeapons) {
-        this.m_toggleAttackUi();
-    }
-
-    if (this.m_attacksVisible) {
-        this.m_updateWeaponUiInput();
-    } else {
-        this.m_updatePlayerInput();
-    }
 
     if (this.m_mouseDown || this.m_gamepadAiming) {
         this.m_drawArc(this.m_activePlayer.character);
@@ -698,7 +621,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     if (this.m_activePlayer !== oldActivePlayer) {
         this.m_startRoundTimer();
         this.m_selectWeapon("pistol");
-        // this.m_hideUi();
     }
 };
 
