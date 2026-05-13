@@ -53,13 +53,21 @@ TerraTactics.scene.Grenade.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
-TerraTactics.scene.Grenade.prototype.m_fireProjectile = function (player, targetX, targetY) {
+TerraTactics.scene.Grenade.prototype.m_getProjectileData = function (player, targetX, targetY) {
     var dx = targetX - player.centerX;
     var dy = targetY - player.centerY;
-    var vx = dx * this.m_speed;
-    var vy = dy * this.m_speed;
 
-    var bullet = new TerraTactics.scene.Bullet(player.centerX + 10, player.centerY - 20, vx, vy, this.m_damage, this.m_knockback);
+    return {
+        x: player.centerX + 10,
+        y: player.centerY - 20,
+        vx: dx * this.m_speed,
+        vy: dy * this.m_speed
+    };
+};
+
+TerraTactics.scene.Grenade.prototype.m_fireProjectile = function (player, targetX, targetY) {
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
+    var bullet = new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
     return bullet;
 };
 

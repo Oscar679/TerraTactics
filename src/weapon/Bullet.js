@@ -30,10 +30,12 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
 
     this.m_velocityX = vx;
     this.m_velocityY = vy;
-    this.m_gravity = 0.1;
+    this.m_gravity = TerraTactics.scene.Bullet.GRAVITY;
     this.m_damage = damage;
     this.m_knockback = knockback;
 };
+
+TerraTactics.scene.Bullet.GRAVITY = 0.1;
 
 //------------------------------------------------------------------------------
 // Inheritance

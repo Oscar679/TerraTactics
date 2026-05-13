@@ -56,12 +56,8 @@ TerraTactics.scene.Melee.prototype.init = function () {
 };
 
 TerraTactics.scene.Melee.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    var dx = targetX - player.centerX;
-    var dy = targetY - player.centerY;
-    var vx = dx * this.m_speed;
-    var vy = dy * this.m_speed;
-
-    var bullet = new TerraTactics.scene.Bullet(player.centerX, player.centerY, vx, vy, this.m_damage, this.m_knockback);
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
+    var bullet = new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
     return bullet;
 };
 

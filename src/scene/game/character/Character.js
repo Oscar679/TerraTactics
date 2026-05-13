@@ -76,7 +76,6 @@ TerraTactics.scene.Character.prototype.m_getHealth = function () {
 
 TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
     if (this.m_weaponState.cooldowns[weapon] === 0) {
-        console.log('can fire');
         return true;
     } else {
         return false;
@@ -88,7 +87,6 @@ TerraTactics.scene.Character.prototype.m_setWeapon = function (weapon) {
 }
 
 TerraTactics.scene.Character.prototype.m_getWeapon = function () {
-    console.log(this.m_weaponState.currentWeapon);
     return this.m_weaponState.currentWeapon;
 }
 

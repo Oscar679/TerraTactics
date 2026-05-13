@@ -54,20 +54,21 @@ TerraTactics.scene.Pistol.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
-TerraTactics.scene.Pistol.prototype.m_fireProjectile = function (player, targetX, targetY) {
+TerraTactics.scene.Pistol.prototype.m_getProjectileData = function (player, targetX, targetY) {
     var dx = targetX - player.centerX;
     var dy = targetY - player.centerY;
 
-    var vx = dx * this.m_speed;
-    var vy = dy * this.m_speed;
+    return {
+        x: player.centerX,
+        y: player.y + 2,
+        vx: dx * this.m_speed,
+        vy: dy * this.m_speed
+    };
+};
 
-    var angle = Math.atan2(dy, dx);
-    var spawnDistance = 14;
-
-    var sx = player.centerX;
-    var sy = player.y + 2;
-
-    var bullet = new TerraTactics.scene.Bullet(sx, sy, vx, vy, this.m_damage, this.m_knockback);
+TerraTactics.scene.Pistol.prototype.m_fireProjectile = function (player, targetX, targetY) {
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
+    var bullet = new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
     return bullet;
 };
 

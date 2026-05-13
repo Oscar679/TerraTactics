@@ -58,7 +58,19 @@ TerraTactics.scene.Weapon.prototype.init = function () {
     throw new Error("Child classes must implement this method.");
 };
 
-TerraTactics.scene.Weapon.m_fireProjectile = function () {
+TerraTactics.scene.Weapon.prototype.m_getProjectileData = function (player, targetX, targetY) {
+    var dx = targetX - player.centerX;
+    var dy = targetY - player.centerY;
+
+    return {
+        x: player.centerX,
+        y: player.y + 2,
+        vx: dx * this.m_speed,
+        vy: dy * this.m_speed
+    };
+};
+
+TerraTactics.scene.Weapon.prototype.m_fireProjectile = function () {
     throw new Error("Child classes must implement this method.");
 };
 
