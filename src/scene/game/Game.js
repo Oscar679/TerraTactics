@@ -72,8 +72,6 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_attacksVisible = false;
 
-    //load characters hp bars
-
     this.m_mouseDown = false;
     this.m_mouseX = 0;
     this.m_mouseY = 0;
@@ -538,13 +536,13 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
     var angle = Math.atan2(this.m_mouseY - source.centerY, this.m_mouseX - source.centerX);
     var aimLength = 30;
 
-    var endX = source.centerX + Math.cos(angle) * aimLength;
-    var endY = source.centerY + Math.sin(angle) * aimLength;
+    var endX = source.x + Math.cos(angle) * aimLength;
+    var endY = source.y + Math.sin(angle) * aimLength;
 
     this.m_artboard.canvas.clear();
     this.m_artboard.canvas.drawLine(
-        source.centerX,
-        source.centerY,
+        source.x,
+        source.y,
         endX,
         endY,
         "red",
