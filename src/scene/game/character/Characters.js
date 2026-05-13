@@ -2,20 +2,27 @@
 TerraTactics.scene.Characters = function (stage) {
     this.m_stage = stage;
 
+    var character1 = new TerraTactics.scene.Character(100, 10);
+    var character2 = new TerraTactics.scene.Character(70, 10);
+    var character3 = new TerraTactics.scene.Character(140, 10);
+
     this.m_players = {
         player1: {
             id: "player1",
-            character: new TerraTactics.scene.Character(100, 10),
+            character: character1,
+            healthBar: new TerraTactics.scene.HealthBar(4, 0, character1),
             active: true
         },
         player2: {
             id: "player2",
-            character: new TerraTactics.scene.Character(70, 10),
+            character: character2,
+            healthBar: new TerraTactics.scene.HealthBar(4, 20, character2),
             active: false
         },
         player3: {
             id: "player3",
-            character: new TerraTactics.scene.Character(140, 10),
+            character: character3,
+            healthBar: new TerraTactics.scene.HealthBar(4, 40, character3),
             active: false
         }
     };
@@ -58,7 +65,6 @@ TerraTactics.scene.Characters.prototype.getInactive = function () {
         }, this);
 };
 
-
 TerraTactics.scene.Characters.prototype.switchTurn = function () {
     this.m_currentPlayerIndex = (this.m_currentPlayerIndex + 1) % this.m_playerOrder.length;
     this.m_syncActivePlayers();
@@ -79,6 +85,10 @@ TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
 
 TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
     // we need to send the player that won, not died.
+    if (playerEntry === null || playerEntry.character === null) {
+        return;
+    }
+
     switch (playerEntry.id) {
         case "player1":
             this.m_winnerText = "Player 1 Wins!";

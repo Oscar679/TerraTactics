@@ -12,21 +12,18 @@
  * 
  * UI class for switching attacks.
  */
-TerraTactics.scene.Players = function (x, y, weapon, onClick) {
-    rune.display.Sprite.call(this, x, y, 48, 48, weapon);
+TerraTactics.scene.TimeBar = function (x, y) {
+    rune.display.Sprite.call(this, x, y, 96, 48, "time-bar");
 
-    this.scaleX = 0.9;
-    this.scaleY = 0.9;
-
-
+    this.scaleY = 0.8;
 };
 
 //inheritance
 
-TerraTactics.scene.Players.prototype = Object.create(rune.display.Sprite.prototype);
-TerraTactics.scene.Players.prototype.constructor = TerraTactics.scene.Players;
+TerraTactics.scene.TimeBar.prototype = Object.create(rune.display.Sprite.prototype);
+TerraTactics.scene.TimeBar.prototype.constructor = TerraTactics.scene.TimeBar;
 
-TerraTactics.scene.Players.prototype.m_active = function (active) {
+TerraTactics.scene.TimeBar.prototype.m_active = function (active) {
     if (active) {
         this.animation.gotoAndPlay("active", 0);
     } else {
