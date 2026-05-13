@@ -54,7 +54,6 @@ TerraTactics.scene.Rifle.prototype.init = function () {
 };
 
 TerraTactics.scene.Rifle.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    this.m_speed = 0.05; // Magic Number
     var dx = targetX - player.centerX;
     var dy = targetY - player.centerY;
     var vx = dx * this.m_speed;

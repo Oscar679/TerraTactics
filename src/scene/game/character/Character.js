@@ -40,11 +40,10 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_healthBar = new rune.ui.Progressbar(20, 3, "#000000", "#ff004d");
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
-    this.hitbox.set(12, 0, 2, 12);
-    // this.hitbox.debug = true;
-    //this.hitbox.debugColor = "green";
+    this.hitbox.set(8, 0, 8, 12);
+    this.hitbox.debug = true;
+    this.hitbox.debugColor = "green";
 
-    // this.debug = true;
 
     this.animation.create("idle", [0, 1, 2, 3], 6, true);
     this.animation.create("walk", [4, 5, 6, 7], 6, true);

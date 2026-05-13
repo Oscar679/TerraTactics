@@ -55,13 +55,19 @@ TerraTactics.scene.Pistol.prototype.init = function () {
 };
 
 TerraTactics.scene.Pistol.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    this.m_speed = 0.05; // Magic Number
     var dx = targetX - player.centerX;
     var dy = targetY - player.centerY;
+
     var vx = dx * this.m_speed;
     var vy = dy * this.m_speed;
 
-    var bullet = new TerraTactics.scene.Bullet(player.centerX, player.centerY, vx, vy, this.m_damage, this.m_knockback);
+    var angle = Math.atan2(dy, dx);
+    var spawnDistance = 14;
+
+    var sx = player.centerX;
+    var sy = player.y + 2;
+
+    var bullet = new TerraTactics.scene.Bullet(sx, sy, vx, vy, this.m_damage, this.m_knockback);
     return bullet;
 };
 

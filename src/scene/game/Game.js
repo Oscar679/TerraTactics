@@ -50,7 +50,40 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     // load tilemap
     this.stage.m_map.load("map");
-    console.log(this.stage.m_map.m_bufferB.m_tmpTile);
+
+    this.m_tiles = [];
+
+    var map = this.stage.m_map;
+    var frontLayer = map.front;
+
+    for (var i = 0; i < frontLayer.data.length; i++) {
+        var tileValue = frontLayer.getTileValueAt(i);
+
+        if (tileValue <= 0) {
+            continue;
+        }
+
+        var properties = map.getTilePropertiesOf(tileValue);
+
+        if (properties === null) {
+            continue;
+        }
+
+        var tileX = i % map.widthInTiles * map.tileWidth;
+        var tileY = Math.floor(i / map.widthInTiles) * map.tileHeight;
+
+        if (properties.leftEdge) {
+            this.m_tiles.push(new rune.display.InteractiveObject(tileX, tileY, 3, 16));
+        }
+
+        if (properties.rightEdge) {
+            this.m_tiles.push(new rune.display.InteractiveObject(tileX + 13, tileY, 3, 16));
+        }
+
+        if (properties.bottomEdge) {
+            this.m_tiles.push(new rune.display.InteractiveObject(tileX, tileY, 16, 8));
+        }
+    }
 
     this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
     this.stage.addChild(this.m_lava);
@@ -72,10 +105,10 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_attacks = new rune.display.DisplayGroup(this.stage);
 
-    this.attack1 = new TerraTactics.scene.Attacks(110, 180, "grenade", selectWeapon);
-    this.attack2 = new TerraTactics.scene.Attacks(165, 180, "grenade", selectWeapon);
+    this.attack1 = new TerraTactics.scene.Attacks(110, 180, "pistol", selectWeapon);
+    this.attack2 = new TerraTactics.scene.Attacks(165, 180, "rifle", selectWeapon);
     this.attack3 = new TerraTactics.scene.Attacks(220, 180, "grenade", selectWeapon);
-    this.attack4 = new TerraTactics.scene.Attacks(275, 180, "grenade", selectWeapon);
+    this.attack4 = new TerraTactics.scene.Attacks(275, 180, "melee", selectWeapon);
 
     this.m_attacks.addMember(this.attack1);
     this.m_attacks.addMember(this.attack2);
@@ -251,10 +284,9 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.stage.addChild(this.m_activeArrow);
 
-    this.test = new rune.display.Sprite(50, 50, 96, 96, "playgame");
-
-    this.test.animation.create("idle", [0, 1, 2], 6, true);
-    this.stage.addChild(this.test);
+    // this.test = new rune.display.Sprite(50, 50, 96, 48, "playgame");
+    //   this.test.animation.create("idle", [0, 1, 2], 6, true);
+    //  this.stage.addChild(this.test);
 
     this.m_startRoundTimer();
 };
@@ -468,10 +500,9 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
     var endX = source.x + Math.cos(angle) * aimLength;
     var endY = source.y + Math.sin(angle) * aimLength;
 
-    this.m_artboard.canvas.clear();
     this.m_artboard.canvas.drawLine(
-        source.x,
-        source.y,
+        source.centerX,
+        source.centerY - 20,
         endX,
         endY,
         "red",
@@ -514,17 +545,16 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
 
-    this.m_updatePlayerInput();
-    this.m_updateWeaponUiInput();
-
-
-    this.m_activeArrow.centerX = this.m_activePlayer.character.centerX;
-    this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 38 + this.m_bounceValue.y;
-
     if (this.m_gameEnd === true) {
         // this.tweens.clear();
         return;
     }
+
+    this.m_updatePlayerInput();
+    this.m_updateWeaponUiInput();
+
+    this.m_activeArrow.centerX = this.m_activePlayer.character.centerX;
+    this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 38 + this.m_bounceValue.y;
 
     if (this.m_characters.getWinnerText() !== null) {
         this.m_displayWinner(this.m_characters.getWinnerText());
@@ -555,7 +585,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     if (this.m_bullet !== null) {
-        if (this.m_bullet.hitTestTilemapLayer(this.stage.m_map.front)) {
+        if (this.m_bullet.hitTest(this.m_tiles)) {
             console.log('hit');
             this.stage.removeChild(this.m_bullet);
             this.m_bullet = null;

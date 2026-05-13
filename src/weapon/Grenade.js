@@ -54,13 +54,12 @@ TerraTactics.scene.Grenade.prototype.init = function () {
 };
 
 TerraTactics.scene.Grenade.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    this.m_speed = 0.05; // Magic Number
     var dx = targetX - player.centerX;
     var dy = targetY - player.centerY;
     var vx = dx * this.m_speed;
     var vy = dy * this.m_speed;
 
-    var bullet = new TerraTactics.scene.Bullet(player.centerX, player.centerY, vx, vy, this.m_damage, this.m_knockback);
+    var bullet = new TerraTactics.scene.Bullet(player.centerX + 10, player.centerY - 20, vx, vy, this.m_damage, this.m_knockback);
     return bullet;
 };
 

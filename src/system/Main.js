@@ -25,7 +25,7 @@ TerraTactics.system.Main = function() {
         developer: "com.terratactics",
         app: "TerraTactics",
         build: "1.0.0",
-        scene: TerraTactics.scene.Intro,
+        scene: TerraTactics.scene.MainMenu,
         resources: TerraTactics.data.Requests,
         useGamepads:true,
         useKeyboard:true,

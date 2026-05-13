@@ -57,7 +57,7 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
 
-    this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
+    this.bg = new rune.display.Graphic(0, 0, 400, 225, "background");
     this.stage.addChild(this.bg);
 
     this.m_menu = new rune.ui.VTMenu();
