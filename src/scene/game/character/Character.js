@@ -33,6 +33,8 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_collided = false;
     this.m_movingLeft = false;
     this.m_movingRight = false;
+    this.m_isJumping = false;
+    this.m_isTouchingLava = false;
 
     this.m_maxHealth = 100;
     this.m_health = this.m_maxHealth;
@@ -47,6 +49,7 @@ TerraTactics.scene.Character = function (x, y) {
 
     this.animation.create("idle", [0, 1, 2, 3], 6, true);
     this.animation.create("walk", [4, 5, 6, 7], 6, true);
+    this.animation.create("jump", [8, 9, 10], 6, false);
 
     this.animation.gotoAndPlay("idle", 0);
 
@@ -121,11 +124,11 @@ TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, tar
 
 TerraTactics.scene.Character.prototype.m_getCollided = function () {
     return this.m_collided;
-}
+};
 
 TerraTactics.scene.Character.prototype.m_setCollided = function (value) {
     this.m_collided = value;
-}
+};
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -144,7 +147,7 @@ TerraTactics.scene.Character.prototype.update = function (step) {
     if (!this.m_grounded) {
         this.m_velocityY += this.m_gravity;
         // jump & falling animations
-        // this.animation.gotoAndPlay("falling", 0);
+        this.animation.gotoAndPlay("jump", 0);
     } else if (this.m_movingLeft || this.m_movingRight) {
         this.m_velocityY = 0;
         if (!this.animation.current || this.animation.current.name !== "walk") {

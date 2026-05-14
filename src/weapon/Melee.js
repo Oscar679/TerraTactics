@@ -31,6 +31,8 @@ TerraTactics.scene.Melee = function () {
     this.m_damage = 30; // Magic Number
     this.m_knockback = 20; // Magic Number
     this.m_cooldown = 0; // Magic Number
+    this.m_fireSoundId = "fist_punch";
+    this.m_switchSoundId = "switch_melee";
 
 };
 
@@ -57,8 +59,10 @@ TerraTactics.scene.Melee.prototype.init = function () {
 
 TerraTactics.scene.Melee.prototype.m_fireProjectile = function (player, targetX, targetY) {
     var projectile = this.m_getProjectileData(player, targetX, targetY);
-    var bullet = new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
-    return bullet;
+
+    this.m_playFireSound();
+
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
 };
 
 /**

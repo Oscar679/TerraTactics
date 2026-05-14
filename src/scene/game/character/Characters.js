@@ -2,6 +2,17 @@
 TerraTactics.scene.Characters = function (stage) {
     this.m_stage = stage;
 
+    this.m_soundChannel = new rune.media.SoundChannel();
+
+    this.m_jumpSound = this.m_soundChannel.get("jump");
+    this.m_walkSound = this.m_soundChannel.get("walk");
+    this.m_ouchSound = this.m_soundChannel.get("ouch");
+    this.m_lavaShizzle = this.m_soundChannel.get("lava_shizzle");
+
+    this.m_isWalkSoundPlaying = false;
+
+    console.log(this.m_jumpSound);
+
     var character1 = new TerraTactics.scene.Character(100, 10);
     var character2 = new TerraTactics.scene.Character(70, 10);
     var character3 = new TerraTactics.scene.Character(140, 10);
@@ -83,6 +94,20 @@ TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
     }
 };
 
+TerraTactics.scene.Characters.prototype.m_damageTaken = function (character, damage) {
+    character.m_health -= damage;
+    this.m_ouchSound.play();
+};
+
+TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
+    if (this.m_isWalkSoundPlaying) {
+        this.m_walkSound.stop();
+        this.m_isWalkSoundPlaying = false;
+    }
+
+    this.m_jumpSound.play(true);
+};
+
 TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
     // we need to send the player that won, not died.
     if (playerEntry === null || playerEntry.character === null) {
@@ -109,6 +134,24 @@ TerraTactics.scene.Characters.prototype.getWinnerText = function () {
 };
 
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
+    var activeCharacter = null;
+
+    if (this.getActive().character.m_grounded) {
+        this.getActive().character.m_isJumping = false;
+    }
+
+    for (var playerId in this.m_players) {
+        var playerEntry = this.m_players[playerId];
+        var character = playerEntry.character;
+
+        if (character !== null) {
+            if (character.m_isTouchingLava) {
+                character.m_isTouchingLava = false;
+                this.m_lavaShizzle.play();
+            }
+        }
+    }
+
     for (var playerId in this.m_players) {
         var playerEntry = this.m_players[playerId];
         var character = playerEntry.character;
@@ -128,7 +171,24 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         var character = playerEntry.character;
 
         if (character !== null) {
-            character.m_grounded = character.hitTestAndSeparateTilemapLayer(tilemapLayer);
+            character.hitTestAndSeparateTilemapLayer(tilemapLayer);
+            character.m_grounded = character.isTouching(rune.physics.Space.DOWN);
+        }
+    }
+
+    activeCharacter = this.getActive().character;
+
+    if (activeCharacter !== null) {
+        if ((activeCharacter.m_movingLeft || activeCharacter.m_movingRight) && !activeCharacter.m_isJumping) {
+            if (!this.m_isWalkSoundPlaying) {
+                this.m_walkSound.play(true);
+                this.m_isWalkSoundPlaying = true;
+            }
+        } else {
+            if (this.m_isWalkSoundPlaying) {
+                this.m_walkSound.stop();
+                this.m_isWalkSoundPlaying = false;
+            }
         }
     }
 };
