@@ -35,6 +35,7 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_movingRight = false;
     this.m_isJumping = false;
     this.m_isTouchingLava = false;
+    this.m_airborneTicks = 0;
 
     this.m_maxHealth = 100;
     this.m_health = this.m_maxHealth;
@@ -43,8 +44,8 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
     this.hitbox.set(8, 0, 8, 12);
-    this.hitbox.debug = true;
-    this.hitbox.debugColor = "green";
+    //this.hitbox.debug = true;
+    // this.hitbox.debugColor = "green";
 
 
     this.animation.create("idle", [0, 1, 2, 3], 6, true);
@@ -130,6 +131,12 @@ TerraTactics.scene.Character.prototype.m_setCollided = function (value) {
     this.m_collided = value;
 };
 
+TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
+    if (!this.animation.current || this.animation.current.name !== name) {
+        this.animation.gotoAndPlay(name, 0);
+    }
+};
+
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
@@ -146,18 +153,21 @@ TerraTactics.scene.Character.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     if (!this.m_grounded) {
         this.m_velocityY += this.m_gravity;
-        // jump & falling animations
-        this.animation.gotoAndPlay("jump", 0);
+        this.m_airborneTicks++;
+
+        if (this.m_isJumping || this.m_airborneTicks > 2) {
+            this.m_playAnimation("jump");
+        } else if (this.m_movingLeft || this.m_movingRight) {
+            this.m_playAnimation("walk");
+        } else {
+            this.m_playAnimation("idle");
+        }
     } else if (this.m_movingLeft || this.m_movingRight) {
         this.m_velocityY = 0;
-        if (!this.animation.current || this.animation.current.name !== "walk") {
-            this.animation.gotoAndPlay("walk", 0);
-        }
+        this.m_playAnimation("walk");
     } else {
         this.m_velocityY = 0;
-        if (!this.animation.current || this.animation.current.name !== "idle") {
-            this.animation.gotoAndPlay("idle", 0);
-        }
+        this.m_playAnimation("idle");
     }
 
     this.y += this.m_velocityY;

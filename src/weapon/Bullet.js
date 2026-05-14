@@ -26,7 +26,7 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
     rune.display.Sprite.call(this, x, y, 6, 6, "bullet");
 
     this.hitbox.set(1, 1, 1, 1);
-    this.hitbox.debug = true;
+  //  this.hitbox.debug = true;
 
     this.m_velocityX = vx;
     this.m_velocityY = vy;

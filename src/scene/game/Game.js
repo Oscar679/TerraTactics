@@ -691,10 +691,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         }
     }
 
-    if (this.m_activePlayer.character.m_grounded) {
-        this.m_counter = 0;
-    }
-
     if (this.m_activePlayer !== null && this.m_activePlayer.character !== null) {
         if (this.m_activePlayer.character.bottom >= this.m_lava.top) {
             console.log(this.m_activePlayer.character.bottom, this.m_lava.top);
@@ -718,6 +714,12 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayers = this.m_characters.getInactive();
+
+    if (this.m_activePlayer !== null &&
+        this.m_activePlayer.character !== null &&
+        this.m_activePlayer.character.m_grounded) {
+        this.m_counter = 0;
+    }
 
     if (this.m_activePlayer !== oldActivePlayer) {
         this.m_startRoundTimer();

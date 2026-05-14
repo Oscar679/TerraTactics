@@ -136,10 +136,6 @@ TerraTactics.scene.Characters.prototype.getWinnerText = function () {
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
     var activeCharacter = null;
 
-    if (this.getActive().character.m_grounded) {
-        this.getActive().character.m_isJumping = false;
-    }
-
     for (var playerId in this.m_players) {
         var playerEntry = this.m_players[playerId];
         var character = playerEntry.character;
@@ -172,7 +168,14 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
 
         if (character !== null) {
             character.hitTestAndSeparateTilemapLayer(tilemapLayer);
-            character.m_grounded = character.isTouching(rune.physics.Space.DOWN);
+            character.m_grounded = character.m_velocityY >= 0 &&
+                character.isTouching(rune.physics.Space.DOWN);
+
+            if (character.m_grounded) {
+                character.m_airborneTicks = 0;
+                character.m_velocityY = 0;
+                character.m_isJumping = false;
+            }
         }
     }
 
