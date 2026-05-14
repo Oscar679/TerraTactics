@@ -15,7 +15,7 @@
  * 
  * Melee Class Extends Weapon.
  */
-TerraTactics.scene.Melee = function (damage, speed, knockback, cooldown) {
+TerraTactics.scene.Melee = function () {
 
 
     // Super call
@@ -26,11 +26,13 @@ TerraTactics.scene.Melee = function (damage, speed, knockback, cooldown) {
      */
     TerraTactics.scene.Weapon.call(this);
 
-    var speed = 0.05; // Magic Number
+    this.m_speed = 0.05; // Magic Number
 
     this.m_damage = 30; // Magic Number
     this.m_knockback = 20; // Magic Number
     this.m_cooldown = 0; // Magic Number
+    this.m_fireSoundId = "fist_punch";
+    this.m_switchSoundId = "switch_melee";
 
 };
 
@@ -56,14 +58,11 @@ TerraTactics.scene.Melee.prototype.init = function () {
 };
 
 TerraTactics.scene.Melee.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    var speed = 0.05; // Magic Number
-    var dx = targetX - player.centerX;
-    var dy = targetY - player.centerY;
-    var vx = dx * speed;
-    var vy = dy * speed;
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
 
-    var bullet = new TerraTactics.scene.Bullet(player.centerX, player.centerY, vx, vy, this.m_damage, this.m_knockback);
-    return bullet;
+    this.m_playFireSound();
+
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
 };
 
 /**

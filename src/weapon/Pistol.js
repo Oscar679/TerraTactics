@@ -30,6 +30,8 @@ TerraTactics.scene.Pistol = function () {
     this.m_damage = 30; // Magic Number
     this.m_knockback = 1; // Magic Number
     this.m_cooldown = 0; // Magic Number
+    this.m_fireSoundId = "pistol_fire";
+    this.m_switchSoundId = "switch_pistol";
 
 };
 
@@ -54,15 +56,24 @@ TerraTactics.scene.Pistol.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
-TerraTactics.scene.Pistol.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    this.m_speed = 0.05; // Magic Number
+TerraTactics.scene.Pistol.prototype.m_getProjectileData = function (player, targetX, targetY) {
     var dx = targetX - player.centerX;
     var dy = targetY - player.centerY;
-    var vx = dx * this.m_speed;
-    var vy = dy * this.m_speed;
 
-    var bullet = new TerraTactics.scene.Bullet(player.centerX, player.centerY, vx, vy, this.m_damage, this.m_knockback);
-    return bullet;
+    return {
+        x: player.centerX,
+        y: player.y + 2,
+        vx: dx * this.m_speed,
+        vy: dy * this.m_speed
+    };
+};
+
+TerraTactics.scene.Pistol.prototype.m_fireProjectile = function (player, targetX, targetY) {
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
+
+    this.m_playFireSound();
+
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
 };
 
 /**

@@ -269,19 +269,36 @@ Object.defineProperty(TerraTactics.util.Controls.prototype, "confirm", {
 });
 
 /**
- * Toggle weapon menu.
+ * Previous weapon.
  *
- * @member {boolean} toggleWeapons
+ * @member {boolean} weaponPrevious
  * @memberof TerraTactics.util.Controls
  * @readonly
  */
-Object.defineProperty(TerraTactics.util.Controls.prototype, "toggleWeapons", {
+Object.defineProperty(TerraTactics.util.Controls.prototype, "weaponPrevious", {
     /**
      * @this TerraTactics.util.Controls
      * @ignore
      */
     get: function () {
-        return this.m_keyboard.toggleWeapons || this.m_gamepad.toggleWeapons;
+        return this.m_keyboard.weaponPrevious || this.m_gamepad.weaponPrevious;
+    }
+});
+
+/**
+ * Next weapon.
+ *
+ * @member {boolean} weaponNext
+ * @memberof TerraTactics.util.Controls
+ * @readonly
+ */
+Object.defineProperty(TerraTactics.util.Controls.prototype, "weaponNext", {
+    /**
+     * @this TerraTactics.util.Controls
+     * @ignore
+     */
+    get: function () {
+        return this.m_keyboard.weaponNext || this.m_gamepad.weaponNext;
     }
 });
 

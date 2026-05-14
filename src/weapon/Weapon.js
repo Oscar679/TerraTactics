@@ -31,6 +31,8 @@ TerraTactics.scene.Weapon = function () {
     this.m_speed = null;
     this.m_knockback = null;
     this.m_cooldown = null;
+    this.m_fireSoundId = null;
+    this.m_switchSoundId = null;
 
     if (this.constructor === TerraTactics.scene.Weapon) {
         throw new Error("Abstract classes cannot be instantiated.");
@@ -58,8 +60,39 @@ TerraTactics.scene.Weapon.prototype.init = function () {
     throw new Error("Child classes must implement this method.");
 };
 
-TerraTactics.scene.Weapon.m_fireProjectile = function () {
+TerraTactics.scene.Weapon.prototype.m_getProjectileData = function (player, targetX, targetY) {
+    var dx = targetX - player.centerX;
+    var dy = targetY - player.centerY;
+
+    return {
+        x: player.centerX,
+        y: player.y + 2,
+        vx: dx * this.m_speed,
+        vy: dy * this.m_speed
+    };
+};
+
+TerraTactics.scene.Weapon.prototype.m_fireProjectile = function () {
     throw new Error("Child classes must implement this method.");
+};
+
+TerraTactics.scene.Weapon.prototype.m_playSound = function (soundId) {
+    var sound = null;
+
+    if (soundId === null || soundId === undefined) {
+        return;
+    }
+
+    sound = rune.system.Application.instance.sounds.sound.get(soundId, true);
+    sound.play(true);
+};
+
+TerraTactics.scene.Weapon.prototype.m_playFireSound = function () {
+    this.m_playSound(this.m_fireSoundId);
+};
+
+TerraTactics.scene.Weapon.prototype.m_playSwitchSound = function () {
+    this.m_playSound(this.m_switchSoundId);
 };
 
 /**

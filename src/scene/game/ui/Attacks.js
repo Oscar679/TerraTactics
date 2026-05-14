@@ -46,9 +46,9 @@ TerraTactics.scene.Attacks.prototype.m_click = function () {
 
 TerraTactics.scene.Attacks.prototype.m_selected = function (selected) {
     if (selected) {
-        //  this.animation.gotoAndPlay("selected", 0);
+      //  this.animation.gotoAndPlay("selected", 0);
         console.log('selected: ' + this.m_weapon);
     } else {
-        //  this.animation.gotoAndStop("idle", 0);
+        this.animation.gotoAndStop("idle", 0);
     }
 };

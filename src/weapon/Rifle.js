@@ -30,6 +30,8 @@ TerraTactics.scene.Rifle = function () {
     this.m_damage = 50; // Magic Number
     this.m_knockback = 3; // Magic Number
     this.m_cooldown = 1; // Magic Number
+    this.m_fireSoundId = "rifle_fire";
+    this.m_switchSoundId = "switch_rifle";
 };
 
 //------------------------------------------------------------------------------
@@ -54,14 +56,11 @@ TerraTactics.scene.Rifle.prototype.init = function () {
 };
 
 TerraTactics.scene.Rifle.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    this.m_speed = 0.05; // Magic Number
-    var dx = targetX - player.centerX;
-    var dy = targetY - player.centerY;
-    var vx = dx * this.m_speed;
-    var vy = dy * this.m_speed;
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
 
-    var bullet = new TerraTactics.scene.Bullet(player.centerX, player.centerY, vx, vy, this.m_damage, this.m_knockback);
-    return bullet;
+    this.m_playFireSound();
+
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
 };
 
 /**

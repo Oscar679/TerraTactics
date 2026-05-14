@@ -23,16 +23,19 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
     /**
      * Calls the constructor method of the super class.
      */
-    rune.display.Sprite.call(this, x, y - 5, 6, 6, "bullet");
+    rune.display.Sprite.call(this, x, y, 6, 6, "bullet");
 
+    this.hitbox.set(1, 1, 1, 1);
     this.hitbox.debug = true;
 
     this.m_velocityX = vx;
     this.m_velocityY = vy;
-    this.m_gravity = 0.1;
+    this.m_gravity = TerraTactics.scene.Bullet.GRAVITY;
     this.m_damage = damage;
     this.m_knockback = knockback;
 };
+
+TerraTactics.scene.Bullet.GRAVITY = 0.1;
 
 //------------------------------------------------------------------------------
 // Inheritance

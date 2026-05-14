@@ -97,9 +97,15 @@ Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "confirm", {
     }
 });
 
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "toggleWeapons", {
+Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponPrevious", {
     get: function () {
         return this.m_justPressed("Q");
+    }
+});
+
+Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponNext", {
+    get: function () {
+        return this.m_justPressed("E");
     }
 });
 
