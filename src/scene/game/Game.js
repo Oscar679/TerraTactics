@@ -635,6 +635,8 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 38 + this.m_bounceValue.y;
 
     if (this.m_gameEnd === true) {
+        this.m_tick3SecSound.stop();
+        this.m_turnChange.stop();
         return;
     }
 
