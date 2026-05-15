@@ -12,13 +12,13 @@ This is the practical checklist for getting TerraTactics ready for presentation.
 
 - [ ] Boot into a real main menu before the game starts.
 - [ ] Add an instructions screen that explains controls, goal, weapons, turns, and lava.
-- [ ] Make the full game playable with gamepad.
-- [ ] Make sure menu navigation works with gamepad.
-- [ ] Make sure weapon selection works with gamepad.
-- [ ] Make sure aiming and firing works with gamepad.
+- [x] Make the full game playable with gamepad.
+- [x] Make sure menu navigation works with gamepad.
+- [x] Make sure weapon selection works with gamepad.
+- [x] Make sure aiming and firing works with gamepad.
 - [ ] Make sure restart/back/menu flow works with gamepad.
-- [ ] Confirm how the teacher wants "two players simultaneously" interpreted.
-- [ ] Keep at least two playable players in the final version.
+- [x] Confirm how the teacher wants "two players simultaneously" interpreted.
+- [x] Keep at least two playable players in the final version.
 - [ ] Remove or disable fake menu options that do not work.
 - [ ] Remove debug visuals before presentation.
 - [ ] Remove console logs before presentation.
