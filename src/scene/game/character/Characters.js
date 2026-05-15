@@ -13,27 +13,20 @@ TerraTactics.scene.Characters = function (stage) {
 
     console.log(this.m_jumpSound);
 
-    var character1 = new TerraTactics.scene.Character(100, 10);
-    var character2 = new TerraTactics.scene.Character(70, 10);
-    var character3 = new TerraTactics.scene.Character(140, 10);
+    var character1 = new TerraTactics.scene.Character(70, 10);
+    var character2 = new TerraTactics.scene.Character(100, 10);
 
     this.m_players = {
         player1: {
             id: "player1",
             character: character1,
-            healthBar: new TerraTactics.scene.HealthBar(4, 0, character1),
+            healthBar: new TerraTactics.scene.HealthBar(4, 20, character1),
             active: true
         },
         player2: {
             id: "player2",
             character: character2,
-            healthBar: new TerraTactics.scene.HealthBar(4, 20, character2),
-            active: false
-        },
-        player3: {
-            id: "player3",
-            character: character3,
-            healthBar: new TerraTactics.scene.HealthBar(4, 40, character3),
+            healthBar: new TerraTactics.scene.HealthBar(324, 20, character2),
             active: false
         }
     };
@@ -44,12 +37,10 @@ TerraTactics.scene.Characters = function (stage) {
     this.m_stage.addChild(this.m_players.player2.character);
     this.m_stage.addChild(this.m_players.player2.character.m_healthBar);
 
-    this.m_stage.addChild(this.m_players.player3.character);
-    this.m_stage.addChild(this.m_players.player3.character.m_healthBar);
 
     this.m_winnerText = null;
 
-    this.m_playerOrder = ["player1", "player2", "player3"];
+    this.m_playerOrder = ["player1", "player2"];
     this.m_currentPlayerIndex = 0;
     this.m_syncActivePlayers();
 };

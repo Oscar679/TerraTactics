@@ -73,6 +73,12 @@ Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "jump", {
     }
 });
 
+Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "confirm", {
+    get: function () {
+        return this.m_justPressed("ENTER") || this.m_justPressed("SPACE");
+    }
+});
+
 Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponPrevious", {
     get: function () {
         return this.m_justPressed("Q");

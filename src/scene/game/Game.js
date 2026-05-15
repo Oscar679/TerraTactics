@@ -48,6 +48,10 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
     this.stage.addChild(this.bg);
 
+    this.m_soundChannel = new rune.media.SoundChannel();
+    this.m_tick3SecSound = this.m_soundChannel.get("tick_3_sec");
+    this.m_turnChange = this.m_soundChannel.get("turn_change");
+
     // load tilemap
     this.stage.m_map.load("map");
 
@@ -221,7 +225,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     });
 
     // create containers
-    this.m_timerContainer = new rune.display.DisplayObjectContainer(246, 8, 190, 148);
+    this.m_timerContainer = new rune.display.DisplayObjectContainer(105, 8, 190, 148);
     this.m_globalTimerContainer = new rune.display.DisplayObjectContainer(90, 0, 96, 48);
     this.m_roundTimerContainer = new rune.display.DisplayObjectContainer(30, 0, 96, 48);
 
@@ -519,6 +523,9 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
         onTick: function () {
             this.m_roundTime--;
             this.m_roundTimeString.text = this.m_padNumber(this.m_roundTime);
+            if (this.m_roundTime <= 3 && this.m_roundTime > 0) {
+                this.m_tick3SecSound.play();
+            }
         },
         onComplete: this.m_onRoundTimerComplete,
         scope: this
@@ -528,11 +535,17 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
 };
 
 TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
+    this.m_tick3SecSound.stop();
     this.m_roundTimer = null;
     this.m_endTurn();
 };
 
 TerraTactics.scene.Game.prototype.m_endTurn = function () {
+    if (this.m_tick3SecSound !== null) {
+        this.m_tick3SecSound.stop();
+    }
+
+    this.m_turnChange.play();
     this.m_cancelAim();
     this.m_characters.switchTurn();
 
