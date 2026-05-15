@@ -50,7 +50,8 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_soundChannel = new rune.media.SoundChannel();
     this.m_tick3SecSound = this.m_soundChannel.get("tick_3_sec");
-    this.m_turnChange = this.m_soundChannel.get("turn_change");
+    this.m_turnChangeSound = this.m_soundChannel.get("turn_change");
+    this.m_victorySound = this.m_soundChannel.get("victory");
 
     // load tilemap
     this.stage.m_map.load("map");
@@ -59,6 +60,19 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     var map = this.stage.m_map;
     var frontLayer = map.front;
+
+    // custom tile collision
+    var tileColliderThickness = 3;
+    var tileSurfaceBounds = {
+        1: { x: 6, width: 10 },
+        2: { x: 0, width: 16 },
+        3: { x: 0, width: 10 },
+        17: { x: 4, width: 8 },
+        19: { x: 6, width: 10 },
+        20: { x: 0, width: 16 },
+        21: { x: 0, width: 16 },
+        22: { x: 0, width: 10 }
+    };
 
     for (var i = 0; i < frontLayer.data.length; i++) {
         var tileValue = frontLayer.getTileValueAt(i);
@@ -76,23 +90,22 @@ TerraTactics.scene.Game.prototype.init = function () {
         var tileX = i % map.widthInTiles * map.tileWidth;
         var tileY = Math.floor(i / map.widthInTiles) * map.tileHeight;
 
-        if (properties.leftEdge) {
-            this.m_tiles.push(new rune.display.InteractiveObject(tileX, tileY, 3, 16));
-        }
+        var surfaceBounds = tileSurfaceBounds[tileValue];
 
-        if (properties.rightEdge) {
-            this.m_tiles.push(new rune.display.InteractiveObject(tileX + 13, tileY, 3, 16));
-        }
-
-        if (properties.bottomEdge) {
-            this.m_tiles.push(new rune.display.InteractiveObject(tileX, tileY, 16, 8));
+        if (properties.bottomEdge && surfaceBounds !== undefined) {
+            this.m_tiles.push(new rune.display.InteractiveObject(
+                tileX + surfaceBounds.x,
+                tileY,
+                surfaceBounds.width,
+                tileColliderThickness
+            ));
         }
     }
 
     this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
     this.stage.addChild(this.m_lava);
 
-    this.tweens.create({
+    this.m_lavaTween = this.tweens.create({
         target: this.m_lava,
         scope: this,
         duration: 700000,
@@ -545,7 +558,7 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
         this.m_tick3SecSound.stop();
     }
 
-    this.m_turnChange.play();
+    this.m_turnChangeSound.play();
     this.m_cancelAim();
     this.m_characters.switchTurn();
 
@@ -589,8 +602,9 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
     var vy = projectile.vy;
 
     for (var i = 0; i < 20; i++) {
-        this.m_artboard.canvas.drawLine(x, y, x + vx, y + vy, "#ffcc00", 2, 1);
-
+        if (i % 2 === 0) {
+            this.m_artboard.canvas.drawLine(x, y, x + vx, y + vy, "#ffcc00", 2, 1);
+        }
         x += vx;
         y += vy;
         vy += TerraTactics.scene.Bullet.GRAVITY;
@@ -617,6 +631,9 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
     winnerText.scaleY = 2;
 
     this.stage.addChild(winnerText);
+
+    this.m_victorySound.play(true);
+    this.m_victorySound.loop = false;
 };
 
 /**
@@ -636,7 +653,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     if (this.m_gameEnd === true) {
         this.m_tick3SecSound.stop();
-        this.m_turnChange.stop();
+        this.m_turnChangeSound.stop();
         return;
     }
 

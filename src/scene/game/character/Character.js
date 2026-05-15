@@ -44,8 +44,8 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
     this.hitbox.set(8, 0, 8, 12);
-    //this.hitbox.debug = true;
-    // this.hitbox.debugColor = "green";
+    this.hitbox.debug = true;
+    this.hitbox.debugColor = "green";
 
 
     this.animation.create("idle", [0, 1, 2, 3], 6, true);
