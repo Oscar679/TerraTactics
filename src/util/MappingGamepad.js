@@ -328,74 +328,6 @@ Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "weaponNext", 
 });
 
 /**
- * Weapon shortcut 1.
- *
- * @member {boolean} weaponOne
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "weaponOne", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return false;
-    }
-});
-
-/**
- * Weapon shortcut 2.
- *
- * @member {boolean} weaponTwo
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "weaponTwo", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return false;
-    }
-});
-
-/**
- * Weapon shortcut 3.
- *
- * @member {boolean} weaponThree
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "weaponThree", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return false;
-    }
-});
-
-/**
- * Weapon shortcut 4.
- *
- * @member {boolean} weaponFour
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "weaponFour", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return false;
-    }
-});
-
-/**
  * Left stick x-axis.
  *
  * @member {number} aimX
@@ -512,7 +444,7 @@ TerraTactics.util.MappingGamepad.prototype.m_getGamepad = function () {
 };
 
 /**
- * Gets a boolean stick property safely.
+ * Gets a boolean stick property.
  *
  * @param {string} property Stick property name.
  *
@@ -534,7 +466,7 @@ TerraTactics.util.MappingGamepad.prototype.m_stick = function (property) {
 };
 
 /**
- * Reads a held button safely.
+ * Reads a held button.
  *
  * @param {number} button Button ID.
  *
@@ -556,7 +488,7 @@ TerraTactics.util.MappingGamepad.prototype.m_pressed = function (button) {
 };
 
 /**
- * Reads a just-pressed button safely.
+ * Reads a just-pressed button.
  *
  * @param {number} button Button ID.
  *
@@ -578,7 +510,7 @@ TerraTactics.util.MappingGamepad.prototype.m_justPressed = function (button) {
 };
 
 /**
- * Reads a just-released button safely.
+ * Reads a just-released button.
  *
  * @param {number} button Button ID.
  *

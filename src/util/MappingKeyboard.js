@@ -73,30 +73,6 @@ Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "jump", {
     }
 });
 
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "fire", {
-    get: function () {
-        return this.m_pressed("SPACE");
-    }
-});
-
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "firePressed", {
-    get: function () {
-        return this.m_justPressed("SPACE");
-    }
-});
-
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "fireReleased", {
-    get: function () {
-        return this.m_justReleased("SPACE");
-    }
-});
-
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "confirm", {
-    get: function () {
-        return this.m_justPressed("ENTER") || this.m_justPressed("SPACE");
-    }
-});
-
 Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponPrevious", {
     get: function () {
         return this.m_justPressed("Q");
@@ -106,30 +82,6 @@ Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponPrevio
 Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponNext", {
     get: function () {
         return this.m_justPressed("E");
-    }
-});
-
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponOne", {
-    get: function () {
-        return this.m_justPressed("ONE");
-    }
-});
-
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponTwo", {
-    get: function () {
-        return this.m_justPressed("TWO");
-    }
-});
-
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponThree", {
-    get: function () {
-        return this.m_justPressed("THREE");
-    }
-});
-
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponFour", {
-    get: function () {
-        return this.m_justPressed("FOUR");
     }
 });
 
@@ -152,7 +104,7 @@ TerraTactics.util.MappingKeyboard.prototype.m_getKeyboard = function () {
 };
 
 /**
- * Reads a held key safely.
+ * Reads a held key.
  *
  * @param {string} key Key name.
  *
@@ -165,7 +117,7 @@ TerraTactics.util.MappingKeyboard.prototype.m_pressed = function (key) {
 };
 
 /**
- * Reads a just-pressed key safely.
+ * Reads a just-pressed key.
  *
  * @param {string} key Key name.
  *
@@ -178,7 +130,7 @@ TerraTactics.util.MappingKeyboard.prototype.m_justPressed = function (key) {
 };
 
 /**
- * Reads a just-released key safely.
+ * Reads a just-released key.
  *
  * @param {string} key Key name.
  *
