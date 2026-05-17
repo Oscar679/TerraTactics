@@ -115,6 +115,78 @@ TerraTactics.scene.Game.prototype.init = function () {
         }
     });
 
+    this.m_time = 0;
+
+    // round timer string
+    this.m_roundTimeString = new rune.text.BitmapField("10");
+    this.m_roundTimeString.width = this.m_roundTimeString.textWidth;
+    this.m_roundTimeString.height = this.m_roundTimeString.textHeight;
+
+    // global timer string
+    this.m_timeString = new rune.text.BitmapField("00:00");
+    this.m_timeString.width = this.m_timeString.textWidth;
+    this.m_timeString.height = this.m_timeString.textHeight;
+
+    this.m_globalTimer = this.timers.create({
+        duration: 1000,
+        repeat: 999999,
+        onTick: function () {
+            this.m_time++;
+            console.log('1 second passed');
+
+            this.m_second = this.m_time % 60;
+            this.m_minute = Math.floor(this.m_time / 60);
+
+            this.m_timeString.text = this.m_padNumber(this.m_minute) + ":" + this.m_padNumber(this.m_second);
+        },
+        scope: this
+    });
+
+    // create containers
+    this.m_timerContainer = new rune.display.DisplayObjectContainer(105, 8, 190, 148);
+    this.m_globalTimerContainer = new rune.display.DisplayObjectContainer(90, 0, 96, 48);
+    this.m_roundTimerContainer = new rune.display.DisplayObjectContainer(30, 0, 96, 48);
+
+    // create time bars
+    this.totalTimeBar = new TerraTactics.scene.TimeBar(0, 0);
+    this.roundTimeBar = new TerraTactics.scene.TimeBar(0, 0);
+
+    // add containers
+    this.stage.addChild(this.m_timerContainer);
+    this.m_timerContainer.addChild(this.m_globalTimerContainer);
+    this.m_timerContainer.addChild(this.m_roundTimerContainer);
+
+    this.totalTimeBar.scaleX = 0.6;
+    this.totalTimeBar.scaleY = 0.8;
+    this.roundTimeBar.scaleX = 0.6;
+    this.roundTimeBar.scaleY = 0.8;
+
+    this.m_globalTitle = new rune.text.BitmapField("TOTAL");
+    this.m_roundTitle = new rune.text.BitmapField("TURN");
+
+    var globalTimerCenterX = this.totalTimeBar.x + this.totalTimeBar.width * this.totalTimeBar.scaleX / 2;
+    var roundTimerCenterX = this.roundTimeBar.x + this.roundTimeBar.width * this.roundTimeBar.scaleX / 2;
+
+    this.m_timeString.centerX += 14;
+    this.m_timeString.centerY = 25;
+    this.m_roundTimeString.centerX += 20;
+    this.m_roundTimeString.centerY = 25;
+
+    this.m_globalTitle.centerY = 14;
+    this.m_globalTitle.centerX += 14;
+
+    this.m_roundTitle.centerY = 14;
+    this.m_roundTitle.centerX += 14;
+
+    // add bars first, text second
+    this.m_globalTimerContainer.addChild(this.totalTimeBar);
+    this.m_globalTimerContainer.addChild(this.m_timeString);
+    this.m_globalTimerContainer.addChild(this.m_globalTitle);
+
+    this.m_roundTimerContainer.addChild(this.roundTimeBar);
+    this.m_roundTimerContainer.addChild(this.m_roundTimeString);
+    this.m_roundTimerContainer.addChild(this.m_roundTitle);
+
     this.m_artboard = new rune.display.Artboard(0, 0, 400, 225);
     this.stage.addChild(this.m_artboard);
 
@@ -210,77 +282,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_currentPlayerText = null;
 
 
-    this.m_time = 0;
 
-    // round timer string
-    this.m_roundTimeString = new rune.text.BitmapField("10");
-    this.m_roundTimeString.width = this.m_roundTimeString.textWidth;
-    this.m_roundTimeString.height = this.m_roundTimeString.textHeight;
-
-    // global timer string
-    this.m_timeString = new rune.text.BitmapField("00:00");
-    this.m_timeString.width = this.m_timeString.textWidth;
-    this.m_timeString.height = this.m_timeString.textHeight;
-
-    this.m_globalTimer = this.timers.create({
-        duration: 1000,
-        repeat: 999999,
-        onTick: function () {
-            this.m_time++;
-            console.log('1 second passed');
-
-            this.m_second = this.m_time % 60;
-            this.m_minute = Math.floor(this.m_time / 60);
-
-            this.m_timeString.text = this.m_padNumber(this.m_minute) + ":" + this.m_padNumber(this.m_second);
-        },
-        scope: this
-    });
-
-    // create containers
-    this.m_timerContainer = new rune.display.DisplayObjectContainer(105, 8, 190, 148);
-    this.m_globalTimerContainer = new rune.display.DisplayObjectContainer(90, 0, 96, 48);
-    this.m_roundTimerContainer = new rune.display.DisplayObjectContainer(30, 0, 96, 48);
-
-    // create time bars
-    this.totalTimeBar = new TerraTactics.scene.TimeBar(0, 0);
-    this.roundTimeBar = new TerraTactics.scene.TimeBar(0, 0);
-
-    // add containers
-    this.stage.addChild(this.m_timerContainer);
-    this.m_timerContainer.addChild(this.m_globalTimerContainer);
-    this.m_timerContainer.addChild(this.m_roundTimerContainer);
-
-    this.totalTimeBar.scaleX = 0.6;
-    this.totalTimeBar.scaleY = 0.8;
-    this.roundTimeBar.scaleX = 0.6;
-    this.roundTimeBar.scaleY = 0.8;
-
-    this.m_globalTitle = new rune.text.BitmapField("TOTAL");
-    this.m_roundTitle = new rune.text.BitmapField("TURN");
-
-    var globalTimerCenterX = this.totalTimeBar.x + this.totalTimeBar.width * this.totalTimeBar.scaleX / 2;
-    var roundTimerCenterX = this.roundTimeBar.x + this.roundTimeBar.width * this.roundTimeBar.scaleX / 2;
-
-    this.m_timeString.centerX += 14;
-    this.m_timeString.centerY = 25;
-    this.m_roundTimeString.centerX += 20;
-    this.m_roundTimeString.centerY = 25;
-
-    this.m_globalTitle.centerY = 14;
-    this.m_globalTitle.centerX += 14;
-
-    this.m_roundTitle.centerY = 14;
-    this.m_roundTitle.centerX += 14;
-
-    // add bars first, text second
-    this.m_globalTimerContainer.addChild(this.totalTimeBar);
-    this.m_globalTimerContainer.addChild(this.m_timeString);
-    this.m_globalTimerContainer.addChild(this.m_globalTitle);
-
-    this.m_roundTimerContainer.addChild(this.roundTimeBar);
-    this.m_roundTimerContainer.addChild(this.m_roundTimeString);
-    this.m_roundTimerContainer.addChild(this.m_roundTitle);
 
     //add arrows to characters
     this.m_activeArrow = new rune.display.Sprite(0, 0, 32, 32, "arrow");
