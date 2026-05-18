@@ -280,14 +280,19 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_gameEnd = false;
 
-    this.m_controls = new TerraTactics.util.Controls(0);
+    this.m_playerControls = {
+        player1: new TerraTactics.util.Controls(0),
+        player2: new TerraTactics.util.Controls(1)
+    };
+
+    this.m_controls = this.m_playerControls.player1;
+
     this.m_weaponNames = ["pistol", "rifle", "grenade", "melee"];
     this.m_selectedAttackIndex = 0;
 
     this.m_currentPlayerText = null;
 
     console.log(this.stage.m_map);
-
 
     //add arrows to characters
     this.m_activeArrow = new rune.display.Sprite(0, 0, 32, 32, "arrow");
@@ -314,6 +319,14 @@ TerraTactics.scene.Game.prototype.init = function () {
     //  this.stage.addChild(this.test);
 
     this.m_startRoundTimer();
+};
+
+TerraTactics.scene.Game.prototype.m_getActiveControls = function () {
+    if (this.m_activePlayer === null || this.m_activePlayer === undefined) {
+        return this.m_playerControls.player1;
+    }
+
+    return this.m_playerControls[this.m_activePlayer.id] || this.m_playerControls.player1;
 };
 
 TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
@@ -702,6 +715,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         return;
     }
 
+    this.m_controls = this.m_getActiveControls();
     this.m_updateGamepadAim();
     this.m_updatePlayerInput();
     this.m_updateWeaponUiInput();

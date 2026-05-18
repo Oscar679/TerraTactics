@@ -12,20 +12,20 @@ This list is focused on your responsibility as the developer: game logic, mechan
 
 - [x] Lock player control after firing. While `m_bullet !== null`, the active player should not move, jump, aim, switch weapons, or fire again. Start in `src/scene/game/Game.js` around `m_updatePlayerInput`, `m_updateWeaponUiInput`, and the bullet checks.
 - [x] Prevent the round timer from ending the turn while a projectile is still active. If the timer hits zero during a shot, wait until the projectile hits terrain, hits a player, explodes, or leaves the world.
-- [ ] Fix remaining active-player null safety. The arrow update is guarded, but `Game.js` and `Characters.js` still have direct `getActive().character` / `m_activePlayer.character` reads that can crash after death or simultaneous player removal.
+- [ ] Fix remaining active-player null safety. The arrow update is guarded, but `Game.js` and `Characters.js` still have direct `getActive().character` / `m_activePlayer.character` reads in input, aiming, turn switching, and character update code that can crash after death or simultaneous player removal.
 - [ ] Make death and winner logic impossible to crash. Test both cases: active player dies from lava, inactive player dies from lava/projectile. The game should show one winner message and then stop gameplay cleanly.
-- [ ] Remove debug mode and hitbox visuals for final build: `src/system/Main.js` has `debug: true`; `src/scene/game/character/Character.js` has `this.hitbox.debug = true`.
+- [ ] Remove debug mode for final build. `src/system/Main.js` still has `debug: true`; character and bullet hitbox debug lines are currently commented out.
 - [ ] Remove all `console.log` calls before final hand-in. Check with `rg -n "console\\.log" src`.
-- [ ] Remove or implement broken menu items. `MainMenu.js` has `Exit` in the menu but no scene/action for it, and `Options.js` currently logs placeholder volume changes.
+- [ ] Remove or implement broken menu items. `MainMenu.js` has `Exit` in the menu but no scene/action for it, and `Options.js` still has placeholder volume functions that do nothing.
 - [ ] Decide final menu flow with the designer: either keep a simple working Main Menu -> Game -> Credits/Back flow, or remove fake options that do nothing.
 - [ ] Update `README.md` controls. It currently says mouse/Q controls, but the project now has gamepad/keyboard weapon cycling and analog aiming.
 - [ ] Rebuild and run the final version after every resource/code change: `npm run build`, then `npm start` or the Rune OS test flow required by the course.
-- [ ] Fix or document the Windows build setup. `npm run build` currently calls `bash ./build.sh`; on this machine it fails because WSL has no installed Linux distribution. Either use Git Bash/WSL reliably or add a Windows-friendly build command.
+- [ ] Fix or document the Windows build setup. `npm run build` currently calls `bash ./build.sh` inside `scripts/shell`; on this machine it fails because WSL has no installed Linux distribution. Either use Git Bash/WSL reliably or add a Windows-friendly build command.
 
 ## P0 - Core Mechanics You Own
 
-- [ ] Make turns deterministic: exactly one turn switch per shot or timeout. Avoid double-calling `m_endTurn` from timer, collision, player death, and off-screen projectile logic.
-- [ ] Add a simple game state flag such as `waitingForProjectile`, `turnChanging`, or `gameOver` so input/timers/projectiles cannot overlap in weird ways.
+- [ ] Make turns deterministic: exactly one turn switch per shot or timeout. Avoid double-calling `m_endTurn` from timer, collision, player death, off-screen projectile logic, and game-over transitions.
+- [ ] Add a simple game state flag such as `waitingForProjectile`, `turnChanging`, or `gameOver` so input/timers/projectiles cannot overlap in weird ways. `m_gameEnd` exists, but there is not yet a turn/projectile transition guard.
 - [x] Make projectile cleanup centralized. Right now terrain hit, player hit, and screen exit each remove the bullet and call `m_endTurn`; put the repeated cleanup into one helper.
 - [ ] Confirm what happens if a projectile kills the active player indirectly, such as knockback/lava or explosion later if grenade gets radius damage.
 - [ ] Keep lava death reliable for active and inactive players. Lava should set health/death once, play feedback once, and not repeatedly trigger sounds.
@@ -42,17 +42,19 @@ This list is focused on your responsibility as the developer: game logic, mechan
   - Grenade: arcing area damage.
   - Melee: close range, high knockback, no projectile.
 - [x] Move cooldown values into weapon classes instead of duplicating them in `Character.m_setCooldown`. Use each weapon's `m_cooldown`.
-- [ ] Make cooldown behavior visible or remove cooldowns. Hidden cooldowns feel like bugs during testing.
+- [ ] Make cooldown behavior visible or remove cooldowns. Attack icons show base cooldown text, but they do not yet show each active player's current cooldown state.
 - [x] Verify arc preview matches the actual projectile for every projectile weapon.
 - [ ] Tune damage so a match is neither instant nor too slow for presentation.
 
 ## P0 - Input And Two-Player Expectations
 
 - [ ] Confirm with the teacher whether "two players" means one shared controller/keyboard taking turns or two separate controllers. Document the answer.
+- [x] Route active-turn gameplay input through player-specific controllers. `player1` now uses `Controls(0)`, `player2` uses `Controls(1)`, and `Game.update` reads from the active player's controls.
+- [ ] Test two connected controllers on the presentation hardware. Each player should use their own controller for movement, aiming, firing, and weapon selection, with the active turn reading input from the correct controller only.
 - [ ] Test the exact controller you will present with. Current mapping is PS4-style buttons in `src/util/MappingGamepad.js`.
 - [ ] Decide final keyboard support. If keyboard remains, document it and make it complete. If gamepad is the target, make sure the game can be played start-to-finish with gamepad only.
 - [ ] Fix missing/unused input hooks. `Game.js` checks `weaponOne`, `weaponTwo`, `weaponThree`, `weaponFour`, and `Intro.js` checks `toggleWeapons`, but `Controls.js` does not define them.
-- [ ] Make fire behavior predictable: aim with stick/mouse, press fire once, shot happens once.
+- [x] Make fire behavior predictable: aim with stick/mouse, press fire once, shot happens once.
 - [ ] Test menu confirm so one press does not accidentally skip multiple scenes.
 
 ## P1 - Developer Support For Designer-Owned Work
@@ -62,7 +64,7 @@ This list is focused on your responsibility as the developer: game logic, mechan
 - [ ] Coordinate final menu screens: Start, Instructions/Controls, Credits, Back/Restart. The designer can own visuals, but you should wire scene transitions safely.
 - [ ] Add a restart/back-to-menu path after game over if the designer wants it.
 - [ ] Make sure sounds are triggered by real game events only once: jump, weapon switch, fire, hit, lava, turn change, victory.
-- [ ] Keep all design assets referenced correctly in `Requests.js` by rebuilding after asset changes.
+- [ ] Keep all design assets referenced correctly in `src/data/resource/Requests.js` by rebuilding after asset changes.
 
 ## P1 - Code Quality
 
@@ -77,7 +79,7 @@ This list is focused on your responsibility as the developer: game logic, mechan
 
 - [ ] Update `README.md` with accurate setup, build, controls, goal, and known limitations.
 - [ ] Add a short "Developer responsibility" section to docs: turn system, collision, weapons, lava, gamepad input, win condition.
-- [ ] Keep `BUGS.md` current or merge the real issues into this TODO before submission.
+- [ ] Keep `BUGS.md` current or merge the real issues into this TODO before submission. It still lists some issues that appear fixed in code, such as projectile/timer conflict, post-shot input, and bottom-of-terrain grounding.
 - [ ] Prepare a short explanation of your code structure:
   - `Game.js`: turn loop, timers, lava, collision checks, win state.
   - `Character.js` / `Characters.js`: player state, health, physics, death.
@@ -107,9 +109,9 @@ This list is focused on your responsibility as the developer: game logic, mechan
 
 ## Suggested Work Order
 
-1. Fix game-state safety: input lock, projectile/timer conflict, active-player null checks.
-2. Clean final-build issues: debug mode, hitbox debug, console logs, broken menu options.
-3. Finish weapon mechanics: melee/grenade decision, cooldown cleanup, balance pass.
-4. Verify controls and update README.
+1. Fix game-state safety: active-player null checks, death/winner handling, deterministic turn guards.
+2. Clean final-build issues: Rune debug mode, console logs, broken menu/options flow.
+3. Finish weapon mechanics: melee/grenade decision, cooldown visibility, balance pass.
+4. Verify two-controller controls and update README.
 5. Coordinate final UI/menu polish with the designer.
 6. Do full playtests and record any remaining known issues.
