@@ -62,7 +62,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     var frontLayer = map.front;
 
     // custom tile collision
-    var tileColliderThickness = 3;
+    var tileColliderThickness = 1;
     var tileSurfaceBounds = {
         1: { x: 6, width: 10 },
         2: { x: 0, width: 16 },
