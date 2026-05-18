@@ -191,10 +191,10 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_attacks = new rune.display.DisplayGroup(this.stage);
 
-    this.attack1 = new TerraTactics.scene.Attacks(110, 180, "pistol", selectWeapon);
-    this.attack2 = new TerraTactics.scene.Attacks(165, 180, "rifle", selectWeapon);
-    this.attack3 = new TerraTactics.scene.Attacks(220, 180, "grenade", selectWeapon);
-    this.attack4 = new TerraTactics.scene.Attacks(275, 180, "melee", selectWeapon);
+    this.attack1 = new TerraTactics.scene.Attacks(80, 170, "pistol", selectWeapon);
+    this.attack2 = new TerraTactics.scene.Attacks(155, 170, "rifle", selectWeapon);
+    this.attack3 = new TerraTactics.scene.Attacks(230, 170, "grenade", selectWeapon);
+    this.attack4 = new TerraTactics.scene.Attacks(290, 170, "melee", selectWeapon);
 
     this.m_attacks.addMember(this.attack1);
     this.m_attacks.addMember(this.attack2);
@@ -273,6 +273,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_inActivePlayers = this.m_characters.getInactive();
 
     this.m_selectWeapon("pistol");
+    this.m_updateAttackCooldowns();
 
     this.m_counter = 0;
 
@@ -388,6 +389,23 @@ TerraTactics.scene.Game.prototype.m_selectWeaponAt = function (index) {
     this.m_selectWeapon(this.m_weaponNames[this.m_selectedAttackIndex]);
 };
 
+TerraTactics.scene.Game.prototype.m_updateAttackCooldowns = function () {
+    var character = null;
+
+    if (this.m_activePlayer === null ||
+        this.m_activePlayer === undefined ||
+        this.m_activePlayer.character === null ||
+        this.m_activePlayer.character === undefined) {
+        return;
+    }
+
+    character = this.m_activePlayer.character;
+
+    this.m_attacks.forEachMember(function (attack) {
+        attack.setCooldown = character.m_weaponState.cooldowns[attack.m_weapon];
+    });
+};
+
 TerraTactics.scene.Game.prototype.m_fireActiveWeapon = function (targetX, targetY) {
     var weapon = null;
 
@@ -402,6 +420,7 @@ TerraTactics.scene.Game.prototype.m_fireActiveWeapon = function (targetX, target
     if (this.m_activePlayer.character.m_canFire(weapon)) {
         this.m_bullet = this.m_activePlayer.character.m_fireProjectile(targetX, targetY);
         this.m_activePlayer.character.m_setCooldown(weapon);
+        this.m_updateAttackCooldowns();
         this.stage.addChild(this.m_bullet);
     }
 };
@@ -597,6 +616,7 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_inActivePlayers = this.m_characters.getInactive();
     this.m_startRoundTimer();
     this.m_selectWeapon("pistol");
+    this.m_updateAttackCooldowns();
 };
 
 TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
@@ -786,6 +806,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         if (this.m_activePlayer !== oldActivePlayer) {
             this.m_startRoundTimer();
             this.m_selectWeapon("pistol");
+            this.m_updateAttackCooldowns();
         }
 };
 

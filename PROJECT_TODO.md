@@ -42,7 +42,8 @@ This list is focused on your responsibility as the developer: game logic, mechan
   - Grenade: arcing area damage.
   - Melee: close range, high knockback, no projectile.
 - [x] Move cooldown values into weapon classes instead of duplicating them in `Character.m_setCooldown`. Use each weapon's `m_cooldown`.
-- [ ] Make cooldown behavior visible or remove cooldowns. Attack icons show base cooldown text, but they do not yet show each active player's current cooldown state.
+- [x] Sync the active player's current weapon cooldown values into the attack icon text.
+- [ ] Finish cooldown UI polish. Current cooldown values now sync into attack icons, but the full turn flow needs playtesting and you still need to decide whether `0` should be hidden, dimmed, or shown.
 - [x] Verify arc preview matches the actual projectile for every projectile weapon.
 - [ ] Tune damage so a match is neither instant nor too slow for presentation.
 
@@ -73,13 +74,14 @@ This list is focused on your responsibility as the developer: game logic, mechan
 - [ ] Remove unused methods or old experiments, such as `Game.m_fireProjectile` if it is no longer used.
 - [ ] Avoid duplicated mouse/gamepad aiming logic where possible.
 - [ ] Add small helper functions for repeated checks: `m_hasActiveCharacter`, `m_hasActiveProjectile`, `m_canAcceptInput`, `m_finishProjectile`.
+- [ ] Consider extracting attack-bar management from `Game.js` after cooldown UI is stable. Keep `Attacks` as one icon/button, and move the group, hit testing, selected state, and cooldown syncing into an `AttackBar` or `WeaponSelector` class.
 - [ ] Keep functions short enough that you can explain them during presentation.
 
 ## P1 - Documentation And Presentation
 
 - [ ] Update `README.md` with accurate setup, build, controls, goal, and known limitations.
 - [ ] Add a short "Developer responsibility" section to docs: turn system, collision, weapons, lava, gamepad input, win condition.
-- [ ] Keep `BUGS.md` current or merge the real issues into this TODO before submission. It still lists some issues that appear fixed in code, such as projectile/timer conflict, post-shot input, and bottom-of-terrain grounding.
+- [ ] Keep `BUGS.md` current or merge the real issues into this TODO before submission. It still lists some issues that appear fixed or partly fixed in code, such as projectile/timer conflict, post-shot input, bottom-of-terrain grounding, and cooldown display.
 - [ ] Prepare a short explanation of your code structure:
   - `Game.js`: turn loop, timers, lava, collision checks, win state.
   - `Character.js` / `Characters.js`: player state, health, physics, death.
@@ -111,7 +113,7 @@ This list is focused on your responsibility as the developer: game logic, mechan
 
 1. Fix game-state safety: active-player null checks, death/winner handling, deterministic turn guards.
 2. Clean final-build issues: Rune debug mode, console logs, broken menu/options flow.
-3. Finish weapon mechanics: melee/grenade decision, cooldown visibility, balance pass.
+3. Finish weapon mechanics: melee/grenade decision, cooldown UI polish, balance pass.
 4. Verify two-controller controls and update README.
 5. Coordinate final UI/menu polish with the designer.
 6. Do full playtests and record any remaining known issues.
