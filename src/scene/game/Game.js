@@ -222,6 +222,10 @@ TerraTactics.scene.Game.prototype.init = function () {
             return;
         }
 
+        if (this.m_bullet !== null) {
+            return;
+        }
+
         this.m_mouseX = e.offsetX * (400 / e.target.clientWidth);
         this.m_mouseY = e.offsetY * (225 / e.target.clientHeight);
 
@@ -758,18 +762,17 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayers = this.m_characters.getInactive();
 
-    console.log(this.m_activePlayer.character.x);
-
     if (this.m_activePlayer !== null &&
         this.m_activePlayer.character !== null &&
         this.m_activePlayer.character.m_grounded) {
         this.m_counter = 0;
     }
 
-    if (this.m_activePlayer !== oldActivePlayer) {
-        this.m_startRoundTimer();
-        this.m_selectWeapon("pistol");
-    }
+    if (this.m_activeArrow !== null && oldActivePlayer !== null)
+        if (this.m_activePlayer !== oldActivePlayer) {
+            this.m_startRoundTimer();
+            this.m_selectWeapon("pistol");
+        }
 };
 
 /**

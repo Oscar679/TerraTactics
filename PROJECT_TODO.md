@@ -10,9 +10,9 @@ This list is focused on your responsibility as the developer: game logic, mechan
 
 ## P0 - Must Fix Before Submission
 
-- [ ] Lock player control after firing. While `m_bullet !== null`, the active player should not move, jump, aim, switch weapons, or fire again. Start in `src/scene/game/Game.js` around `m_updatePlayerInput`, `m_updateWeaponUiInput`, and the bullet checks.
+- [x] Lock player control after firing. While `m_bullet !== null`, the active player should not move, jump, aim, switch weapons, or fire again. Start in `src/scene/game/Game.js` around `m_updatePlayerInput`, `m_updateWeaponUiInput`, and the bullet checks.
 - [x] Prevent the round timer from ending the turn while a projectile is still active. If the timer hits zero during a shot, wait until the projectile hits terrain, hits a player, explodes, or leaves the world.
-- [ ] Fix active-player null safety. `Game.update` moves `m_activeArrow` before checking if `m_activePlayer.character` exists, which can crash after death. Guard the arrow update before reading `character.centerX`.
+- [ ] Fix remaining active-player null safety. The arrow update is guarded, but `Game.js` and `Characters.js` still have direct `getActive().character` / `m_activePlayer.character` reads that can crash after death or simultaneous player removal.
 - [ ] Make death and winner logic impossible to crash. Test both cases: active player dies from lava, inactive player dies from lava/projectile. The game should show one winner message and then stop gameplay cleanly.
 - [ ] Remove debug mode and hitbox visuals for final build: `src/system/Main.js` has `debug: true`; `src/scene/game/character/Character.js` has `this.hitbox.debug = true`.
 - [ ] Remove all `console.log` calls before final hand-in. Check with `rg -n "console\\.log" src`.
@@ -30,7 +30,7 @@ This list is focused on your responsibility as the developer: game logic, mechan
 - [ ] Confirm what happens if a projectile kills the active player indirectly, such as knockback/lava or explosion later if grenade gets radius damage.
 - [ ] Keep lava death reliable for active and inactive players. Lava should set health/death once, play feedback once, and not repeatedly trigger sounds.
 - [x] Clamp or handle player world bounds so a player cannot leave the map in a broken way.
-- [ ] Fix collision/grounding edge cases listed in `BUGS.md`, especially jumping into the bottom of terrain causing `grounded`.
+- [x] Fix collision/grounding edge cases listed in `BUGS.md`, especially jumping into the bottom of terrain causing `grounded`.
 
 ## P0 - Weapons
 
