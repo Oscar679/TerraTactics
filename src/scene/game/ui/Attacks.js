@@ -19,12 +19,10 @@ TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
     this.m_weapon = weapon;
     this.m_onClick = onClick;
 
-    this.m_cd = TerraTactics.data.Weapons[this.m_weapon].m_cooldown;
-    console.log(this.m_cd);
+    this.m_cd = TerraTactics.data.Weapons[this.m_weapon].cooldown;
 
     this.m_cdText = new rune.text.BitmapField(this.m_cd.toString());
 
-    console.log(this.m_cdText);
     this.addChild(this.m_cdText);
 
     this.animation.create("idle", [0], 1, true);
@@ -47,7 +45,6 @@ TerraTactics.scene.Attacks.prototype.m_click = function () {
 TerraTactics.scene.Attacks.prototype.m_selected = function (selected) {
     if (selected) {
       //  this.animation.gotoAndPlay("selected", 0);
-        console.log('selected: ' + this.m_weapon);
     } else {
         this.animation.gotoAndStop("idle", 0);
     }

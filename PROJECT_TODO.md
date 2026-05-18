@@ -1,188 +1,115 @@
-# TerraTactics Project TODO
+# TerraTactics Developer TODO
 
-This is the practical checklist for getting TerraTactics ready for presentation. Focus on the required and high-risk items first. Extra features are only worth doing after the game is stable.
+This list is focused on your responsibility as the developer: game logic, mechanics, technical stability, integration, documentation support, and playtest fixes. Your designer partner owns graphics, menus, sound, animation, interaction polish, UI, highscore if used, and QA testing, but you still need to make sure the code supports her work and that the final game loop is stable.
 
-## Priority Key
+## Course Responsibility Summary
 
-- `P0` = must fix/add for the school project to feel finished.
-- `P1` = important polish that makes the game feel much better.
-- `P2` = nice idea, but only if the main game is already safe.
+- Developer: game logic and mechanics in code.
+- Designer: graphics, start menus, sound, animation, interaction, UI, highscore, and code that is not directly game logic.
+- Shared: game design choices, documentation, playtesting, and QA testing.
 
-## P0 - Course Requirements
+## P0 - Must Fix Before Submission
 
-- [ ] Boot into a real main menu before the game starts.
-- [ ] Add an instructions screen that explains controls, goal, weapons, turns, and lava.
-- [x] Make the full game playable with gamepad.
-- [x] Make sure menu navigation works with gamepad.
-- [x] Make sure weapon selection works with gamepad.
-- [x] Make sure aiming and firing works with gamepad.
-- [ ] Make sure restart/back/menu flow works with gamepad.
-- [x] Confirm how the teacher wants "two players simultaneously" interpreted.
-- [x] Keep at least two playable players in the final version.
-- [ ] Remove or disable fake menu options that do not work.
-- [ ] Remove debug visuals before presentation.
-- [ ] Remove console logs before presentation.
-- [ ] Make sure the game runs in RUNE OS.
-- [ ] Make sure the final build runs at a stable framerate.
-- [ ] Keep the game visually consistent: same pixel style, same UI style, no mixed art direction.
-- [ ] Make sure all graphics, sound, and code are allowed by the course rules.
-- [ ] Replace any asset that may count as AI-generated.
-- [ ] Document the teacher's highscore exception, since highscore is normally listed in the requirements.
+- [ ] Lock player control after firing. While `m_bullet !== null`, the active player should not move, jump, aim, switch weapons, or fire again. Start in `src/scene/game/Game.js` around `m_updatePlayerInput`, `m_updateWeaponUiInput`, and the bullet checks.
+- [x] Prevent the round timer from ending the turn while a projectile is still active. If the timer hits zero during a shot, wait until the projectile hits terrain, hits a player, explodes, or leaves the world.
+- [ ] Fix active-player null safety. `Game.update` moves `m_activeArrow` before checking if `m_activePlayer.character` exists, which can crash after death. Guard the arrow update before reading `character.centerX`.
+- [ ] Make death and winner logic impossible to crash. Test both cases: active player dies from lava, inactive player dies from lava/projectile. The game should show one winner message and then stop gameplay cleanly.
+- [ ] Remove debug mode and hitbox visuals for final build: `src/system/Main.js` has `debug: true`; `src/scene/game/character/Character.js` has `this.hitbox.debug = true`.
+- [ ] Remove all `console.log` calls before final hand-in. Check with `rg -n "console\\.log" src`.
+- [ ] Remove or implement broken menu items. `MainMenu.js` has `Exit` in the menu but no scene/action for it, and `Options.js` currently logs placeholder volume changes.
+- [ ] Decide final menu flow with the designer: either keep a simple working Main Menu -> Game -> Credits/Back flow, or remove fake options that do nothing.
+- [ ] Update `README.md` controls. It currently says mouse/Q controls, but the project now has gamepad/keyboard weapon cycling and analog aiming.
+- [ ] Rebuild and run the final version after every resource/code change: `npm run build`, then `npm start` or the Rune OS test flow required by the course.
+- [ ] Fix or document the Windows build setup. `npm run build` currently calls `bash ./build.sh`; on this machine it fails because WSL has no installed Linux distribution. Either use Git Bash/WSL reliably or add a Windows-friendly build command.
 
-## P0 - Serious Gameplay Bugs
+## P0 - Core Mechanics You Own
 
-- [ ] Prevent player movement after firing until the projectile/action is finished.
-- [ ] Prevent the round timer from switching turn while a projectile is still active.
-- [ ] Prevent firing while another projectile/action is active.
-- [ ] Make sure the game does not crash when the active player dies.
-- [ ] Make sure the game does not crash when only one player remains.
-- [ ] Make sure winner text appears once and the game ends cleanly.
-- [ ] Make sure active arrow does not update if there is no active character.
-- [ ] Make sure dead characters cannot aim, fire, move, or switch weapons.
-- [ ] Make sure lava death works for active and inactive players.
-- [ ] Make sure projectiles cannot create endless turns or softlocks.
-- [ ] Make sure the player cannot leave the playable area in a broken way.
+- [ ] Make turns deterministic: exactly one turn switch per shot or timeout. Avoid double-calling `m_endTurn` from timer, collision, player death, and off-screen projectile logic.
+- [ ] Add a simple game state flag such as `waitingForProjectile`, `turnChanging`, or `gameOver` so input/timers/projectiles cannot overlap in weird ways.
+- [x] Make projectile cleanup centralized. Right now terrain hit, player hit, and screen exit each remove the bullet and call `m_endTurn`; put the repeated cleanup into one helper.
+- [ ] Confirm what happens if a projectile kills the active player indirectly, such as knockback/lava or explosion later if grenade gets radius damage.
+- [ ] Keep lava death reliable for active and inactive players. Lava should set health/death once, play feedback once, and not repeatedly trigger sounds.
+- [x] Clamp or handle player world bounds so a player cannot leave the map in a broken way.
+- [ ] Fix collision/grounding edge cases listed in `BUGS.md`, especially jumping into the bottom of terrain causing `grounded`.
 
 ## P0 - Weapons
 
-- [ ] Make melee behave like melee, not like a bullet.
-- [ ] Decide if rifle should be fast/straight and pistol should be weaker/simple.
-- [ ] Give each weapon a clear reason to exist.
-- [ ] Make weapon cooldowns visible or remove cooldowns if they are not important.
-- [ ] Make grenade explosion/radius damage understandable if grenade stays in the game.
-- [ ] Make arc preview match the actual projectile path.
-- [ ] Make projectile spawn positions consistent across weapons.
-- [ ] Make weapon damage feel fair enough for a class presentation.
+- [ ] Make melee a real close-range attack or remove it. It currently fires a bullet like the other weapons in `src/weapon/Melee.js`.
+- [ ] Make grenade either a real grenade or cut it. If kept, it needs an explosion radius, radius damage/knockback, explosion sound, and clear end-of-turn behavior.
+- [ ] Give each weapon a clear mechanical role:
+  - Pistol: reliable, low/no cooldown.
+  - Rifle: faster/straighter, higher damage or precision.
+  - Grenade: arcing area damage.
+  - Melee: close range, high knockback, no projectile.
+- [x] Move cooldown values into weapon classes instead of duplicating them in `Character.m_setCooldown`. Use each weapon's `m_cooldown`.
+- [ ] Make cooldown behavior visible or remove cooldowns. Hidden cooldowns feel like bugs during testing.
+- [x] Verify arc preview matches the actual projectile for every projectile weapon.
+- [ ] Tune damage so a match is neither instant nor too slow for presentation.
 
-## P0 - Controls
+## P0 - Input And Two-Player Expectations
 
-- [ ] Decide final aiming model: gamepad only.
-- [ ] Remove or ignore mouse aiming in the final version if it is not required.
-- [ ] Make aim direction easy to understand visually.
-- [ ] Make fire/cancel aim predictable.
-- [ ] Add a small gamepad input delay/cooldown for menu selection so one press does not skip multiple options.
-- [ ] Test with the actual controller you will use during presentation.
+- [ ] Confirm with the teacher whether "two players" means one shared controller/keyboard taking turns or two separate controllers. Document the answer.
+- [ ] Test the exact controller you will present with. Current mapping is PS4-style buttons in `src/util/MappingGamepad.js`.
+- [ ] Decide final keyboard support. If keyboard remains, document it and make it complete. If gamepad is the target, make sure the game can be played start-to-finish with gamepad only.
+- [ ] Fix missing/unused input hooks. `Game.js` checks `weaponOne`, `weaponTwo`, `weaponThree`, `weaponFour`, and `Intro.js` checks `toggleWeapons`, but `Controls.js` does not define them.
+- [ ] Make fire behavior predictable: aim with stick/mouse, press fire once, shot happens once.
+- [ ] Test menu confirm so one press does not accidentally skip multiple scenes.
 
-## P0 - Level And Collision
+## P1 - Developer Support For Designer-Owned Work
 
-- [ ] Fix grounded behavior when the character hits the bottom of terrain.
-- [ ] Check terrain edge hitboxes so characters do not snag too much.
-- [ ] Check if thin character hitboxes make bullet hits feel unfair.
-- [ ] Make sure bullets collide with terrain in a predictable way.
-- [ ] Make sure players spawn on safe terrain.
-- [ ] Make sure no player starts inside terrain or lava.
-
-## P1 - Lava Camera / Taller Map
-
-- [ ] Make the tilemap taller than one screen if you want camera reveal.
-- [ ] Change `asset/map.json` height and front-layer data length.
-- [ ] Build actual playable platforms higher up in the map.
-- [ ] Start the camera near the bottom of the taller map.
-- [ ] Start lava at the bottom of the taller map.
-- [ ] Move the camera upward only when lava has risen enough.
-- [ ] Replace hardcoded screen-height values like `225` with world/map values where needed.
-- [ ] Make sure aiming/projectiles use world coordinates.
-- [ ] Make sure UI does not scroll weirdly with the camera.
-- [ ] Make or extend background art so camera movement does not reveal empty space.
-
-Recommended simple camera behavior:
-
-```js
-var targetY = this.m_lava.y - 170;
-
-if (targetY < this.m_camera.viewport.y) {
-    this.m_camera.viewport.y += (targetY - this.m_camera.viewport.y) * 0.05;
-}
-```
-
-Only do this after the required features are stable.
-
-## P1 - UI Polish
-
-- [ ] Make current player clearly visible.
-- [ ] Make selected weapon clearly visible.
-- [ ] Show weapon cooldowns if cooldowns matter.
-- [ ] Make health readable.
-- [ ] Make timer readable.
-- [ ] Make game-over/winner state clear.
-- [ ] Make buttons/icons use one consistent visual style.
-- [ ] Keep text short and readable on the 400x225 screen.
-
-## P1 - Game Feel
-
-- [ ] Add a short hit effect when a player takes damage.
-- [ ] Add a small camera shake or flash for explosions/hits.
-- [ ] Add clear feedback when a weapon cannot be used.
-- [ ] Tune jump and movement so turns feel responsive.
-- [ ] Tune lava speed so the match has pressure but does not feel random.
-- [ ] Tune projectile speeds so weapons feel different.
-- [ ] Add simple sound effects if allowed and student-made.
+- [ ] Give the designer a stable list of UI states needed by game logic: current player, selected weapon, cooldown, health, turn time, total time, winner.
+- [ ] Expose clean data from game code instead of making UI inspect private fields everywhere.
+- [ ] Coordinate final menu screens: Start, Instructions/Controls, Credits, Back/Restart. The designer can own visuals, but you should wire scene transitions safely.
+- [ ] Add a restart/back-to-menu path after game over if the designer wants it.
+- [ ] Make sure sounds are triggered by real game events only once: jump, weapon switch, fire, hit, lava, turn change, victory.
+- [ ] Keep all design assets referenced correctly in `Requests.js` by rebuilding after asset changes.
 
 ## P1 - Code Quality
 
-- [ ] Move weapon-specific projectile data into each weapon class.
-- [ ] Keep game-state logic in `Game.js`, but keep weapon behavior in weapon classes.
-- [ ] Avoid duplicated aiming/firing logic between mouse and gamepad.
-- [ ] Replace magic numbers like `400`, `225`, and repeated offsets with named values when useful.
-- [ ] Keep null checks around active player/character.
-- [ ] Keep code simple and readable in your current style.
-- [ ] Remove unused variables and old experimental code before final build.
-- [ ] Rebuild after resource changes.
+- [ ] Replace repeated hardcoded screen values like `400` and `225` with named constants where it improves readability.
+- [ ] Keep game-state/turn logic in `Game.js`; keep weapon-specific behavior in weapon classes; keep character physics in `Character.js`.
+- [ ] Remove unused methods or old experiments, such as `Game.m_fireProjectile` if it is no longer used.
+- [ ] Avoid duplicated mouse/gamepad aiming logic where possible.
+- [ ] Add small helper functions for repeated checks: `m_hasActiveCharacter`, `m_hasActiveProjectile`, `m_canAcceptInput`, `m_finishProjectile`.
+- [ ] Keep functions short enough that you can explain them during presentation.
 
-## P2 - Optional Features
+## P1 - Documentation And Presentation
 
-- [ ] Add more maps.
-- [ ] Add better weapon balancing.
-- [ ] Add animated UI transitions.
-- [ ] Add stronger explosion effects.
-- [ ] Add character selection.
-- [ ] Add music only if it is allowed and you have permission.
-- [ ] Add highscore only if the teacher changes their mind.
+- [ ] Update `README.md` with accurate setup, build, controls, goal, and known limitations.
+- [ ] Add a short "Developer responsibility" section to docs: turn system, collision, weapons, lava, gamepad input, win condition.
+- [ ] Keep `BUGS.md` current or merge the real issues into this TODO before submission.
+- [ ] Prepare a short explanation of your code structure:
+  - `Game.js`: turn loop, timers, lava, collision checks, win state.
+  - `Character.js` / `Characters.js`: player state, health, physics, death.
+  - `weapon/*`: weapon data and projectile creation.
+  - `util/*`: keyboard/gamepad mapping.
+- [ ] Document any course exceptions, especially if highscore is not required or if two-player input is turn-based on one controller.
 
-## Suggested Two-Week Plan
+## Final QA Checklist
 
-### Days 1-3: Make It Safe
+- [ ] Fresh clone/install works: `npm install`.
+- [ ] Build passes on the presentation machine: `npm run build`.
+- [ ] Game starts from the final menu, not a debug scene.
+- [ ] One full match can be played without touching mouse/keyboard if gamepad is the target.
+- [ ] Player 1 can win.
+- [ ] Player 2 can win.
+- [ ] Active player dying does not crash.
+- [ ] Inactive player dying does not crash.
+- [ ] Timer timeout switches turn once.
+- [ ] Projectile hit switches turn once.
+- [ ] Projectile miss/off-screen switches turn once.
+- [ ] Lava death works.
+- [ ] Winner text appears once.
+- [ ] Restart/menu flow works, or absent buttons are removed.
+- [ ] No debug overlays.
+- [ ] No console spam.
+- [ ] Final build runs in Rune OS / required course environment.
 
-- [ ] Fix projectile/turn/action lock bugs.
-- [ ] Fix death/winner crashes.
-- [ ] Remove debug/log code.
-- [ ] Make gamepad work for the full game loop.
+## Suggested Work Order
 
-### Days 4-6: Meet Requirements
-
-- [ ] Finish main menu.
-- [ ] Finish instructions screen.
-- [ ] Confirm multiplayer/controller expectations.
-- [ ] Confirm asset legality.
-
-### Days 7-9: Polish Core Gameplay
-
-- [ ] Make melee feel correct.
-- [ ] Tune weapons.
-- [ ] Tune lava.
-- [ ] Improve UI clarity.
-
-### Days 10-11: Add Camera Reveal Only If Stable
-
-- [ ] Make taller map.
-- [ ] Add lava-based camera movement.
-- [ ] Fix hardcoded world bounds.
-- [ ] Test aiming/projectiles with camera movement.
-
-### Days 12-14: Presentation Mode
-
-- [ ] Full playtest from menu to winner.
-- [ ] Test in RUNE OS.
-- [ ] Build final version.
-- [ ] Prepare a short explanation of design choices.
-- [ ] Prepare a backup plan if something fails live.
-
-## Presentation Talking Points
-
-- TerraTactics is a turn-based tactical arena game with rising lava pressure.
-- The lava forces players to act instead of waiting forever.
-- Weapons create different tactical choices.
-- The game uses object-oriented JavaScript: characters, weapons, bullets, UI, and scenes have separate classes.
-- The design was improved iteratively through testing: aiming, projectile arcs, turn flow, and lava pressure.
-- The final version focuses on readable controls, fair turns, and a complete game loop.
-
+1. Fix game-state safety: input lock, projectile/timer conflict, active-player null checks.
+2. Clean final-build issues: debug mode, hitbox debug, console logs, broken menu options.
+3. Finish weapon mechanics: melee/grenade decision, cooldown cleanup, balance pass.
+4. Verify controls and update README.
+5. Coordinate final UI/menu polish with the designer.
+6. Do full playtests and record any remaining known issues.

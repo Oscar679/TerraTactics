@@ -11,8 +11,6 @@ TerraTactics.scene.Characters = function (stage) {
 
     this.m_isWalkSoundPlaying = false;
 
-    console.log(this.m_jumpSound);
-
     var character1 = new TerraTactics.scene.Character(70, 10);
     var character2 = new TerraTactics.scene.Character(100, 10);
 
@@ -69,10 +67,10 @@ TerraTactics.scene.Characters.prototype.getInactive = function () {
 
 TerraTactics.scene.Characters.prototype.switchTurn = function () {
     this.m_currentPlayerIndex = (this.m_currentPlayerIndex + 1) % this.m_playerOrder.length;
-    this.m_syncActivePlayers();
     var activePlayer = this.getActive();
     this.adjustCooldowns(activePlayer.character);
     activePlayer.character.m_setWeapon("pistol");
+    this.m_syncActivePlayers();
 };
 
 TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
@@ -123,6 +121,46 @@ TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry)
 TerraTactics.scene.Characters.prototype.getWinnerText = function () {
     return this.m_winnerText;
 };
+
+TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
+    // left wall
+    if (player.left < this.leftWall) {
+        player.left = this.leftWall;
+        player.m_grounded = false;
+        player.m_velocityY = 2;
+    }
+
+    // right wall
+    if (player.right > this.rightWall) {
+        player.right = this.rightWall;
+        player.m_grounded = false;
+        player.m_velocityY = 2;
+    }
+};
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldWidth", {
+    get: function () {
+        return this.m_stage.m_map.widthInTiles * this.m_stage.m_map.tileWidth;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldHeight", {
+    get: function () {
+        return this.m_stage.m_map.heightInTiles * this.m_stage.m_map.tileHeight;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "leftWall", {
+    get: function () {
+        return 0;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "rightWall", {
+    get: function () {
+        return this.worldWidth;
+    }
+});
 
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
     var activeCharacter = null;
@@ -183,6 +221,14 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
                 this.m_walkSound.stop();
                 this.m_isWalkSoundPlaying = false;
             }
+        }
+    }
+
+    if (activeCharacter !== null) {
+        if (activeCharacter.left < this.leftWall ||
+            activeCharacter.right > this.rightWall) {
+            console.log("hit boundary");
+            this.hitBoundary(activeCharacter);
         }
     }
 };

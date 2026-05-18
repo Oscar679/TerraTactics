@@ -32,23 +32,18 @@ TerraTactics.scene.Options = function () {
 TerraTactics.scene.Options.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.Options.prototype.constructor = TerraTactics.scene.Options;
 TerraTactics.scene.Options.prototype.m_onMenuSelect = function (e) {
-    console.log(e);
 
     this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
 };
 
 TerraTactics.scene.Options.prototype.decrease = function (x) {
-    console.log("decrease");
     var items = this.m_menu.m_list.getChildren();
     var item = items[x];
-    console.log(item.text);
 };
 
 TerraTactics.scene.Options.prototype.increase = function (x) {
-    console.log("increase");
     var items = this.m_menu.m_list.getChildren();
     var item = items[x];
-    console.log(item.text);
 };
 
 

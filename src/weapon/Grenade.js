@@ -55,18 +55,7 @@ TerraTactics.scene.Grenade.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
-TerraTactics.scene.Grenade.prototype.m_getProjectileData = function (player, targetX, targetY) {
-    var dx = targetX - player.centerX;
-    var dy = targetY - player.centerY;
-
-    return {
-        x: player.centerX + 10,
-        y: player.centerY - 20,
-        vx: dx * this.m_speed,
-        vy: dy * this.m_speed
-    };
-};
-
+// override?
 TerraTactics.scene.Grenade.prototype.m_fireProjectile = function (player, targetX, targetY) {
     var projectile = this.m_getProjectileData(player, targetX, targetY);
 

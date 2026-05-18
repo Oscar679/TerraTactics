@@ -28,7 +28,7 @@ TerraTactics.scene.Melee = function () {
 
     this.m_speed = 0.05; // Magic Number
 
-    this.m_damage = 30; // Magic Number
+    this.m_damage = 10; // Magic Number
     this.m_knockback = 20; // Magic Number
     this.m_cooldown = 0; // Magic Number
     this.m_fireSoundId = "fist_punch";
@@ -55,14 +55,6 @@ TerraTactics.scene.Melee.prototype.constructor = TerraTactics.scene.Melee;
  */
 TerraTactics.scene.Melee.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
-};
-
-TerraTactics.scene.Melee.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    var projectile = this.m_getProjectileData(player, targetX, targetY);
-
-    this.m_playFireSound();
-
-    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
 };
 
 /**

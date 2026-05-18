@@ -72,8 +72,12 @@ TerraTactics.scene.Weapon.prototype.m_getProjectileData = function (player, targ
     };
 };
 
-TerraTactics.scene.Weapon.prototype.m_fireProjectile = function () {
-    throw new Error("Child classes must implement this method.");
+TerraTactics.scene.Weapon.prototype.m_fireProjectile = function (player, targetX, targetY) {
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
+
+    this.m_playFireSound();
+
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
 };
 
 TerraTactics.scene.Weapon.prototype.m_playSound = function (soundId) {
@@ -94,6 +98,12 @@ TerraTactics.scene.Weapon.prototype.m_playFireSound = function () {
 TerraTactics.scene.Weapon.prototype.m_playSwitchSound = function () {
     this.m_playSound(this.m_switchSoundId);
 };
+
+Object.defineProperty(TerraTactics.scene.Weapon.prototype, "cooldown", {
+    get: function () {
+        return this.m_cooldown;
+    }
+});
 
 /**
  * This method is automatically executed once per "tick". The method is used for 

@@ -95,21 +95,12 @@ TerraTactics.scene.Character.prototype.m_getWeapon = function () {
 }
 
 TerraTactics.scene.Character.prototype.m_setCooldown = function (weapon) {
-    switch (weapon) {
-        case "pistol":
-            this.m_weaponState.cooldowns[weapon] = 0;
-            break;
-        case "rifle":
-            this.m_weaponState.cooldowns[weapon] = 1;
-            break;
-        case "grenade":
-            this.m_weaponState.cooldowns[weapon] = 2;
-            break;
-        case "melee":
-            this.m_weaponState.cooldowns[weapon] = 3;
-            break;
-        default:
-            throw new Error("Invalid weapon");
+    var cooldown = TerraTactics.data.Weapons[weapon].cooldown;
+
+    if (cooldown > 0) {
+        this.m_weaponState.cooldowns[weapon] = cooldown + 1;
+    } else {
+        this.m_weaponState.cooldowns[weapon] = 0;
     }
 }
 
@@ -119,6 +110,9 @@ TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, tar
     if (!weapon || !weapon.m_fireProjectile) {
         throw new Error("Invalid weapon");
     }
+
+    this.m_movingLeft = false;
+    this.m_movingRight = false;
 
     return weapon.m_fireProjectile(this, targetX, targetY);
 };

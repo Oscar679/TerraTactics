@@ -72,8 +72,6 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 
     this.m_menu.onSelect(this.m_onMenuSelect, this);
 
-    console.log(this.m_menu.m_list);
-
     this.stage.addChild(this.m_menu);
     this.m_scaleItem();
 

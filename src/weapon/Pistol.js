@@ -56,26 +56,6 @@ TerraTactics.scene.Pistol.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
-TerraTactics.scene.Pistol.prototype.m_getProjectileData = function (player, targetX, targetY) {
-    var dx = targetX - player.centerX;
-    var dy = targetY - player.centerY;
-
-    return {
-        x: player.centerX,
-        y: player.y + 2,
-        vx: dx * this.m_speed,
-        vy: dy * this.m_speed
-    };
-};
-
-TerraTactics.scene.Pistol.prototype.m_fireProjectile = function (player, targetX, targetY) {
-    var projectile = this.m_getProjectileData(player, targetX, targetY);
-
-    this.m_playFireSound();
-
-    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
-};
-
 /**
  * This method is automatically executed once per "tick". The method is used for 
  * calculations such as application logic.

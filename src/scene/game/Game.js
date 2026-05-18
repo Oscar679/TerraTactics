@@ -44,7 +44,6 @@ TerraTactics.scene.Game.prototype.constructor = TerraTactics.scene.Game;
  */
 TerraTactics.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-    console.log(rune.display.Graphic);
     this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
     this.stage.addChild(this.bg);
 
@@ -132,8 +131,6 @@ TerraTactics.scene.Game.prototype.init = function () {
         repeat: 999999,
         onTick: function () {
             this.m_time++;
-            console.log('1 second passed');
-
             this.m_second = this.m_time % 60;
             this.m_minute = Math.floor(this.m_time / 60);
 
@@ -221,6 +218,10 @@ TerraTactics.scene.Game.prototype.init = function () {
     }.bind(this));
 
     window.addEventListener("mousedown", function (e) {
+        if (this.m_gameEnd === true) {
+            return;
+        }
+
         this.m_mouseX = e.offsetX * (400 / e.target.clientWidth);
         this.m_mouseY = e.offsetY * (225 / e.target.clientHeight);
 
@@ -281,7 +282,7 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_currentPlayerText = null;
 
-
+    console.log(this.stage.m_map);
 
 
     //add arrows to characters
@@ -465,6 +466,10 @@ TerraTactics.scene.Game.prototype.m_updateGamepadAim = function () {
 };
 
 TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
+    if (this.m_bullet !== null) {
+        return;
+    }
+
     if (this.m_controls.firePressed) {
         this.m_fireAim();
         return;
@@ -499,6 +504,11 @@ TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
 };
 
 TerraTactics.scene.Game.prototype.m_updatePlayerInput = function () {
+
+    if (this.m_bullet !== null) {
+        return;
+    }
+
     this.m_activePlayer.character.m_movingLeft = false;
     this.m_activePlayer.character.m_movingRight = false;
 
@@ -552,7 +562,10 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
 TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
     this.m_tick3SecSound.stop();
     this.m_roundTimer = null;
-    this.m_endTurn();
+
+    if (this.m_bullet === null) {
+        this.m_endTurn();
+    }
 };
 
 TerraTactics.scene.Game.prototype.m_endTurn = function () {
@@ -563,10 +576,8 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_turnChangeSound.play();
     this.m_cancelAim();
     this.m_characters.switchTurn();
-
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayers = this.m_characters.getInactive();
-
     this.m_startRoundTimer();
     this.m_selectWeapon("pistol");
 };
@@ -576,7 +587,6 @@ TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
 };
 
 TerraTactics.scene.Game.prototype.m_knockback = function (player, source) {
-    console.log(source);
     if (player.centerX < source.centerX) {
         player.x -= source.m_knockback;
     } else {
@@ -638,6 +648,21 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
     this.m_victorySound.loop = false;
 };
 
+TerraTactics.scene.Game.prototype.m_bulletHit = function () {
+    this.stage.removeChild(this.m_bullet);
+    this.m_bullet = null;
+    this.m_endTurn();
+};
+
+TerraTactics.scene.Game.prototype.m_updateArrow = function () {
+    if (this.m_activePlayer !== null &&
+        this.m_activePlayer !== undefined &&
+        this.m_activePlayer.character !== null) {
+        this.m_activeArrow.centerX = this.m_activePlayer.character.centerX;
+        this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 38 + this.m_bounceValue.y;
+    }
+};
+
 /**
  * This method is automatically executed once per "tick". The method is used for 
  * calculations such as application logic.
@@ -649,9 +674,7 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
 TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
-
-    this.m_activeArrow.centerX = this.m_activePlayer.character.centerX;
-    this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 38 + this.m_bounceValue.y;
+    this.m_updateArrow();
 
     if (this.m_gameEnd === true) {
         this.m_tick3SecSound.stop();
@@ -675,11 +698,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         return;
     }
 
-    if (this.m_activePlayer === null || this.m_activePlayer.character === null) {
-        this.m_cancelAim();
-        return;
-    }
-
     this.m_updateGamepadAim();
     this.m_updatePlayerInput();
     this.m_updateWeaponUiInput();
@@ -690,11 +708,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     if (this.m_bullet !== null) {
         if (this.m_bullet.hitTest(this.m_tiles)) {
-            console.log('hit');
-            this.stage.removeChild(this.m_bullet);
-            this.m_bullet = null;
-
-            this.m_endTurn();
+            this.m_bulletHit();
         }
     }
 
@@ -703,9 +717,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             if (this.m_inActivePlayers[i].character !== null && this.m_bullet.hitTest(this.m_inActivePlayers[i].character)) {
                 this.m_characters.m_damageTaken(this.m_inActivePlayers[i].character, this.m_bullet.m_damage);
                 this.m_knockback(this.m_inActivePlayers[i].character, this.m_bullet);
-                this.stage.removeChild(this.m_bullet);
-                this.m_bullet = null;
-                this.m_endTurn();
+                this.m_bulletHit();
                 break;
             }
         }
@@ -719,15 +731,12 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             this.m_bullet.y < 0 ||
             this.m_bullet.y > 225
         ) {
-            this.stage.removeChild(this.m_bullet);
-            this.m_bullet = null;
-            this.m_endTurn();
+            this.m_bulletHit();
         }
     }
 
     if (this.m_activePlayer !== null && this.m_activePlayer.character !== null) {
         if (this.m_activePlayer.character.bottom >= this.m_lava.top) {
-            console.log(this.m_activePlayer.character.bottom, this.m_lava.top);
             this.m_activePlayer.character.m_isTouchingLava = true;
             this.m_activePlayer.character.m_health = 0;
         }
@@ -748,6 +757,8 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayers = this.m_characters.getInactive();
+
+    console.log(this.m_activePlayer.character.x);
 
     if (this.m_activePlayer !== null &&
         this.m_activePlayer.character !== null &&
