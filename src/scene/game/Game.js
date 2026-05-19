@@ -652,10 +652,37 @@ TerraTactics.scene.Game.prototype.m_bulletHit = function () {
 TerraTactics.scene.Game.prototype.m_destroyTileAtHitbox = function (hitbox) {
     var indexes = this.stage.m_map.front.getTileIndexesInRect(hitbox);
     for (var i = 0; i < indexes.length; i++) {
-        if (this.stage.m_map.front.getTileValueAt(indexes[i]) > 0) {
-            this.stage.m_map.front.setTileValueAt(indexes[i], 0);
-            break;
+        var index = indexes[i];
+        var width = this.stage.m_map.widthInTiles;
+        var column = index % width;
+        var value = this.stage.m_map.front.getTileValueAt(index);
+
+        if (value === 0) {
+            continue;
         }
+
+        // if its already a destroyed edge or a small island, apply empty tile
+        if (value === 13 || value === 14 || value === 8) {
+            this.stage.m_map.front.setTileValueAt(index, 0);
+            return;
+        }
+
+        if (column > 0 && this.stage.m_map.front.getTileValueAt(index - 1) === 0 && column < width - 1 && this.stage.m_map.front.getTileValueAt(index + 1) === 0) {
+            this.stage.m_map.front.setTileValueAt(index, 0);
+            return;
+        }
+
+
+        if (column > 0 && this.stage.m_map.front.getTileValueAt(index - 1) === 0) {
+            //apply broken island where its empty on the left side of the island
+            this.stage.m_map.front.setTileValueAt(index, 13);
+        } else if (column < width - 1 && this.stage.m_map.front.getTileValueAt(index + 1) === 0) {
+            //apply broken island where its empty on the right side of the island
+            this.stage.m_map.front.setTileValueAt(index, 14);
+        } else {
+            this.stage.m_map.front.setTileValueAt(index, 0);
+        }
+        return;
     }
 };
 
