@@ -55,51 +55,6 @@ TerraTactics.scene.Game.prototype.init = function () {
     // load tilemap
     this.stage.m_map.load("map");
 
-    this.m_tiles = [];
-
-    var map = this.stage.m_map;
-    var frontLayer = map.front;
-
-    // custom tile collision
-    var tileColliderThickness = 1;
-    var tileSurfaceBounds = {
-        1: { x: 6, width: 10 },
-        2: { x: 0, width: 16 },
-        3: { x: 0, width: 10 },
-        17: { x: 4, width: 8 },
-        19: { x: 6, width: 10 },
-        20: { x: 0, width: 16 },
-        21: { x: 0, width: 16 },
-        22: { x: 0, width: 10 }
-    };
-
-    for (var i = 0; i < frontLayer.data.length; i++) {
-        var tileValue = frontLayer.getTileValueAt(i);
-
-        if (tileValue <= 0) {
-            continue;
-        }
-
-        var properties = map.getTilePropertiesOf(tileValue);
-
-        if (properties === null) {
-            continue;
-        }
-
-        var tileX = i % map.widthInTiles * map.tileWidth;
-        var tileY = Math.floor(i / map.widthInTiles) * map.tileHeight;
-
-        var surfaceBounds = tileSurfaceBounds[tileValue];
-
-        if (properties.bottomEdge && surfaceBounds !== undefined) {
-            this.m_tiles.push(new rune.display.InteractiveObject(
-                tileX + surfaceBounds.x,
-                tileY,
-                surfaceBounds.width,
-                tileColliderThickness
-            ));
-        }
-    }
 
     this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
     this.stage.addChild(this.m_lava);
@@ -745,7 +700,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     if (this.m_bullet !== null) {
-        if (this.m_bullet.hitTest(this.m_tiles)) {
+        if (this.m_bullet.hitTest(this.stage.m_map.front)) {
             this.m_bulletHit();
         }
     }
