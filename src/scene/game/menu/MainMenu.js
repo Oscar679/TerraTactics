@@ -6,7 +6,7 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.display.Sprite
+ * @extends rune.scene.Scene
  *
  * @class
  * @classdesc
@@ -22,20 +22,26 @@ TerraTactics.scene.MainMenu = function () {
     /**
      * Calls the constructor method of the super class.
      */
-    rune.display.Sprite.call(this, 150, 100, 96, 96, "Selectedplaygame");
-    rune.display.Sprite.call(this, 190, 100, 96, 96, "SelectedCredits");
-    rune.display.Sprite.call(this, 230, 100, 96, 96, "OptionSelected");
-    rune.display.Sprite.call(this, 260, 100, 96, 96, "ExitGame");
+
+    this.PlayGame = new rune.display.Sprite(0, 150, 100, 96, 96, "Selectedplaygame");
+    this.stage.addChild(this.PlayGame);
+
+     this.Credits = new rune.display.Sprite(0, 190, 100, 96, 96, "SelectedCredits");
+    this.stage.addChild(this.Credits);
+
+     this.Option = new rune.display.Sprite(0, 230, 100, 96, 96, "OptionSelected");
+    this.stage.addChild(this.Option);
+
+     this.ExitGame = new rune.display.Sprite(0, 260, 100, 96, 96, "ExitGame");
+    this.stage.addChild(this.ExitGame);
 
 };
-
-TerraTactics.scene.MainMenu.GRAVITY = 0.1;
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-TerraTactics.scene.MainMenu.prototype = Object.create(rune.display.Sprite.prototype);
+TerraTactics.scene.MainMenu.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
 
 //------------------------------------------------------------------------------
@@ -49,7 +55,7 @@ TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
  * @returns {undefined}
  */
 TerraTactics.scene.MainMenu.prototype.init = function () {
-    rune.display.Sprite.prototype.init.call(this);
+    rune.scene.Scene.prototype.init.call(this);
 };
 
 /**
@@ -61,7 +67,7 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
  * @returns {undefined}
  */
 TerraTactics.scene.MainMenu.prototype.update = function (step) {
-    rune.display.Sprite.prototype.update.call(this, step);
+    rune.scene.Scene.prototype.update.call(this, step);
 };
 
 /**
@@ -73,5 +79,5 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
  * @returns {undefined}
  */
 TerraTactics.scene.MainMenu.prototype.dispose = function () {
-    rune.display.Sprite.prototype.dispose.call(this);
+    rune.scene.Scene.prototype.dispose.call(this);
 };
