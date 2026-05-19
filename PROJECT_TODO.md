@@ -12,7 +12,7 @@ This list is focused on your responsibility as the developer: game logic, mechan
 
 - [x] Lock player control after firing. While `m_bullet !== null`, the active player should not move, jump, aim, switch weapons, or fire again. Start in `src/scene/game/Game.js` around `m_updatePlayerInput`, `m_updateWeaponUiInput`, and the bullet checks.
 - [x] Prevent the round timer from ending the turn while a projectile is still active. If the timer hits zero during a shot, wait until the projectile hits terrain, hits a player, explodes, or leaves the world.
-- [ ] Fix remaining active-player null safety. The arrow update is guarded, but `Game.js` and `Characters.js` still have direct `getActive().character` / `m_activePlayer.character` reads in input, aiming, turn switching, and character update code that can crash after death or simultaneous player removal.
+- [x] Fix remaining active-player null safety. The arrow update is guarded, but `Game.js` and `Characters.js` still have direct `getActive().character` / `m_activePlayer.character` reads in input, aiming, turn switching, and character update code that can crash after death or simultaneous player removal.
 - [ ] Make death and winner logic impossible to crash. Test both cases: active player dies from lava, inactive player dies from lava/projectile. The game should show one winner message and then stop gameplay cleanly.
 - [ ] Remove debug mode for final build. `src/system/Main.js` still has `debug: true`; character and bullet hitbox debug lines are currently commented out.
 - [ ] Remove all `console.log` calls before final hand-in. Check with `rg -n "console\\.log" src`.
