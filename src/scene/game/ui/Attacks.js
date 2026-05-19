@@ -29,6 +29,7 @@ TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
 
     this.animation.create("idle", [0], 1, true);
     this.animation.create("selected", [1, 2], 6, true);
+    this.animation.create("onCooldown", [3], 6, true);
 
     this.animation.gotoAndStop("idle", 0);
 };
@@ -58,3 +59,13 @@ Object.defineProperty(TerraTactics.scene.Attacks.prototype, "setCooldown", {
         this.m_cdText.text = this.m_cd.toString();
     }
 });
+
+TerraTactics.scene.Attacks.prototype.update = function (step) {
+    rune.display.Sprite.prototype.update.call(this, step);
+
+    if (this.m_cd > 0) {
+        this.animation.gotoAndPlay("onCooldown", 0);
+    } else {
+        this.animation.gotoAndPlay("idle", 0);
+    }
+};
