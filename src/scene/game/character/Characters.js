@@ -68,8 +68,10 @@ TerraTactics.scene.Characters.prototype.getInactive = function () {
 TerraTactics.scene.Characters.prototype.switchTurn = function () {
     this.m_currentPlayerIndex = (this.m_currentPlayerIndex + 1) % this.m_playerOrder.length;
     var activePlayer = this.getActive();
-    this.adjustCooldowns(activePlayer.character);
-    activePlayer.character.m_setWeapon("pistol");
+    if (activePlayer != null && activePlayer.character != null) {
+        this.adjustCooldowns(activePlayer.character);
+        activePlayer.character.m_setWeapon("pistol");
+    }
     this.m_syncActivePlayers();
 };
 
@@ -99,7 +101,7 @@ TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
 
 TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
     // we need to send the player that won, not died.
-    if (playerEntry === null || playerEntry.character === null) {
+    if (playerEntry == null || playerEntry.character == null) {
         return;
     }
 
@@ -163,8 +165,6 @@ Object.defineProperty(TerraTactics.scene.Characters.prototype, "rightWall", {
 });
 
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
-    var activeCharacter = null;
-
     for (var playerId in this.m_players) {
         var playerEntry = this.m_players[playerId];
         var character = playerEntry.character;
@@ -207,11 +207,11 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
             }
         }
     }
-
-    activeCharacter = this.getActive().character;
-
-    if (activeCharacter !== null) {
-        if ((activeCharacter.m_movingLeft || activeCharacter.m_movingRight) && !activeCharacter.m_isJumping) {
+    var activePlayer = this.getActive();
+    if (
+        activePlayer != null &&
+        activePlayer.character != null) {
+        if ((activePlayer.character.m_movingLeft || activePlayer.character.m_movingRight) && !activePlayer.character.m_isJumping) {
             if (!this.m_isWalkSoundPlaying) {
                 this.m_walkSound.play(true);
                 this.m_isWalkSoundPlaying = true;
@@ -224,11 +224,11 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         }
     }
 
-    if (activeCharacter !== null) {
-        if (activeCharacter.left < this.leftWall ||
-            activeCharacter.right > this.rightWall) {
-            console.log("hit boundary");
-            this.hitBoundary(activeCharacter);
+    if (activePlayer != null &&
+        activePlayer.character != null) {
+        if (activePlayer.character.left < this.leftWall ||
+            activePlayer.character.right > this.rightWall) {
+            this.hitBoundary(activePlayer.character);
         }
     }
 };
