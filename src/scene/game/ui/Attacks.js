@@ -13,10 +13,8 @@
  * UI class for switching attacks.
  */
 TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
-    rune.display.Sprite.call(this, x, y, 96, 136, weapon);
+    rune.display.Sprite.call(this, x, y, 48, 48, weapon);
 
-    this.scaleX = 0.85;
-    this.scaleY = 0.85;
 
     this.m_weapon = weapon;
     this.m_onClick = onClick;
