@@ -12,8 +12,8 @@ This list is focused on your responsibility as the developer: game logic, mechan
 
 - [x] Lock player control after firing. While `m_bullet !== null`, the active player should not move, jump, aim, switch weapons, or fire again. Start in `src/scene/game/Game.js` around `m_updatePlayerInput`, `m_updateWeaponUiInput`, and the bullet checks.
 - [x] Prevent the round timer from ending the turn while a projectile is still active. If the timer hits zero during a shot, wait until the projectile hits terrain, hits a player, explodes, or leaves the world.
-- [ ] Fix remaining active-player null safety. The arrow update is guarded, but `Game.js` and `Characters.js` still have direct `getActive().character` / `m_activePlayer.character` reads in input, aiming, turn switching, and character update code that can crash after death or simultaneous player removal.
-- [ ] Make death and winner logic impossible to crash. Test both cases: active player dies from lava, inactive player dies from lava/projectile. The game should show one winner message and then stop gameplay cleanly.
+- [x] Fix remaining active-player null safety. The arrow update is guarded, but `Game.js` and `Characters.js` still have direct `getActive().character` / `m_activePlayer.character` reads in input, aiming, turn switching, and character update code that can crash after death or simultaneous player removal.
+- [ ] Finish death and winner edge cases. Normal active/inactive death paths are guarded, but simultaneous death still needs a decided behavior, such as draw text or choosing a winner safely.
 - [ ] Remove debug mode for final build. `src/system/Main.js` still has `debug: true`; character and bullet hitbox debug lines are currently commented out.
 - [ ] Remove all `console.log` calls before final hand-in. Check with `rg -n "console\\.log" src`.
 - [ ] Remove or implement broken menu items. `MainMenu.js` has `Exit` in the menu but no scene/action for it, and `Options.js` still has placeholder volume functions that do nothing.
@@ -24,11 +24,9 @@ This list is focused on your responsibility as the developer: game logic, mechan
 
 ## P0 - Core Mechanics You Own
 
-- [ ] Make turns deterministic: exactly one turn switch per shot or timeout. Avoid double-calling `m_endTurn` from timer, collision, player death, off-screen projectile logic, and game-over transitions.
-- [ ] Add a simple game state flag such as `waitingForProjectile`, `turnChanging`, or `gameOver` so input/timers/projectiles cannot overlap in weird ways. `m_gameEnd` exists, but there is not yet a turn/projectile transition guard.
+- [ ] Playtest turn switching for double-end-turn cases. `m_bullet !== null` now acts as the projectile/waiting state, but terrain hit, player hit, off-screen projectile, timer timeout, death, and game-over transitions still need one full playtest pass.
 - [x] Make projectile cleanup centralized. Right now terrain hit, player hit, and screen exit each remove the bullet and call `m_endTurn`; put the repeated cleanup into one helper.
-- [ ] Confirm what happens if a projectile kills the active player indirectly, such as knockback/lava or explosion later if grenade gets radius damage.
-- [ ] Keep lava death reliable for active and inactive players. Lava should set health/death once, play feedback once, and not repeatedly trigger sounds.
+- [x] Keep lava death reliable for active and inactive players. Lava sets health/death once, plays feedback through `Characters.update`, and disposed characters no longer retrigger the lava sound.
 - [x] Clamp or handle player world bounds so a player cannot leave the map in a broken way.
 - [x] Fix collision/grounding edge cases listed in `BUGS.md`, especially jumping into the bottom of terrain causing `grounded`.
 

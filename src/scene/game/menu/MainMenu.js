@@ -11,7 +11,7 @@
  * @class
  * @classdesc
  * 
- * MainMenu scene.
+ * Options scene.
  */
 TerraTactics.scene.MainMenu = function () {
 
@@ -22,7 +22,9 @@ TerraTactics.scene.MainMenu = function () {
     /**
      * Calls the constructor method of the super class.
      */
-    rune.scene.Scene.call(this);
+
+   rune.scene.Scene.call(this);
+
 };
 
 //------------------------------------------------------------------------------
@@ -31,17 +33,6 @@ TerraTactics.scene.MainMenu = function () {
 
 TerraTactics.scene.MainMenu.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
-TerraTactics.scene.MainMenu.prototype.m_onMenuSelect = function (e) {
-
-    var obj = {
-        "Start Game": new TerraTactics.scene.Game(),
-        "Options": new TerraTactics.scene.Options(),
-        "Credits": new TerraTactics.scene.Credits(),
-        //"Exit": 
-    };
-
-    this.application.scenes.load([obj[e.text]]);
-};
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -56,45 +47,54 @@ TerraTactics.scene.MainMenu.prototype.m_onMenuSelect = function (e) {
 TerraTactics.scene.MainMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
-
-    this.bg = new rune.display.Graphic(0, 0, 400, 225, "background");
+      this.bg = new rune.display.Graphic(0, 0, 400, 225, "background");
     this.stage.addChild(this.bg);
 
-    this.m_menu = new rune.ui.VTMenu();
+    this.PlayGame = new rune.display.Sprite(150, 100, 96, 96, "Selectedplaygame");
+    this.stage.addChild(this.PlayGame);
 
-    this.m_menu.add("Start Game");
-    this.m_menu.add("Options");
-    this.m_menu.add("Credits");
-    this.m_menu.add("Exit");
+     this.Credits = new rune.display.Sprite(190, 100, 96, 96, "SelectedCredits");
+    this.stage.addChild(this.Credits);
 
-    this.m_menu.centerX = this.application.screen.centerX;
-    this.m_menu.y = 90;
+     this.Option = new rune.display.Sprite(230, 100, 96, 96, "OptionSelected");
+    this.stage.addChild(this.Option);
 
-    this.m_menu.onSelect(this.m_onMenuSelect, this);
+     this.ExitGame = new rune.display.Sprite(260, 100, 96, 96, "ExitGame");
+    this.stage.addChild(this.ExitGame);
 
-    this.stage.addChild(this.m_menu);
-    this.m_scaleItem();
+    // group of menu items (controller/keyboard navigation)
+    this.m_menuItems = [this.PlayGame, this.Credits, this.Option, this.ExitGame];
 
+    // controls (keyboard / gamepad)
     this.m_controls = new TerraTactics.util.Controls(0);
-};
 
-TerraTactics.scene.MainMenu.prototype.m_scaleItem = function () {
-    for (var i = 0; i < this.m_menu.m_list.numChildren; i++) {
-        var item = this.m_menu.m_list.getAt(i);
-
-        var selectedItem = i === this.m_menu.m_index;
-
-        this.tweens.removeFrom(item);
-
-        this.tweens.create({
-            target: item,
-            duration: 100,
-            args: {
-                scaleX: selectedItem ? 1.2 : 1,
-                scaleY: selectedItem ? 1.2 : 1
+    // selection index for keyboard/gamepad navigation
+    this.m_selectedIndex = 0;
+    this.m_updateSelection = function () {
+        for (var i = 0; i < this.m_menuItems.length; i++) {
+            var it = this.m_menuItems[i];
+            if (!it) continue;
+            if (i === this.m_selectedIndex) {
+                if (typeof it.m_selected === 'function') {
+                    it.m_selected(true);
+                } else {
+                    it.scaleX = 1.05;
+                    it.scaleY = 1.05;
+                    it.alpha = 1.0;
+                }
+            } else {
+                if (typeof it.m_selected === 'function') {
+                    it.m_selected(false);
+                } else {
+                    it.scaleX = 1.0;
+                    it.scaleY = 1.0;
+                    it.alpha = 0.7;
+                }
             }
-        });
-    }
+        }
+    }.bind(this);
+
+    this.m_updateSelection();
 };
 
 /**
@@ -108,20 +108,42 @@ TerraTactics.scene.MainMenu.prototype.m_scaleItem = function () {
 TerraTactics.scene.MainMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
+    if (!this.m_controls) {
+        this.m_controls = new TerraTactics.util.Controls(0);
+    }
+
     if (this.m_controls.justUp) {
-        this.m_menu.up();
-        this.m_scaleItem();
+        this.m_selectedIndex -= 1;
+        if (this.m_selectedIndex < 0) {
+            this.m_selectedIndex = this.m_menuItems.length - 1;
+        }
+        this.m_updateSelection();
     }
 
     if (this.m_controls.justDown) {
-        this.m_menu.down();
-        this.m_scaleItem();
+        this.m_selectedIndex += 1;
+        if (this.m_selectedIndex >= this.m_menuItems.length) {
+            this.m_selectedIndex = 0;
+        }
+        this.m_updateSelection();
     }
 
     if (this.m_controls.confirm) {
-        this.m_menu.select();
+        var sel = this.m_menuItems[this.m_selectedIndex];
+        if (sel === this.PlayGame) {
+            this.application.scenes.load([new TerraTactics.scene.Game()]);
+        } else if (sel === this.Credits) {
+            this.application.scenes.load([new TerraTactics.scene.Credits()]);
+        } else if (sel === this.Option) {
+            this.application.scenes.load([new TerraTactics.scene.Options()]);
+        } else if (sel === this.ExitGame) {
+            try {
+                window.close();
+            } catch (err) {
+                console.log('Exit requested');
+            }
+        }
     }
-
 };
 
 /**
@@ -133,8 +155,9 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
  * @returns {undefined}
  */
 TerraTactics.scene.MainMenu.prototype.dispose = function () {
-    window.removeEventListener("keydown", this.m_onKeyDown);
-    this.m_onKeyDown = null;
+    this.m_menuItems = null;
+    this.m_updateSelection = null;
+    this.m_controls = null;
 
     rune.scene.Scene.prototype.dispose.call(this);
 };
