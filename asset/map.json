@@ -414,6 +414,20 @@
             "rightEdge": true,
             "leftEdge": false,
             "bottomEdge": true
+        },
+        {
+            "value": 13,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": true,
+            "bottomEdge": true
+        },
+        {
+            "value": 14,
+            "collision": "0x1111",
+            "rightEdge": true,
+            "leftEdge": false,
+            "bottomEdge": true
         }
     ]
 }
