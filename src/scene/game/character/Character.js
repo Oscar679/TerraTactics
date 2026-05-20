@@ -18,7 +18,7 @@ TerraTactics.scene.Character = function (x, y, role) {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    rune.display.Sprite.call(this, x, y, 24, 48, role);
+    rune.display.Sprite.call(this, x, y, 24, 24, role);
 
     //--------------------------------------------------------------------------
     // Private properties
@@ -43,8 +43,8 @@ TerraTactics.scene.Character = function (x, y, role) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
     this.hitbox.set(8, 4, 8, 16);
-    this.hitbox.debug = true;
-    this.hitbox.debugColor = "green";
+    // this.hitbox.debug = true;
+    //this.hitbox.debugColor = "green";
 
 
     this.animation.create("idle", [0, 1, 2, 3], 6, true);

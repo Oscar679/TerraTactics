@@ -1,6 +1,7 @@
 // Handler for Character.js
-TerraTactics.scene.Characters = function (stage) {
+TerraTactics.scene.Characters = function (stage, roles) {
     this.m_stage = stage;
+    this.m_roles = roles;
 
     this.m_soundChannel = new rune.media.SoundChannel();
 
@@ -11,8 +12,8 @@ TerraTactics.scene.Characters = function (stage) {
 
     this.m_isWalkSoundPlaying = false;
 
-    var character1 = new TerraTactics.scene.Character(70, 10, "ninja");
-    var character2 = new TerraTactics.scene.Character(100, 10, "bomber");
+    var character1 = new TerraTactics.scene.Character(70, 10, this.m_roles[0]);
+    var character2 = new TerraTactics.scene.Character(100, 10, this.m_roles[1]);
 
     this.m_players = {
         player1: {
