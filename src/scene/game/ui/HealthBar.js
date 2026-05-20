@@ -22,8 +22,8 @@ TerraTactics.scene.HealthBar = function (x, y, character) {
     this.m_healthBar = new rune.ui.Progressbar(20, 3, "#000000", "#ff004d");
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
-    this.m_healthBar.x = this.x + 40;
-    this.m_healthBar.y = this.y + 6;
+    this.m_healthBar.x = this.x + 60;
+    this.m_healthBar.y = this.y + 12;
 };
 
 //inheritance
