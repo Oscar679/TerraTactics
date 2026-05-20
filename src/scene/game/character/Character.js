@@ -136,6 +136,15 @@ Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
     }
 });
 
+Object.defineProperty(TerraTactics.scene.Character.prototype, "getCurrentCooldown", {
+}, {
+    get: function () {
+        var weapon = this.m_getWeapon();
+        console.log(weapon);
+        return this.m_weaponState.cooldowns[weapon] || 0;
+    }
+});
+
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
