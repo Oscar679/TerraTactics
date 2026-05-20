@@ -24,22 +24,6 @@ TerraTactics.scene.RoleMenu = function () {
      */
 
     rune.scene.Scene.call(this);
-
-    // controls (keyboard / gamepad)
-    this.m_controls = new TerraTactics.util.Controls(0);
-
-    this.m_roles = new rune.display.Sprite(20, 20, 24, 24, "roles");
-    this.stage.addChild(this.m_roles);
-
-    this.m_selectedRole = 0;
-
-    this.m_roles.animation.create("role1", [0], 1, true);
-    this.m_roles.animation.create("role2", [1], 1, true);
-    this.m_roles.animation.create("role3", [2], 1, true);
-
-    this.m_roles.animation.gotoAndPlay("role1", 0);
-
-    this.m_selectedRoles = [];
 };
 
 //------------------------------------------------------------------------------
@@ -61,6 +45,22 @@ TerraTactics.scene.RoleMenu.prototype.constructor = TerraTactics.scene.RoleMenu;
  */
 TerraTactics.scene.RoleMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+
+    // controls (keyboard / gamepad)
+    this.m_controls = new TerraTactics.util.Controls(0);
+
+    this.m_roles = new rune.display.Sprite(20, 20, 24, 24, "roles");
+    this.stage.addChild(this.m_roles);
+
+    this.m_selectedRole = 0;
+
+    this.m_roles.animation.create("role1", [0], 1, true);
+    this.m_roles.animation.create("role2", [1], 1, true);
+    this.m_roles.animation.create("role3", [2], 1, true);
+
+    this.m_roles.animation.gotoAndPlay("role1", 0);
+
+    this.m_selectedRoles = [];
 };
 
 /**
