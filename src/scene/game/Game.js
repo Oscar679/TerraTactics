@@ -296,6 +296,18 @@ TerraTactics.scene.Game.prototype.m_selectWeapon = function (weapon) {
     var previousWeapon = null;
     var selectedWeapon = null;
 
+    if (this.m_activePlayer == null || this.m_activePlayer.character == null) {
+        return;
+    }
+
+    character = this.m_activePlayer.character;
+    currentCooldown = character.m_weaponState.cooldowns[weapon] || 0;
+
+    if (currentCooldown > 0) {
+
+        return;
+    }
+
     if (this.m_weaponNames !== null && this.m_weaponNames !== undefined) {
         this.m_selectedAttackIndex = this.m_getWeaponIndex(weapon);
     }
@@ -303,10 +315,8 @@ TerraTactics.scene.Game.prototype.m_selectWeapon = function (weapon) {
     if (this.m_activePlayer != null && this.m_activePlayer.character != null) {
         previousWeapon = this.m_activePlayer.character.m_getWeapon();
         this.m_activePlayer.character.m_setWeapon(weapon);
-
         if (previousWeapon !== weapon) {
             selectedWeapon = this.m_getActiveWeapon();
-
             if (selectedWeapon !== null && typeof selectedWeapon.m_playSwitchSound === "function") {
                 selectedWeapon.m_playSwitchSound();
             }
@@ -328,17 +338,34 @@ TerraTactics.scene.Game.prototype.m_getWeaponIndex = function (weapon) {
     return 0;
 };
 
-TerraTactics.scene.Game.prototype.m_selectWeaponAt = function (index) {
-    if (index < 0) {
-        index = this.m_weaponNames.length - 1;
-    }
+TerraTactics.scene.Game.prototype.m_selectWeaponAt = function (index, direction) {
+    var attempts = 0;
 
-    if (index >= this.m_weaponNames.length) {
-        index = 0;
+    if (direction === undefined) {
+        direction = 1;
     }
+    
+    while (attempts < this.m_weaponNames.length) {
+        if (index < 0) {
+            index = this.m_weaponNames.length - 1;
+        }
 
-    this.m_selectedAttackIndex = index;
-    this.m_selectWeapon(this.m_weaponNames[this.m_selectedAttackIndex]);
+        if (index >= this.m_weaponNames.length) {
+            index = 0;
+        }
+
+        var weapon = this.m_weaponNames[index];
+        var cooldown = this.m_activePlayer.character.m_weaponState.cooldowns[weapon] || 0;
+
+        if (cooldown === 0) {
+            this.m_selectedAttackIndex = index;
+            this.m_selectWeapon(weapon);
+            return;
+        }
+
+        index += direction;
+        attempts++;
+    }
 };
 
 TerraTactics.scene.Game.prototype.m_updateAttackCooldowns = function () {
@@ -463,27 +490,11 @@ TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
     }
 
     if (this.m_controls.weaponPrevious) {
-        this.m_selectWeaponAt(this.m_selectedAttackIndex - 1);
+        this.m_selectWeaponAt(this.m_selectedAttackIndex - 1, -1);
     }
 
     if (this.m_controls.weaponNext) {
-        this.m_selectWeaponAt(this.m_selectedAttackIndex + 1);
-    }
-
-    if (this.m_controls.weaponOne) {
-        this.m_selectWeaponAt(0);
-    }
-
-    if (this.m_controls.weaponTwo) {
-        this.m_selectWeaponAt(1);
-    }
-
-    if (this.m_controls.weaponThree) {
-        this.m_selectWeaponAt(2);
-    }
-
-    if (this.m_controls.weaponFour) {
-        this.m_selectWeaponAt(3);
+        this.m_selectWeaponAt(this.m_selectedAttackIndex + 1, 1);
     }
 
     if (this.m_controls.confirm) {

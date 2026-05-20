@@ -46,7 +46,7 @@ TerraTactics.scene.Attacks.prototype.m_click = function () {
 };
 
 TerraTactics.scene.Attacks.prototype.m_selected = function (selected) {
-    if (selected) {
+    if (selected && this.m_cd === 0) {
         this.animation.gotoAndPlay("selected", 0);
     } else if (this.m_cd > 0) {
         this.animation.gotoAndPlay("onCooldown", 0);
