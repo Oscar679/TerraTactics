@@ -11,8 +11,8 @@ TerraTactics.scene.Characters = function (stage) {
 
     this.m_isWalkSoundPlaying = false;
 
-    var character1 = new TerraTactics.scene.Character(70, 10);
-    var character2 = new TerraTactics.scene.Character(100, 10);
+    var character1 = new TerraTactics.scene.Character(70, 10, "ninja");
+    var character2 = new TerraTactics.scene.Character(100, 10, "bomber");
 
     this.m_players = {
         player1: {

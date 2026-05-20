@@ -13,10 +13,10 @@
  * UI class for switching attacks.
  */
 TerraTactics.scene.HealthBar = function (x, y, character) {
-    rune.display.Sprite.call(this, x, y, 240, 480, "hp-bar");
+    rune.display.Sprite.call(this, x, y, 240, 480, "hp-bar-" + character.role);
 
     this.m_character = character;
-
+    console.log(this.m_character);
     this.m_maxHealth = 100;
     this.m_health = this.m_character.m_getHealth();
     this.m_healthBar = new rune.ui.Progressbar(20, 3, "#000000", "#ff004d");

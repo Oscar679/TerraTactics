@@ -13,19 +13,18 @@
  *
  * Character object.
  */
-TerraTactics.scene.Character = function (x, y) {
+TerraTactics.scene.Character = function (x, y, role) {
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-
-    //rune.display.Sprite.call(this, x, y, 25, 18, "character_2_25x18");
-    rune.display.Sprite.call(this, x, y, 24, 48, "ninja-24x48");
+    rune.display.Sprite.call(this, x, y, 24, 48, role);
 
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
 
+    this.m_role = role;
     this.m_grounded = false;
     this.m_velocityY = 0;
     this.m_gravity = 0.2;
@@ -130,6 +129,12 @@ TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
         this.animation.gotoAndPlay(name, 0);
     }
 };
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
+    get: function () {
+        return this.m_role;
+    }
+});
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)

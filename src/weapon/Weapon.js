@@ -72,12 +72,83 @@ TerraTactics.scene.Weapon.prototype.m_getProjectileData = function (player, targ
     };
 };
 
+TerraTactics.scene.Weapon.prototype.m_getRoleSpecificStats = function (player) {
+    var damage = this.m_damage;
+    var knockback = this.m_knockback;
+    var weapon = player.m_weaponState.currentWeapon;
+    var role = player.role;
+
+    if (role === "ninja") {
+        switch (weapon) {
+            case "pistol":
+                break;
+            case "grenade":
+                damage *= 0.6; // Magic Number
+                break;
+            case "rifle":
+                damage *= 0.8; // Magic Number
+                break;
+            case "melee":
+                damage *= 1.2; // Magic Number
+                knockback *= 1.2; // Magic Number
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (role === "bomber") {
+        switch (weapon) {
+            case "pistol":
+                damage *= 0.8; // Magic Number
+                break;
+            case "grenade":
+                damage *= 1.3; // Magic Number
+                knockback *= 1.3; // Magic Number
+                break;
+            case "rifle":
+                damage *= 0.8; // Magic Number
+                break;
+            case "melee":
+                damage *= 0.8; // Magic Number
+                knockback *= 0.8; // Magic Number
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (role === "sniper") {
+        switch (weapon) {
+            case "pistol":
+                damage *= 1.2; // Magic Number
+                break;
+            case "grenade":
+                damage *= 0.8; // Magic Number
+                break;
+            case "rifle":
+                damage *= 1.3; // Magic Number
+                break;
+            case "melee":
+                damage *= 0.8; // Magic Number
+                knockback *= 0.8; // Magic Number
+                break;
+            default:
+                break;
+        }
+    }
+
+    return {
+        damage: damage,
+        knockback: knockback
+    };
+};
+
 TerraTactics.scene.Weapon.prototype.m_fireProjectile = function (player, targetX, targetY) {
     var projectile = this.m_getProjectileData(player, targetX, targetY);
-
     this.m_playFireSound();
-
-    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, this.m_damage, this.m_knockback);
+    var stats = this.m_getRoleSpecificStats(player);
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, stats.damage, stats.knockback);
 };
 
 TerraTactics.scene.Weapon.prototype.m_playSound = function (soundId) {

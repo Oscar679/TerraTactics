@@ -216,8 +216,8 @@ TerraTactics.scene.Game.prototype.init = function () {
     for (var playerId in this.m_characters.m_players) {
         var player = this.m_characters.m_players[playerId];
         var healthBar = player.healthBar;
-        healthBar.scaleX = 0.3;
-        healthBar.scaleY = 0.3;
+        healthBar.scaleX = 0.7;
+        healthBar.scaleY = 0.7;
 
 
         this.stage.addChild(healthBar);
