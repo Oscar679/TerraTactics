@@ -131,7 +131,7 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
     if (this.m_controls.confirm) {
         var sel = this.m_menuItems[this.m_selectedIndex];
         if (sel === this.PlayGame) {
-            this.application.scenes.load([new TerraTactics.scene.RoleMenu()]);
+            this.application.scenes.load([new TerraTactics.scene.ControllerMenu()]);
         } else if (sel === this.Credits) {
             this.application.scenes.load([new TerraTactics.scene.Credits()]);
         } else if (sel === this.Option) {

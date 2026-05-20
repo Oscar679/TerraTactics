@@ -24,17 +24,6 @@ TerraTactics.scene.ControllerMenu = function () {
      */
 
     rune.scene.Scene.call(this);
-
-    // controls (keyboard / gamepad)
-    this.m_controls = new TerraTactics.util.Controls(0);
-
-    this.m_gamePad1 = new rune.display.Sprite(20, 20, 40, 48, "gamepad");
-    this.stage.addChild(this.m_gamePad1);
-
-    this.m_gamePad2 = new rune.display.Sprite(80, 20, 40, 48, "gamepad");
-    this.stage.addChild(this.m_gamePad2);
-
-
 };
 
 //------------------------------------------------------------------------------
@@ -56,6 +45,67 @@ TerraTactics.scene.ControllerMenu.prototype.constructor = TerraTactics.scene.Con
  */
 TerraTactics.scene.ControllerMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+
+    this.m_player1Controls = new TerraTactics.util.Controls(0);
+    this.m_player2Controls = new TerraTactics.util.Controls(1);
+
+    this.m_gamepadController1 = new TerraTactics.util.MappingGamepad(0);
+    this.m_gamepadController2 = new TerraTactics.util.MappingGamepad(1);
+
+    this.m_gamepad1 = new rune.display.Sprite(160, 90, 40, 48, "gamepad");
+    this.stage.addChild(this.m_gamepad1);
+    this.m_gamepad1.isPlayingTween = false;
+    this.m_gamepad1.chosenSide = false;
+    this.m_gamepad1.side = "middle";
+    this.m_gamepad1.middleX = this.m_gamepad1.x;
+
+    this.m_gamepad2 = new rune.display.Sprite(220, 90, 40, 48, "gamepad");
+    this.stage.addChild(this.m_gamepad2);
+    this.m_gamepad2.isPlayingTween = false;
+    this.m_gamepad2.chosenSide = false;
+    this.m_gamepad2.side = "middle";
+    this.m_gamepad2.middleX = this.m_gamepad2.x;
+
+    this.m_continueText = new rune.text.BitmapField("PRESS X TO CHOOSE ROLES");
+    this.stage.addChild(this.m_continueText);
+    this.m_continueText.centerX = this.stage.centerX;
+    this.m_continueText.centerY = this.stage.centerY + 40;
+    this.m_continueText.visible = false;
+
+};
+
+TerraTactics.scene.ControllerMenu.prototype.m_startTween = function (target, x) {
+    target.isPlayingTween = true;
+
+    this.tweens.create({
+        target: target,
+        scope: this,
+        duration: 500,
+        easing: rune.tween.Linear.easeIn,
+        onDispose: function () {
+            target.isPlayingTween = false;
+        },
+        args: {
+            x: x
+        }
+    });
+};
+
+TerraTactics.scene.ControllerMenu.prototype.m_moveController = function (target, side) {
+    if (target.isPlayingTween) {
+        return;
+    }
+
+    var x = target.middleX;
+    if (side === "left") {
+        x = 80;
+    } else if (side === "right") {
+        x = 280;
+    }
+    target.side = side;
+    target.chosenSide = side !== "middle";
+
+    this.m_startTween(target, x);
 };
 
 /**
@@ -69,6 +119,39 @@ TerraTactics.scene.ControllerMenu.prototype.init = function () {
 TerraTactics.scene.ControllerMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
+    if (this.m_gamepad1.chosenSide && this.m_gamepad2.chosenSide) {
+        this.m_continueText.visible = true;
+    } else {
+        this.m_continueText.visible = false;
+    }
+
+    if ((this.m_gamepad1.chosenSide && this.m_gamepad2.chosenSide) && (this.m_player1Controls.confirm || this.m_player2Controls.confirm)) {
+        this.application.scenes.load([new TerraTactics.scene.RoleMenu()]);
+    }
+
+    if (this.m_player1Controls.justLeft) {
+        if (this.m_gamepad1.side === "middle") {
+            this.m_moveController(this.m_gamepad1, "left");
+        }
+    }
+
+    if (this.m_player1Controls.justRight) {
+        if (this.m_gamepad1.side === "left") {
+            this.m_moveController(this.m_gamepad1, "middle");
+        }
+    }
+
+    if (this.m_player2Controls.justUp) {
+        if (this.m_gamepad2.side === "middle") {
+            this.m_moveController(this.m_gamepad2, "right");
+        }
+    }
+
+    if (this.m_player2Controls.justDown) {
+        if (this.m_gamepad2.side === "right") {
+            this.m_moveController(this.m_gamepad2, "middle");
+        }
+    }
 };
 
 /**
