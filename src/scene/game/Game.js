@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-TerraTactics.scene.Game = function () {
+TerraTactics.scene.Game = function (role) {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -23,6 +23,8 @@ TerraTactics.scene.Game = function () {
      * Calls the constructor method of the super class.
      */
     rune.scene.Scene.call(this);
+    this.m_roles = role;
+    console.log(this.m_roles);
 };
 
 //------------------------------------------------------------------------------
@@ -54,7 +56,6 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     // load tilemap
     this.stage.m_map.load("map");
-
 
     this.m_lava = new rune.display.Sprite(0, 225, 400, 2000, "lava");
     this.stage.addChild(this.m_lava);
@@ -210,14 +211,12 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_bullet = null;
 
-    this.m_characters = new TerraTactics.scene.Characters(this.stage);
+    this.m_characters = new TerraTactics.scene.Characters(this.stage, this.m_roles);
 
     //add healthbars to stage
     for (var playerId in this.m_characters.m_players) {
         var player = this.m_characters.m_players[playerId];
         var healthBar = player.healthBar;
-        healthBar.scaleX = 0.7;
-        healthBar.scaleY = 0.7;
 
 
         this.stage.addChild(healthBar);
