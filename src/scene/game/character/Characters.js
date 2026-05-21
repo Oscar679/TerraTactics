@@ -116,6 +116,9 @@ TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry)
         case "player3":
             this.m_winnerText = "Player 3 Wins!";
             break;
+        case "draw":
+            this.m_winnerText = "Draw!";
+            break;
         default:
             break;
     }
@@ -185,6 +188,10 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         if (character !== null && character.m_health <= 0) {
             this.m_disposeCharacter(playerEntry);
         }
+    }
+
+    if (!this.getActive() && this.getInactive().length === 0) {
+        this.m_setWinnerText("DRAW");
     }
 
     if (this.getInactive().length === 0) {

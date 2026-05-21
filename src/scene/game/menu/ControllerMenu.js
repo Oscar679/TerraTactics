@@ -74,6 +74,11 @@ TerraTactics.scene.ControllerMenu.prototype.init = function () {
     this.m_continueText.centerY = this.stage.centerY + 40;
     this.m_continueText.visible = false;
 
+    this.m_player1Container = new rune.display.Sprite(0, 0, 48, 48, "Player1");
+    this.stage.addChild(this.m_player1Container);
+
+    this.m_player2Container = new rune.display.Sprite(0, 0, 48, 48, "Player2");
+    this.stage.addChild(this.m_player2Container);
 };
 
 TerraTactics.scene.ControllerMenu.prototype.m_startTween = function (target, x) {

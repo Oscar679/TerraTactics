@@ -62,6 +62,8 @@ TerraTactics.scene.Game.prototype.init = function () {
     // load tilemap
     this.stage.m_map.load("map");
 
+    this.m_camera = this.cameras.getCameraAt(0);
+
     this.m_time = 0;
 
     // round timer string
@@ -97,7 +99,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.roundTimeBar = new TerraTactics.scene.TimeBar(0, 0);
 
     // add containers
-    this.stage.addChild(this.m_timerContainer);
+    this.m_camera.addChild(this.m_timerContainer);
     this.m_timerContainer.addChild(this.m_globalTimerContainer);
     this.m_timerContainer.addChild(this.m_roundTimerContainer);
 
@@ -141,6 +143,11 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_cloud2.resetX = 620;
     this.m_cloud3.resetX = 520;
     this.m_cloud4.resetX = 720;
+    
+    this.m_cloud1.duration = 45000;
+    this.m_cloud2.duration = 60000;
+    this.m_cloud3.duration = 40000;
+    this.m_cloud4.duration = 35000;
 
     this.stage.addChild(this.m_cloud1);
     this.stage.addChild(this.m_cloud2);
@@ -163,11 +170,11 @@ TerraTactics.scene.Game.prototype.init = function () {
     });
 
     this.m_artboard = new rune.display.Artboard(0, 0, 400, 225);
-    this.stage.addChild(this.m_artboard);
+    this.m_camera.addChild(this.m_artboard);
 
     var selectWeapon = this.m_selectWeapon.bind(this);
 
-    this.m_attacks = new rune.display.DisplayGroup(this.stage);
+    this.m_attacks = new rune.display.DisplayGroup(this.m_camera);
 
     this.attack1 = new TerraTactics.scene.Attacks(80, 170, "pistol", selectWeapon);
     this.attack2 = new TerraTactics.scene.Attacks(155, 170, "rifle", selectWeapon);
@@ -241,8 +248,8 @@ TerraTactics.scene.Game.prototype.init = function () {
         var healthBar = player.healthBar;
 
 
-        this.stage.addChild(healthBar);
-        this.stage.addChild(healthBar.m_healthBar);
+        this.m_camera.addChild(healthBar);
+        this.m_camera.addChild(healthBar.m_healthBar);
     }
 
     this.m_activePlayer = this.m_characters.getActive();
@@ -292,7 +299,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_gamepadAimX = 0;
     this.m_gamepadAimY = 0;
 
-    this.stage.addChild(this.m_activeArrow);
+    this.m_camera.addChild(this.m_activeArrow);
 
     // this.test = new rune.display.Sprite(50, 50, 96, 48, "playgame");
     //   this.test.animation.create("idle", [0, 1, 2], 6, true);
@@ -310,7 +317,7 @@ TerraTactics.scene.Game.prototype.m_animateClouds = function (clouds, isReset) {
         this.tweens.create({
             target: clouds,
             scope: this,
-            duration: 70000,
+            duration: cloud.duration,
             easing: rune.tween.Linear.easeIn,
             onDispose: function () {
                 this.m_animateClouds(clouds, true);
