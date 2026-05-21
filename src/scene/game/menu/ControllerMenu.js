@@ -49,6 +49,11 @@ TerraTactics.scene.ControllerMenu.prototype.init = function () {
     this.m_player1Controls = new TerraTactics.util.Controls(0);
     this.m_player2Controls = new TerraTactics.util.Controls(1);
 
+    this.m_background = new rune.display.Sprite(0, 0, 432, 240, "controllerMenuBackground");
+    this.stage.addChild(this.m_background);
+
+    this.m_background.animation.create("idle", [0, 1, 2, 3], 3, true);
+
     this.m_gamepad1 = new rune.display.Sprite(160, 90, 40, 48, "gamepad");
     this.stage.addChild(this.m_gamepad1);
     this.m_gamepad1.isPlayingTween = false;
