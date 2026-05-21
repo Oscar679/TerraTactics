@@ -340,8 +340,10 @@ Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "aimX", {
      * @ignore
      */
     get: function () {
-        var gamepad = this.m_getGamepad();
-        return gamepad !== null ? gamepad.stickLeft.x : 0;
+        var gamepads = navigator.getGamepads ? navigator.getGamepads() : null;
+        var gamepad = gamepads !== null ? gamepads[this.m_playerID] : null;
+
+        return gamepad !== null && gamepad.axes ? gamepad.axes[0] || 0 : 0;
     }
 });
 
@@ -358,8 +360,10 @@ Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "aimY", {
      * @ignore
      */
     get: function () {
-        var gamepad = this.m_getGamepad();
-        return gamepad !== null ? gamepad.stickLeft.y : 0;
+        var gamepads = navigator.getGamepads ? navigator.getGamepads() : null;
+        var gamepad = gamepads !== null ? gamepads[this.m_playerID] : null;
+
+        return gamepad !== null && gamepad.axes ? gamepad.axes[1] || 0 : 0;
     }
 });
 
