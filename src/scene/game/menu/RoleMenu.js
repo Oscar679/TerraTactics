@@ -47,20 +47,52 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
     // controls (keyboard / gamepad)
-    this.m_controls = new TerraTactics.util.Controls(0);
+    this.m_player1Controls = new TerraTactics.util.Controls(0);
+    this.m_player2Controls = new TerraTactics.util.Controls(1);
 
-    this.m_roles = new rune.display.Sprite(20, 20, 24, 24, "roles");
-    this.stage.addChild(this.m_roles);
+    this.m_rolesPlayer1 = new rune.display.Sprite(20, 20, 24, 24, "roles");
+    this.stage.addChild(this.m_rolesPlayer1);
 
-    this.m_selectedRole = 0;
+    this.m_rolesPlayer2 = new rune.display.Sprite(120, 20, 24, 24, "roles");
+    this.stage.addChild(this.m_rolesPlayer2);
 
-    this.m_roles.animation.create("role1", [0], 1, true);
-    this.m_roles.animation.create("role2", [1], 1, true);
-    this.m_roles.animation.create("role3", [2], 1, true);
+    this.m_selectedRolePlayer1 = 0;
+    this.m_selectedRolePlayer2 = 0;
 
-    this.m_roles.animation.gotoAndPlay("role1", 0);
+    this.m_rolesPlayer1.animation.create("role1", [0], 1, true);
+    this.m_rolesPlayer1.animation.create("role2", [1], 1, true);
+    this.m_rolesPlayer1.animation.create("role3", [2], 1, true);
 
-    this.m_selectedRoles = [];
+    this.m_rolesPlayer2.animation.create("role1", [0], 1, true);
+    this.m_rolesPlayer2.animation.create("role2", [1], 1, true);
+    this.m_rolesPlayer2.animation.create("role3", [2], 1, true);
+
+    this.m_rolesPlayer1.animation.gotoAndPlay("role1", 0);
+    this.m_rolesPlayer2.animation.gotoAndPlay("role1", 0);
+
+    this.m_player1Locked = false;
+    this.m_player2Locked = false;
+
+    this.m_selectedRoles = {
+        "player1": "",
+        "player2": ""
+    };
+};
+
+TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
+    switch (role) {
+        case 0:
+            this.m_selectedRoles[player] = "ninja";
+            break;
+        case 1:
+            this.m_selectedRoles[player] = "bomber";
+            break;
+        case 2:
+            this.m_selectedRoles[player] = "sniper";
+            break;
+        default:
+            break;
+    }
 };
 
 /**
@@ -74,41 +106,43 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
 TerraTactics.scene.RoleMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    if (this.m_selectedRoles.length === 2) {
-        this.application.scenes.load([new TerraTactics.scene.Game(this.m_selectedRoles)]);
-    }
+    this.m_player1Locked = this.m_selectedRoles["player1"] !== "";
+    this.m_player2Locked = this.m_selectedRoles["player2"] !== "";
 
-    this.m_roles.animation.gotoAndPlay("role" + (this.m_selectedRole + 1), 0);
+    this.m_rolesPlayer1.animation.gotoAndPlay("role" + (this.m_selectedRolePlayer1 + 1), 0);
+    this.m_rolesPlayer2.animation.gotoAndPlay("role" + (this.m_selectedRolePlayer2 + 1), 0);
 
-    if (this.m_controls.justUp && this.m_selectedRole > 0) {
-        this.m_selectedRole--;
-    }
-
-    if (this.m_controls.justDown && this.m_selectedRole < 2) {
-        this.m_selectedRole++;
-    }
-
-    if (this.m_controls.confirm) {
-        var role = null;
-        switch (this.m_selectedRole) {
-            case 0:
-                role = "ninja";
-                console.log("Selected ninja");
-                this.m_selectedRoles.push(role);
-                break;
-            case 1:
-                role = "bomber";
-                console.log("Selected bomber");
-                this.m_selectedRoles.push(role);
-                break;
-            case 2:
-                role = "sniper";
-                console.log("Selected sniper");
-                this.m_selectedRoles.push(role);
-                break;
-            default:
-                break;
+    if (!this.m_player1Locked) {
+        if (this.m_player1Controls.justUp && this.m_selectedRolePlayer1 > 0) {
+            this.m_selectedRolePlayer1--;
         }
+
+        if (this.m_player1Controls.justDown && this.m_selectedRolePlayer1 < 2) {
+            this.m_selectedRolePlayer1++;
+        }
+
+        if (this.m_player1Controls.confirm) {
+            this.m_confirmRole("player1", this.m_selectedRolePlayer1);
+        }
+    }
+
+    if (!this.m_player2Locked) {
+        if (this.m_player2Controls.justUp && this.m_selectedRolePlayer2 > 0) {
+            this.m_selectedRolePlayer2--;
+        }
+
+        if (this.m_player2Controls.justDown && this.m_selectedRolePlayer2 < 2) {
+            this.m_selectedRolePlayer2++;
+        }
+
+        if (this.m_player2Controls.confirm) {
+            this.m_confirmRole("player2", this.m_selectedRolePlayer2);
+        }
+    }
+
+    if (this.m_selectedRoles["player1"] !== "" &&
+        this.m_selectedRoles["player2"] !== "") {
+        this.application.scenes.load([new TerraTactics.scene.Game(this.m_selectedRoles)]);
     }
 };
 
