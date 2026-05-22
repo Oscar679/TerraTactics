@@ -46,14 +46,35 @@ TerraTactics.scene.RoleMenu.prototype.constructor = TerraTactics.scene.RoleMenu;
 TerraTactics.scene.RoleMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
+    this.m_background = new rune.display.Sprite(0, 0, 432, 240, "controllerMenuBackground");
+    this.stage.addChild(this.m_background);
+
+    this.m_background.animation.create("idle", [0, 1, 2, 3], 3, true);
+
+    this.m_player1Container = new rune.display.Sprite(5, 30, 128, 128, "Player1");
+    this.stage.addChild(this.m_player1Container);
+
+    this.m_player2Container = new rune.display.Sprite(260, 30, 128, 128, "Player2");
+    this.stage.addChild(this.m_player2Container);
+
     // controls (keyboard / gamepad)
     this.m_player1Controls = new TerraTactics.util.Controls(0);
     this.m_player2Controls = new TerraTactics.util.Controls(1);
 
-    this.m_rolesPlayer1 = new rune.display.Sprite(20, 20, 24, 24, "roles");
+    this.m_rolesPlayer1 = new rune.display.Sprite(0, 0, 24, 24, "roles");
+    this.m_rolesPlayer1.scaleX = 2;
+    this.m_rolesPlayer1.scaleY = 2;
+    this.m_rolesPlayer1.centerX = this.m_player1Container.centerX;
+    this.m_rolesPlayer1.centerY = this.m_player1Container.centerY;
+
     this.stage.addChild(this.m_rolesPlayer1);
 
-    this.m_rolesPlayer2 = new rune.display.Sprite(120, 20, 24, 24, "roles");
+    this.m_rolesPlayer2 = new rune.display.Sprite(0, 0, 24, 24, "roles");
+    this.m_rolesPlayer2.scaleX = 2;
+    this.m_rolesPlayer2.scaleY = 2;
+    this.m_rolesPlayer2.centerX = this.m_player2Container.centerX;
+    this.m_rolesPlayer2.centerY = this.m_player2Container.centerY;
+
     this.stage.addChild(this.m_rolesPlayer2);
 
     this.m_selectedRolePlayer1 = 0;

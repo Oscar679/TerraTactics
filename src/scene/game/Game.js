@@ -143,7 +143,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_cloud2.resetX = 620;
     this.m_cloud3.resetX = 520;
     this.m_cloud4.resetX = 720;
-    
+
     this.m_cloud1.duration = 45000;
     this.m_cloud2.duration = 60000;
     this.m_cloud3.duration = 40000;
@@ -240,6 +240,8 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_bullet = null;
 
+    this.m_powerUps = new TerraTactics.scene.PowerUps(this);
+
     this.m_characters = new TerraTactics.scene.Characters(this.stage, this.m_roles);
 
     //add healthbars to stage
@@ -303,10 +305,22 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     // this.test = new rune.display.Sprite(50, 50, 96, 48, "playgame");
     //   this.test.animation.create("idle", [0, 1, 2], 6, true);
-    //  this.stage.addChild(this.test);
+    //  this.stage.addChild(this.test); 
 
     this.m_startRoundTimer();
 };
+
+TerraTactics.scene.Game.prototype.getCoordinatesForPowerUp = function (tempX) {
+    for (var i = 0; i < this.stage.m_map.heightInTiles; i++) {
+        var tile = this.stage.m_map.front.getTileOfPoint(tempX, i * this.stage.m_map.tileHeight);
+        console.log(tile);
+        if (tile.m_index !== null) {
+            return { x: tempX };
+        }
+    }
+    return null;
+};
+
 TerraTactics.scene.Game.prototype.m_animateClouds = function (clouds, isReset) {
     if (!Array.isArray(clouds)) {
         cloud = clouds;
@@ -613,14 +627,14 @@ TerraTactics.scene.Game.prototype.m_updatePlayerInput = function () {
 
     if (this.m_controls.left && this.m_activePlayer != null &&
         this.m_activePlayer.character != null) {
-        this.m_activePlayer.character.x -= 1;
+        this.m_activePlayer.character.x -= this.m_activePlayer.character.m_speed;
         this.m_activePlayer.character.m_movingLeft = true;
         this.m_activePlayer.character.flippedX = true;
     }
 
     if (this.m_controls.right && this.m_activePlayer != null &&
         this.m_activePlayer.character != null) {
-        this.m_activePlayer.character.x += 1;
+        this.m_activePlayer.character.x += this.m_activePlayer.character.m_speed;
         this.m_activePlayer.character.m_movingRight = true;
         this.m_activePlayer.character.flippedX = false;
     }
@@ -676,6 +690,10 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
         this.m_tick3SecSound.stop();
     }
 
+    if (this.m_gameEnd === true) {
+        return;
+    }
+
     this.m_turnChangeSound.play();
     this.m_cancelAim();
     this.m_characters.switchTurn();
@@ -684,10 +702,12 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_startRoundTimer();
     this.m_selectWeapon("pistol");
     this.m_updateAttackCooldowns();
-};
 
-TerraTactics.scene.Game.prototype.m_fireProjectile = function (player, x, y) {
-    this.stage.addChild(this.m_bullet);
+    var randomType = Math.floor(Math.random() * 2);
+    var types = ["health", "speed"];
+    this.m_powerUps.m_resetPowerUps(this.m_activePlayer.character,
+        this.m_inActivePlayers[0].character);
+    this.m_powerUps.m_spawnPowerUp(types[randomType]);
 };
 
 TerraTactics.scene.Game.prototype.m_knockback = function (player, source) {
@@ -894,6 +914,8 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     }
 
     var oldActivePlayer = this.m_activePlayer;
+
+    this.m_powerUps.update(this.stage.m_map.front, this.m_activePlayer);
 
     this.m_characters.update(this.stage.m_map.front);
 

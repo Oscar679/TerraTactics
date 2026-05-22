@@ -35,6 +35,7 @@ TerraTactics.scene.Character = function (x, y, role) {
     this.m_isJumping = false;
     this.m_isTouchingLava = false;
     this.m_airborneTicks = 0;
+    this.m_speed = 1;
 
     this.m_maxHealth = 100;
     this.m_health = this.m_maxHealth;
@@ -140,8 +141,31 @@ Object.defineProperty(TerraTactics.scene.Character.prototype, "getCurrentCooldow
 }, {
     get: function () {
         var weapon = this.m_getWeapon();
-        console.log(weapon);
         return this.m_weaponState.cooldowns[weapon] || 0;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "maxHealth", {
+    get: function () {
+        return this.m_maxHealth;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "health", {
+    get: function () {
+        return this.m_health;
+    },
+    set: function (value) {
+        this.m_health = value;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "speed", {
+    get: function () {
+        return this.m_speed;
+    },
+    set: function (value) {
+        this.m_speed = value;
     }
 });
 
