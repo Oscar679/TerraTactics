@@ -75,7 +75,7 @@ TerraTactics.scene.ControllerMenu.prototype.init = function () {
     this.m_gamepad2.middleX = this.m_gamepad2.x;
 
     this.m_continueText = new rune.text.BitmapField("PRESS X TO CHOOSE ROLES", "");
-    this.m_continueText.centerX = this.m_background.m_width / 2;
+    this.m_continueText.centerX = this.m_background.m_width / 2.2;
     this.m_continueText.centerY = this.m_background.m_height / 1.4;
     this.m_continueText.visible = false;
     this.stage.addChild(this.m_continueText);

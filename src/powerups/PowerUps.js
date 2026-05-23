@@ -77,13 +77,20 @@ TerraTactics.scene.PowerUps.prototype.m_spawnPowerUp = function (type, x, y) {
     }
     var spawnX = null;
     var tempX = null;
+    var attempts = 0;
+    var maxAttempts = 100;
 
-    while (spawnX === null) {
+    while (spawnX === null && attempts < maxAttempts) {
         tempX = this.m_randomizeXValue();
         spawnX = this.m_gameScene.getCoordinatesForPowerUp(tempX);
+        attempts++;
     }
 
-    powerUp.x = spawnX.x;
+    if (spawnX === null) {
+        return;
+    }
+
+    powerUp.x = spawnX.x - powerUp.width * powerUp.scaleX / 2;
     powerUp.y = y || -50;
     powerUp.velocity = 0;
     powerUp.grounded = false;

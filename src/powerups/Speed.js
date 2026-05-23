@@ -49,10 +49,10 @@ TerraTactics.scene.Speed.prototype.constructor = TerraTactics.scene.Speed;
  * @returns {undefined}
  */
 TerraTactics.scene.Speed.prototype.init = function () {
-    rune.display.Sprite.call(this, this.m_x, this.m_y, 48, 48, "pistol");
+    rune.display.Sprite.call(this, this.m_x, this.m_y, 48, 48, "speed");
 
-    this.scaleX = 0.2;
-    this.scaleY = 0.2;
+    this.scaleX = 0.4;
+    this.scaleY = 0.4;
 };
 
 /**

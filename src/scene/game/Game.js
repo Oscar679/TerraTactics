@@ -52,7 +52,6 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_soundChannel = new rune.media.SoundChannel();
     this.m_tick3SecSound = this.m_soundChannel.get("tick_3_sec");
     this.m_turnChangeSound = this.m_soundChannel.get("turn_change");
-    this.m_victorySound = this.m_soundChannel.get("victory");
 
     this.m_themeMusic = this.m_soundChannel.get("theme_music");
     this.m_themeMusic.loop = true;
@@ -265,6 +264,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_roundTimer = null;
 
     this.m_gameEnd = false;
+    this.m_gameOverLoaded = false;
 
     this.m_playerControls = {
         player1: new TerraTactics.util.Controls(0),
@@ -311,10 +311,19 @@ TerraTactics.scene.Game.prototype.init = function () {
 };
 
 TerraTactics.scene.Game.prototype.getCoordinatesForPowerUp = function (tempX) {
-    for (var i = 0; i < this.stage.m_map.heightInTiles; i++) {
-        var tile = this.stage.m_map.front.getTileOfPoint(tempX, i * this.stage.m_map.tileHeight);
-        console.log(tile);
-        if (tile.m_index !== null) {
+    var tileX = Math.floor(tempX / this.stage.m_map.tileWidth);
+    var width = this.stage.m_map.widthInTiles;
+    var height = this.stage.m_map.heightInTiles;
+
+    if (tileX < 0 || tileX >= width) {
+        return null;
+    }
+
+    for (var i = 0; i < height; i++) {
+        var index = i * width + tileX;
+        var value = this.stage.m_map.front.getTileValueAt(index);
+
+        if (value > 0) {
             return { x: tempX };
         }
     }
@@ -767,9 +776,6 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
     winnerText.scaleY = 2;
 
     this.stage.addChild(winnerText);
-
-    this.m_victorySound.play(true);
-    this.m_victorySound.loop = false;
 };
 
 TerraTactics.scene.Game.prototype.m_bulletHit = function () {
@@ -838,6 +844,10 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     if (this.m_gameEnd === true) {
         this.m_tick3SecSound.stop();
         this.m_turnChangeSound.stop();
+        if (!this.m_gameOverLoaded) {
+            this.application.scenes.load([new TerraTactics.scene.GameOverMenu()]);
+        }
+        this.m_gameOverLoaded = true;
         return;
     }
 

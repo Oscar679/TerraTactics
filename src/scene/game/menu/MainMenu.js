@@ -50,17 +50,18 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     this.bg = new rune.display.Graphic(0, 0, 400, 225, "background");
     this.stage.addChild(this.bg);
 
-    this.PlayGame = new rune.display.Sprite(150, 100, 96, 96, "Selectedplaygame");
+    this.PlayGame = new rune.display.Sprite(160, 30, 96, 96, "Selectedplaygame");
     this.stage.addChild(this.PlayGame);
 
-    this.Credits = new rune.display.Sprite(190, 100, 96, 96, "SelectedCredits");
+    this.Credits = new rune.display.Sprite(160, 75, 96, 96, "SelectedCredits");
     this.stage.addChild(this.Credits);
 
-    this.Option = new rune.display.Sprite(230, 100, 96, 96, "OptionSelected");
+    this.Option = new rune.display.Sprite(160, 120, 96, 96, "OptionSelected");
     this.stage.addChild(this.Option);
 
-    this.ExitGame = new rune.display.Sprite(260, 100, 96, 96, "ExitGame");
+    this.ExitGame = new rune.display.Sprite(160, 165, 96, 96, "ExitGame");
     this.stage.addChild(this.ExitGame);
+
 
     // group of menu items (controller/keyboard navigation)
     this.m_menuItems = [this.PlayGame, this.Credits, this.Option, this.ExitGame];

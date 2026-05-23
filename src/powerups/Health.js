@@ -49,7 +49,7 @@ TerraTactics.scene.Health.prototype.constructor = TerraTactics.scene.Health;
  * @returns {undefined}
  */
 TerraTactics.scene.Health.prototype.init = function () {
-    rune.display.Sprite.call(this, this.m_x, this.m_y, 48, 48, "pistol");
+    rune.display.Sprite.call(this, this.m_x, this.m_y, 48, 48, "health");
     
     this.scaleX = 0.4;
     this.scaleY = 0.4;
