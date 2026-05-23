@@ -8,7 +8,7 @@ TerraTactics.scene.Characters = function (stage, roles) {
     this.m_jumpSound = this.m_soundChannel.get("jump");
     this.m_walkSound = this.m_soundChannel.get("walk");
     this.m_ouchSound = this.m_soundChannel.get("ouch");
-    this.m_lavaShizzle = this.m_soundChannel.get("lava_shizzle");
+    this.m_lavaShizzle = this.m_soundChannel.get("lava_shizzle"); 
 
     this.m_isWalkSoundPlaying = false;
 
@@ -164,7 +164,7 @@ Object.defineProperty(TerraTactics.scene.Characters.prototype, "leftWall", {
 
 Object.defineProperty(TerraTactics.scene.Characters.prototype, "rightWall", {
     get: function () {
-        return this.worldWidth;
+        return 400;
     }
 });
 
@@ -232,11 +232,15 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         }
     }
 
-    if (activePlayer != null &&
-        activePlayer.character != null) {
-        if (activePlayer.character.left < this.leftWall ||
-            activePlayer.character.right > this.rightWall) {
-            this.hitBoundary(activePlayer.character);
+    for (var playerId in this.m_players) {
+        var playerEntry = this.m_players[playerId];
+        var character = playerEntry.character;
+
+        if (character !== null) {
+            if (character.left < this.leftWall ||
+                character.right > this.rightWall) {
+                this.hitBoundary(character);
+            }
         }
     }
 };

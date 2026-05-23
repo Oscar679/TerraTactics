@@ -50,21 +50,15 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     this.bg = new rune.display.Graphic(0, 0, 400, 225, "background");
     this.stage.addChild(this.bg);
 
-    this.PlayGame = new rune.display.Sprite(160, 30, 96, 96, "Selectedplaygame");
+    this.PlayGame = new rune.display.Sprite(160, 60, 96, 96, "Selectedplaygame");
     this.stage.addChild(this.PlayGame);
 
-    this.Credits = new rune.display.Sprite(160, 75, 96, 96, "SelectedCredits");
-    this.stage.addChild(this.Credits);
-
-    this.Option = new rune.display.Sprite(160, 120, 96, 96, "OptionSelected");
-    this.stage.addChild(this.Option);
-
-    this.ExitGame = new rune.display.Sprite(160, 165, 96, 96, "ExitGame");
+    this.ExitGame = new rune.display.Sprite(160, 110, 96, 96, "ExitGame");
     this.stage.addChild(this.ExitGame);
 
 
     // group of menu items (controller/keyboard navigation)
-    this.m_menuItems = [this.PlayGame, this.Credits, this.Option, this.ExitGame];
+    this.m_menuItems = [this.PlayGame, this.ExitGame];
 
     // controls (keyboard / gamepad)
     this.m_controls = new TerraTactics.util.Controls(0);
@@ -133,10 +127,6 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
         var sel = this.m_menuItems[this.m_selectedIndex];
         if (sel === this.PlayGame) {
             this.application.scenes.load([new TerraTactics.scene.ControllerMenu()]);
-        } else if (sel === this.Credits) {
-            this.application.scenes.load([new TerraTactics.scene.Credits()]);
-        } else if (sel === this.Option) {
-            this.application.scenes.load([new TerraTactics.scene.Options()]);
         } else if (sel === this.ExitGame) {
             try {
                 window.close();

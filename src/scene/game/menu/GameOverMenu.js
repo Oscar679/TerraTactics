@@ -13,7 +13,7 @@
  * 
  * Options scene.
  */
-TerraTactics.scene.GameOverMenu = function () {
+TerraTactics.scene.GameOverMenu = function (winnerText) {
 
 
     // Super call
@@ -24,6 +24,8 @@ TerraTactics.scene.GameOverMenu = function () {
      */
 
     rune.scene.Scene.call(this);
+
+    this.m_winner = winnerText;
 };
 
 //------------------------------------------------------------------------------
@@ -61,19 +63,29 @@ TerraTactics.scene.GameOverMenu.prototype.init = function () {
     this.m_selectedIndex = 0;
     this.m_menuItems = [this.playGame, this.exitGame];
 
+    this.m_winnerText = new rune.text.BitmapField(this.m_winner);
+
+    this.m_winnerText.centerX = 200;
+    this.m_winnerText.centerY = 45;
+    this.m_winnerText.scaleX = 2;
+    this.m_winnerText.scaleY = 2;
+
+    this.stage.addChild(this.m_winnerText);
+
     this.m_updateSelection();
 };
 
 TerraTactics.scene.GameOverMenu.prototype.m_updateSelection = function () {
-    console.log(this.m_selectedIndex);
     this.m_menuItems.forEach(function (item) {
         if (item === this.m_menuItems[this.m_selectedIndex]) {
             item.scaleX = 1.05;
             item.scaleY = 1.05;
+            item.alpha = 1.0;
 
         } else {
             item.scaleX = 1.0;
             item.scaleY = 1.0;
+            item.alpha = 0.7;
         }
     }, this);
 };
