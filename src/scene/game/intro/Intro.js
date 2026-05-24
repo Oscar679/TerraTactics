@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description First screen shown before entering the main menu.
@@ -9,22 +8,16 @@
  * @class
  */
 TerraTactics.scene.Intro = function () {
-    // Super call
-    //--------------------------------------------------------------------------
+
+
     rune.scene.Scene.call(this);
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.scene.Intro.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
 
-/**
- * @description Leaves the intro once and loads the main menu.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Intro.prototype.m_continue = function () {
     if (this.m_done !== true) {
         this.m_done = true;
@@ -32,15 +25,7 @@ TerraTactics.scene.Intro.prototype.m_continue = function () {
     }
 };
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
 
-/**
- * @description Sets up this object after Rune creates it.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.Intro.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
@@ -74,13 +59,7 @@ TerraTactics.scene.Intro.prototype.init = function () {
     this.stage.addChild(text2);
 };
 
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.Intro.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
@@ -95,11 +74,7 @@ TerraTactics.scene.Intro.prototype.update = function (step) {
     }
 };
 
-/**
- * @description Cleans up this object before it leaves the scene.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.Intro.prototype.dispose = function () {
     window.removeEventListener("keydown", this.m_onKeyDown);
     this.m_onKeyDown = null;

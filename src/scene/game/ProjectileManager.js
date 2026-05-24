@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Owns the active projectile from firing until impact or cleanup.
@@ -13,20 +12,12 @@ TerraTactics.scene.ProjectileManager = function (gameScene) {
     this.m_bullet = null;
 };
 
-/**
- * @description True while a bullet is still in the world.
- * @returns {boolean} - true if a projectile exists.
- */
+
 TerraTactics.scene.ProjectileManager.prototype.m_hasProjectile = function () {
     return this.m_bullet !== null;
 };
 
-/**
- * @description Creates the active player's bullet if the weapon can fire.
- * @param {number} targetX - x-coordinate of target position.
- * @param {number} targetY - y-coordinate of target position.
- * @returns {undefined}
- */
+
 TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (targetX, targetY) {
     var activePlayer = this.m_gameScene.m_activePlayer;
     var weapon = null;
@@ -48,10 +39,7 @@ TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (ta
     }
 };
 
-/**
- * @description Cleans up the current bullet, then passes the turn.
- * @returns {undefined}
- */
+
 TerraTactics.scene.ProjectileManager.prototype.m_bulletHit = function () {
     this.m_gameScene.stage.removeChild(this.m_bullet);
     this.m_bullet = null;
@@ -59,12 +47,7 @@ TerraTactics.scene.ProjectileManager.prototype.m_bulletHit = function () {
     this.m_gameScene.m_endTurn();
 };
 
-/**
- * @description Pushes a hit character away from the projectile impact.
- * @param {TerraTactics.scene.Character} player - player character hit by the projectile.
- * @param {TerraTactics.scene.Bullet} source - projectile causing knockback.
- * @returns {undefined}
- */
+
 TerraTactics.scene.ProjectileManager.prototype.m_knockback = function (player, source) {
     if (player.centerX < source.centerX) {
         player.x -= source.m_knockback;
@@ -76,11 +59,7 @@ TerraTactics.scene.ProjectileManager.prototype.m_knockback = function (player, s
     player.m_velocityY = -2;
 };
 
-/**
- * @description Breaks the map tile hit by a bullet, including edge variants.
- * @param {rune.geom.Rectangle} hitbox - projectile hitbox.
- * @returns {undefined}
- */
+
 TerraTactics.scene.ProjectileManager.prototype.m_destroyTileAtHitbox = function (hitbox) {
     var indexes = this.m_gameScene.stage.m_map.front.getTileIndexesInRect(hitbox);
 
@@ -94,7 +73,7 @@ TerraTactics.scene.ProjectileManager.prototype.m_destroyTileAtHitbox = function 
             continue;
         }
 
-        // if its already a destroyed edge or a small island, apply empty tile
+
         if (value === 13 || value === 14 || value === 8) {
             this.m_gameScene.stage.m_map.front.setTileValueAt(index, 0);
             return;
@@ -106,10 +85,10 @@ TerraTactics.scene.ProjectileManager.prototype.m_destroyTileAtHitbox = function 
         }
 
         if (column > 0 && this.m_gameScene.stage.m_map.front.getTileValueAt(index - 1) === 0) {
-            //apply broken island where its empty on the left side of the island
+
             this.m_gameScene.stage.m_map.front.setTileValueAt(index, 13);
         } else if (column < width - 1 && this.m_gameScene.stage.m_map.front.getTileValueAt(index + 1) === 0) {
-            //apply broken island where its empty on the right side of the island
+
             this.m_gameScene.stage.m_map.front.setTileValueAt(index, 14);
         } else {
             this.m_gameScene.stage.m_map.front.setTileValueAt(index, 0);
@@ -119,11 +98,7 @@ TerraTactics.scene.ProjectileManager.prototype.m_destroyTileAtHitbox = function 
     }
 };
 
-/**
- * @description Checks bullet hits against terrain, players, and screen bounds.
- * @param {Array} inactivePlayers - inactive player entries that can be hit.
- * @returns {undefined}
- */
+
 TerraTactics.scene.ProjectileManager.prototype.update = function (inactivePlayers) {
     if (this.m_bullet !== null) {
         if (this.m_bullet.hitTest(this.m_gameScene.stage.m_map.front)) {
@@ -144,7 +119,7 @@ TerraTactics.scene.ProjectileManager.prototype.update = function (inactivePlayer
         }
     }
 
-    // if bullet goes outside of screen, its disposed, and turn switched
+
     if (this.m_bullet !== null) {
         if (
             this.m_bullet.x < 0 ||

@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Screen where players choose which side their controllers control.
@@ -11,27 +10,14 @@
 TerraTactics.scene.ControllerMenu = function () {
 
 
-    // Super call
-    //--------------------------------------------------------------------------
     rune.scene.Scene.call(this);
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.scene.ControllerMenu.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.ControllerMenu.prototype.constructor = TerraTactics.scene.ControllerMenu;
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
 
-/**
- * @description Sets up this object after Rune creates it.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.ControllerMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
@@ -70,12 +56,7 @@ TerraTactics.scene.ControllerMenu.prototype.init = function () {
     this.stage.addChild(this.m_continueText);
 };
 
-/**
- * @description Slides a controller icon toward its chosen slot.
- * @param {rune.display.Sprite} target - controller sprite to move.
- * @param {number} x - destination x-coordinate.
- * @returns {undefined}
- */
+
 TerraTactics.scene.ControllerMenu.prototype.m_startTween = function (target, x) {
     target.isPlayingTween = true;
 
@@ -93,22 +74,12 @@ TerraTactics.scene.ControllerMenu.prototype.m_startTween = function (target, x) 
     });
 };
 
-/**
- * @description Calculates the x-position that centers one sprite inside another.
- * @param {rune.display.Sprite} container - container sprite.
- * @param {rune.display.Sprite} target - target sprite.
- * @returns {number} - centered x-coordinate.
- */
+
 TerraTactics.scene.ControllerMenu.prototype.m_getCenteredX = function (container, target) {
     return container.centerX - target.width * 0.5;
 };
 
-/**
- * @description Sends a controller icon to player one, player two, or the middle.
- * @param {rune.display.Sprite} target - controller sprite to move.
- * @param {string} side - side to move controller to.
- * @returns {undefined}
- */
+
 TerraTactics.scene.ControllerMenu.prototype.m_moveController = function (target, side) {
     if (target.isPlayingTween) {
         return;
@@ -126,13 +97,7 @@ TerraTactics.scene.ControllerMenu.prototype.m_moveController = function (target,
     this.m_startTween(target, x);
 };
 
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.ControllerMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
@@ -171,11 +136,7 @@ TerraTactics.scene.ControllerMenu.prototype.update = function (step) {
     }
 };
 
-/**
- * @description Cleans up this object before it leaves the scene.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.ControllerMenu.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };

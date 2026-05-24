@@ -1,7 +1,5 @@
 
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
 
 /**
  * @description Sprite used behind one of the match timers.
@@ -16,16 +14,11 @@ TerraTactics.scene.TimeBar = function (x, y) {
     this.scaleY = 0.8;
 };
 
-//inheritance
 
 TerraTactics.scene.TimeBar.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.TimeBar.prototype.constructor = TerraTactics.scene.TimeBar;
 
-/**
- * @description Switches the timer bar between active and inactive animation.
- * @param {boolean} active - true if the timer bar should appear active.
- * @returns {undefined}
- */
+
 TerraTactics.scene.TimeBar.prototype.m_active = function (active) {
     if (active) {
         this.animation.gotoAndPlay("active", 0);

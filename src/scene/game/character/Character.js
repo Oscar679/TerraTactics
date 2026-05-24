@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Creates a playable character with movement, health, role, and weapons.
@@ -13,14 +12,9 @@
  */
 TerraTactics.scene.Character = function (x, y, role) {
 
-    //--------------------------------------------------------------------------
-    // Super call
-    //--------------------------------------------------------------------------
+
     rune.display.Sprite.call(this, x, y, 24, 24, role);
 
-    //--------------------------------------------------------------------------
-    // Private properties
-    //--------------------------------------------------------------------------
 
     this.m_role = role;
     this.m_grounded = false;
@@ -62,18 +56,11 @@ TerraTactics.scene.Character = function (x, y, role) {
     }
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.scene.Character.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.Character.prototype.constructor = TerraTactics.scene.Character;
 
-/**
- * @description True when the given weapon is off cooldown.
- * @param {string} weapon - weapon to be checked.
- * @returns {boolean} - if weapon not on cooldown, true, otherwise false.
- */
+
 TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
     if (this.m_weaponState.cooldowns[weapon] === 0) {
         return true;
@@ -82,12 +69,7 @@ TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
     }
 }
 
-/**
- * @description Asks the equipped weapon to create a projectile.
- * @param {number} targetX - x-coordinate of mouse position.
- * @param {number} targetY - y-coordinate of mouse position.
- * @returns {TerraTactics.scene.Bullet} - fired projectile.
- */
+
 TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, targetY) {
     var weapon = this.m_guns[this.m_weaponState.currentWeapon];
 
@@ -102,11 +84,6 @@ TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, tar
 };
 
 
-/**
- * @description Changes animation only when a different one is needed.
- * @param {string} name - name of animation to play.
- * @returns {undefined}
- */
 TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
     if (!this.animation.current || this.animation.current.name !== name) {
         this.animation.gotoAndPlay(name, 0);
@@ -114,17 +91,6 @@ TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
 };
 
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
-
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.Character.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     if (!this.m_grounded) {
@@ -153,18 +119,11 @@ TerraTactics.scene.Character.prototype.update = function (step) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 };
 
-/**
- * @description Cleans up this object before it leaves the scene.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.Character.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
 };
 
-//------------------------------------------------------------------------------
-// Public getter and setter methods
-//------------------------------------------------------------------------------
 
 Object.defineProperty(TerraTactics.scene.Character.prototype, "weapon", {
     get: function () {

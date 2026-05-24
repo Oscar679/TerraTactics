@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Maps a browser/Rune gamepad into game controls.
@@ -10,24 +9,11 @@
  */
 TerraTactics.util.MappingGamepad = function (playerID) {
 
-    //--------------------------------------------------------------------------
-    // Private properties
-    //--------------------------------------------------------------------------
 
-    /**
-     * Player ID.
-     *
-     * @type {number}
-     * @private
-     */
     this.m_playerID = playerID || 0;
 };
 
-//------------------------------------------------------------------------------
-// Public static properties
-//------------------------------------------------------------------------------
 
-// PS4 controller button IDs as exposed by the browser Gamepad API.
 TerraTactics.util.MappingGamepad.BUTTON_CROSS = 0;
 TerraTactics.util.MappingGamepad.BUTTON_CIRCLE = 1;
 TerraTactics.util.MappingGamepad.BUTTON_SQUARE = 2;
@@ -46,14 +32,7 @@ TerraTactics.util.MappingGamepad.BUTTON_DPAD_LEFT = 14;
 TerraTactics.util.MappingGamepad.BUTTON_DPAD_RIGHT = 15;
 TerraTactics.util.MappingGamepad.AIM_DEADZONE = 0.25;
 
-//------------------------------------------------------------------------------
-// Private prototype methods
-//------------------------------------------------------------------------------
 
-/**
- * @description Returns the Rune gamepad assigned to this player.
- * @returns {rune.input.Gamepad|null} - gamepad handler if available.
- */
 TerraTactics.util.MappingGamepad.prototype.m_getGamepad = function () {
     var gamepads = null;
 
@@ -72,11 +51,7 @@ TerraTactics.util.MappingGamepad.prototype.m_getGamepad = function () {
     return null;
 };
 
-/**
- * @description Reads one of Rune's boolean stick direction flags.
- * @param {string} property - stick property name.
- * @returns {boolean} - true if the stick property is active.
- */
+
 TerraTactics.util.MappingGamepad.prototype.m_stick = function (property) {
     var gamepad = this.m_getGamepad();
 
@@ -91,11 +66,7 @@ TerraTactics.util.MappingGamepad.prototype.m_stick = function (property) {
     return false;
 };
 
-/**
- * @description Checks whether a gamepad button is currently held.
- * @param {number} button - button id.
- * @returns {boolean} - true if the button is held.
- */
+
 TerraTactics.util.MappingGamepad.prototype.m_pressed = function (button) {
     var gamepad = this.m_getGamepad();
 
@@ -110,11 +81,7 @@ TerraTactics.util.MappingGamepad.prototype.m_pressed = function (button) {
     return false;
 };
 
-/**
- * @description Checks whether a gamepad button was pressed this tick.
- * @param {number} button - button id.
- * @returns {boolean} - true if the button was just pressed.
- */
+
 TerraTactics.util.MappingGamepad.prototype.m_justPressed = function (button) {
     var gamepad = this.m_getGamepad();
 
@@ -129,11 +96,7 @@ TerraTactics.util.MappingGamepad.prototype.m_justPressed = function (button) {
     return false;
 };
 
-/**
- * @description Checks whether a gamepad button was released this tick.
- * @param {number} button - button id.
- * @returns {boolean} - true if the button was just released.
- */
+
 TerraTactics.util.MappingGamepad.prototype.m_justReleased = function (button) {
     var gamepad = this.m_getGamepad();
 
@@ -148,9 +111,6 @@ TerraTactics.util.MappingGamepad.prototype.m_justReleased = function (button) {
     return false;
 };
 
-//------------------------------------------------------------------------------
-// Public getter and setter methods
-//------------------------------------------------------------------------------
 
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "up", {
     get: function () {

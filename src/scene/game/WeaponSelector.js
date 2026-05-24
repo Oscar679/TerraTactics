@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Owns the weapon icons and keeps selection/cooldowns in sync.
@@ -29,11 +28,7 @@ TerraTactics.scene.WeaponSelector = function (gameScene) {
     this.m_selectedAttackIndex = 0;
 };
 
-/**
- * @description Chooses a weapon unless it is still cooling down.
- * @param {string} weapon - weapon name to select.
- * @returns {undefined}
- */
+
 TerraTactics.scene.WeaponSelector.prototype.m_selectWeapon = function (weapon) {
     var previousWeapon = null;
     var selectedWeapon = null;
@@ -73,11 +68,7 @@ TerraTactics.scene.WeaponSelector.prototype.m_selectWeapon = function (weapon) {
     });
 };
 
-/**
- * @description Finds a weapon in the selector order.
- * @param {string} weapon - weapon name.
- * @returns {number} - weapon index.
- */
+
 TerraTactics.scene.WeaponSelector.prototype.m_getWeaponIndex = function (weapon) {
     for (var i = 0; i < this.m_weaponNames.length; i++) {
         if (this.m_weaponNames[i] === weapon) {
@@ -88,12 +79,7 @@ TerraTactics.scene.WeaponSelector.prototype.m_getWeaponIndex = function (weapon)
     return 0;
 };
 
-/**
- * @description Moves to the next usable weapon from a starting index.
- * @param {number} index - index to start selection from.
- * @param {number} direction - direction to move while searching.
- * @returns {undefined}
- */
+
 TerraTactics.scene.WeaponSelector.prototype.m_selectWeaponAt = function (index, direction) {
     var attempts = 0;
 
@@ -129,10 +115,7 @@ TerraTactics.scene.WeaponSelector.prototype.m_selectWeaponAt = function (index, 
     }
 };
 
-/**
- * @description Copies character cooldowns into the weapon icons.
- * @returns {undefined}
- */
+
 TerraTactics.scene.WeaponSelector.prototype.m_updateAttackCooldowns = function () {
     var character = null;
 
@@ -148,11 +131,7 @@ TerraTactics.scene.WeaponSelector.prototype.m_updateAttackCooldowns = function (
     });
 };
 
-/**
- * @description Handles previous/next weapon input for the selector.
- * @param {TerraTactics.util.Controls} controls - active player controls.
- * @returns {undefined}
- */
+
 TerraTactics.scene.WeaponSelector.prototype.m_updateInput = function (controls) {
     if (controls.weaponPrevious) {
         this.m_selectWeaponAt(this.m_selectedAttackIndex - 1, -1);
@@ -166,11 +145,7 @@ TerraTactics.scene.WeaponSelector.prototype.m_updateInput = function (controls) 
     }
 };
 
-/**
- * @description Checks whether a click landed on a weapon icon.
- * @param {rune.geom.Point} point - point to test against attack icons.
- * @returns {boolean} - true if an attack icon was clicked.
- */
+
 TerraTactics.scene.WeaponSelector.prototype.m_clickAt = function (point) {
     var clickedAttack = null;
 
@@ -188,10 +163,7 @@ TerraTactics.scene.WeaponSelector.prototype.m_clickAt = function (point) {
     return false;
 };
 
-/**
- * @description Clears weapon icons from the camera group.
- * @returns {undefined}
- */
+
 TerraTactics.scene.WeaponSelector.prototype.m_remove = function () {
     this.m_attacks.removeMembers(this.m_attacks.members);
 };

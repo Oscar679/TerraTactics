@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Screen where each player picks a character role.
@@ -11,27 +10,14 @@
 TerraTactics.scene.RoleMenu = function () {
 
 
-    // Super call
-    //--------------------------------------------------------------------------
     rune.scene.Scene.call(this);
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.scene.RoleMenu.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.RoleMenu.prototype.constructor = TerraTactics.scene.RoleMenu;
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
 
-/**
- * @description Sets up this object after Rune creates it.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.RoleMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
@@ -46,7 +32,7 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
     this.m_player2Container = new rune.display.Sprite(260, 30, 128, 128, "Player2");
     this.stage.addChild(this.m_player2Container);
 
-    // controls (keyboard / gamepad)
+
     this.m_player1Controls = new TerraTactics.util.Controls(0);
     this.m_player2Controls = new TerraTactics.util.Controls(1);
 
@@ -89,12 +75,7 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
     };
 };
 
-/**
- * @description Converts a role index into the role name stored for a player.
- * @param {string} player - player id to store role for.
- * @param {number} role - selected role index.
- * @returns {undefined}
- */
+
 TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
     switch (role) {
         case 0:
@@ -111,13 +92,7 @@ TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
     }
 };
 
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.RoleMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
@@ -161,11 +136,7 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
     }
 };
 
-/**
- * @description Cleans up this object before it leaves the scene.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.RoleMenu.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };

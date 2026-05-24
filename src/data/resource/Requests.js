@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Resource bundle loaded by Rune before the game starts.
@@ -10,27 +9,15 @@
  */
 TerraTactics.data.Requests = function() {
 
-    //--------------------------------------------------------------------------
-    // Super call
-    //--------------------------------------------------------------------------
+
     rune.resource.Requests.call(this);
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.data.Requests.prototype = Object.create(rune.resource.Requests.prototype);
 TerraTactics.data.Requests.prototype.constructor = TerraTactics.data.Requests;
 
-//------------------------------------------------------------------------------
-// Override protected prototype methods
-//------------------------------------------------------------------------------
 
-/**
- * @description Registers the images, sounds, and maps baked into this file.
- * @returns {undefined}
- */
 TerraTactics.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
     this.add("arrow", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABY9JREFUWIW9l8uPHVcRxn9fnb73jl/jF+CZWHEIyAGFZyxig2ETQLAJggUbWCQLhMQ/gfgz2FlKEIIFG8iChxBI5hHbSUyACANCgC3smWDkyYw9Hs+9fepj0X3HiZLJHWOJkrqv1KdvVZ2v6vvqtNiBHT+4uHHQGiapQsgkpqRAuGJCkqothR0t5qW1a9qJ72YnL+1qi4wjIigy1SC3Qg3pUKStcDgRERQpd+IXYGaWJw8cyd/87NVsKoVTXwNXEyGunEkCYUQFCgZUvwPM4099c0GPvvfg4MxLl9q38z8bARkPKVSMboJSZIAJKklFJJBAQL0BMcJONIh2JhIzE4goKICC4BtpZP3qiWAD0xLQBxe4QrsMwxY7cGmIfvV/T8CY9uGv0uwt8MKnQxvAGGgBYdoegQJKSOOEEoBydolnI2ATw5XEFmNgAlSEsSuhANw9MxAVRXbNpR302MwEJEncNJt3OmcVSLCJFKiF0PTdPpcAI0y9/x6w7BjfEKVNJgQtJpEMJUnTMyE7FmCcLUoLZRS6Ym1rMTOBimhuiZzEVre7XxQhkM3dagdqhEsAZJ3lfzYCkfbyFVhHbPbBk570dM1nwmCpe5aJbNMSA+4bAQdMAsBbCDRd7QHoysBU+1TAYAPO2QgEwFOPPRIlmoqKgyahmCgexCi11dCIwESvfGKqfl0PFoQhE4dIbH/vlX9tFJoEGYWJsCgZGk6L2JXg2d/9NU8eWgyZNFJkxSEMQv0mDbTI7nbrHhEBaQhTMUFHywDr0T2HVXeB5A4hCSPPyT67stQlcPrQopsQP3/6Gvob0Xx73kTHM0Qnb9cRpQ/YhZGEM5GmMLrTStH99dzFV7fkmTH4AmYdNv8i11sun/nBgs+vLitsckiiBm4H0IxEzAFhFNCo4/6khz76AldCHZDuy5EE5KRrm7sCrCk2UkBjKyWsjks6uX8xS5gkuLgirX/ralLQ4OuHhQJ+e/0u7V7/qzfcIfv+cFcRohsPJGaTWP8lrK/DF39ytALhrDq/tqy4sLoUz68shzPVEIxXYGOVxEOy1o5E2RNCvcPoC+Su2r0UaZqaAqvr/8qE4Ca5OSYntVgm5gTn15a11YTQdduH9tf87LOLDJzlF7uXyDU8PN0vVtQXPDEhSERQwX1QOlGClo49EzQ+B5NN4skfLbo6CDnbvMv+NwyLzx97qNy4NZmUCudWJVFZ/dIy+74CDLrZb/pEukGp13nqUEgqCSvPUOoAjvzwGEny8fmW27WO/7B+ffQmHZjaT69crspW6dSpg8l8NDn3/h7YlkDdDADsbijlVrPl1lUw2n0c9hwjPzY/4eT8mCz4TvpNwrftuHz8wIKDoAA/fvoaoxEenaA/mAAmLSS22FERZeNs5/VzzyxiIsdk3Gwrf17/91vG2laK5UI6qa6MhqQa1AvRdM/dCDJQYJqaA6KBCdkNSJu1ycZ2YbYfRhdWr+oL735Y/3ntTi69QgwM79iEGBKDxwBT1GuCDOyFzbNw/RJWgyAYKDafX722e9vob5cAwHP//IdPzS9y7H0Qe9TyoBtX4CiwiVnp4X8QGMijR8xDGySFwq+FIu7/QDJqhvUTZxYkaL57Ypkm8AN/R3UTzX0SFHDn+2TMWZfPo6cuPhAI5pqBRzMOpLCDMxvAR/YtrI/wrpdvSg340ullAL3zPdC2cPll2H18Lj/w3OH48DwWyfm1pZmjHnb4ZTQsBWM+OB/eTas9R2F8G+IojID9N+DIoeqPHuiGpm3P8jm1HSEwtZMHFmzCSutPt4I/PnGVAL784mJHjxAvvrZ0Tz53hMDU5ig1RdxR0siuSdaGIKUmog3d24bgHhGY2uP7Fu1wBgpwGsXvV2+sj9nc+39JACBoxif2v6uR0Qs7/BR/K/svCkjZFhGqigUAAAAASUVORK5CYII=");

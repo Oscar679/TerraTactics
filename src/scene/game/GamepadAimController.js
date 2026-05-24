@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Keeps analog aiming smooth and pointed at the active target.
@@ -14,10 +13,7 @@ TerraTactics.scene.GamepadAimController = function (gameScene) {
     this.m_gamepadAimY = 0;
 };
 
-/**
- * @description Reads the stick and updates the current gamepad aim target.
- * @returns {undefined}
- */
+
 TerraTactics.scene.GamepadAimController.prototype.update = function () {
     var aimLength = 180;
     var aimX = this.m_gameScene.m_controls.aimX;

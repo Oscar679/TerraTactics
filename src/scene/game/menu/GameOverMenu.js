@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description End screen showing the winner with restart and exit choices.
@@ -12,29 +11,16 @@
 TerraTactics.scene.GameOverMenu = function (winnerText) {
 
 
-    // Super call
-    //--------------------------------------------------------------------------
     rune.scene.Scene.call(this);
 
     this.m_winner = winnerText;
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.scene.GameOverMenu.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.GameOverMenu.prototype.constructor = TerraTactics.scene.GameOverMenu;
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
 
-/**
- * @description Sets up this object after Rune creates it.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.GameOverMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
@@ -65,10 +51,7 @@ TerraTactics.scene.GameOverMenu.prototype.init = function () {
     this.m_updateSelection();
 };
 
-/**
- * @description Highlights the currently selected game over menu option.
- * @returns {undefined}
- */
+
 TerraTactics.scene.GameOverMenu.prototype.m_updateSelection = function () {
     this.m_menuItems.forEach(function (item) {
         if (item === this.m_menuItems[this.m_selectedIndex]) {
@@ -84,13 +67,7 @@ TerraTactics.scene.GameOverMenu.prototype.m_updateSelection = function () {
     }, this);
 };
 
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.GameOverMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
@@ -123,11 +100,7 @@ TerraTactics.scene.GameOverMenu.prototype.update = function (step) {
     }
 };
 
-/**
- * @description Cleans up this object before it leaves the scene.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.GameOverMenu.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };

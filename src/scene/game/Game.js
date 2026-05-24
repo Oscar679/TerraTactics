@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Main match scene where players move, aim, fight, and take turns.
@@ -11,29 +10,16 @@
  */
 TerraTactics.scene.Game = function (role) {
 
-    //--------------------------------------------------------------------------
-    // Super call
-    //--------------------------------------------------------------------------
+
     rune.scene.Scene.call(this);
     this.m_roles = role;
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.scene.Game.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.Game.prototype.constructor = TerraTactics.scene.Game;
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
 
-/**
- * @description Sets up this object after Rune creates it.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.bg = new rune.display.Graphic(0, 0, 400, 225, "game_bg");
@@ -48,19 +34,19 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_themeMusic.volume = 0.5;
     this.m_themeMusic.play();
 
-    // load tilemap
+
     this.stage.m_map.load("map");
 
     this.m_camera = this.cameras.getCameraAt(0);
 
     this.m_time = 0;
 
-    // round timer string
+
     this.m_roundTimeString = new rune.text.BitmapField("10");
     this.m_roundTimeString.width = this.m_roundTimeString.textWidth;
     this.m_roundTimeString.height = this.m_roundTimeString.textHeight;
 
-    // global timer string
+
     this.m_timeString = new rune.text.BitmapField("00:00");
     this.m_timeString.width = this.m_timeString.textWidth;
     this.m_timeString.height = this.m_timeString.textHeight;
@@ -78,16 +64,16 @@ TerraTactics.scene.Game.prototype.init = function () {
         scope: this
     });
 
-    // create containers
+
     this.m_timerContainer = new rune.display.DisplayObjectContainer(105, 8, 190, 148);
     this.m_globalTimerContainer = new rune.display.DisplayObjectContainer(90, 0, 96, 48);
     this.m_roundTimerContainer = new rune.display.DisplayObjectContainer(30, 0, 96, 48);
 
-    // create time bars
+
     this.totalTimeBar = new TerraTactics.scene.TimeBar(0, 0);
     this.roundTimeBar = new TerraTactics.scene.TimeBar(0, 0);
 
-    // add containers
+
     this.m_camera.addChild(this.m_timerContainer);
     this.m_timerContainer.addChild(this.m_globalTimerContainer);
     this.m_timerContainer.addChild(this.m_roundTimerContainer);
@@ -114,7 +100,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_roundTitle.centerY = 14;
     this.m_roundTitle.centerX += 14;
 
-    // add bars first, text second
+
     this.m_globalTimerContainer.addChild(this.totalTimeBar);
     this.m_globalTimerContainer.addChild(this.m_timeString);
     this.m_globalTimerContainer.addChild(this.m_globalTitle);
@@ -203,7 +189,7 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_characters = new TerraTactics.scene.Characters(this.stage, this.m_roles);
 
-    //add healthbars to stage
+
     for (var playerId in this.m_characters.m_players) {
         var player = this.m_characters.m_players[playerId];
         var healthBar = player.healthBar;
@@ -237,7 +223,7 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_currentPlayerText = null;
 
-    //add arrows to characters
+
     this.m_activeArrow = new rune.display.Sprite(0, 0, 32, 32, "arrow");
     this.m_activeArrow.scaleX = 0.3;
     this.m_activeArrow.scaleY = 0.3;
@@ -257,18 +243,11 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_camera.addChild(this.m_activeArrow);
 
-    // this.test = new rune.display.Sprite(50, 50, 96, 48, "playgame");
-    //   this.test.animation.create("idle", [0, 1, 2], 6, true);
-    //  this.stage.addChild(this.test);
 
     this.m_startRoundTimer();
 };
 
-/**
- * @description Finds the first solid map tile below a possible powerup x-position.
- * @param {number} tempX - x-coordinate to check against the tilemap.
- * @returns {Object|null} - spawn coordinate if valid.
- */
+
 TerraTactics.scene.Game.prototype.getCoordinatesForPowerUp = function (tempX) {
     var tileX = Math.floor(tempX / this.stage.m_map.tileWidth);
     var width = this.stage.m_map.widthInTiles;
@@ -289,12 +268,7 @@ TerraTactics.scene.Game.prototype.getCoordinatesForPowerUp = function (tempX) {
     return null;
 };
 
-/**
- * @description Loops clouds across the background for simple scene movement.
- * @param {Array|rune.display.Sprite} clouds - cloud sprite or list of cloud sprites.
- * @param {boolean} isReset - true if the cloud should reset to start position.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_animateClouds = function (clouds, isReset) {
     if (!Array.isArray(clouds)) {
         cloud = clouds;
@@ -326,11 +300,7 @@ TerraTactics.scene.Game.prototype.m_animateClouds = function (clouds, isReset) {
     }, this);
 };
 
-/**
- * @description Formats timer numbers as two digits.
- * @param {number} number - number to format.
- * @returns {string} - padded number string.
- */
+
 TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
     if (number < 10) {
         return "0" + number;
@@ -339,56 +309,32 @@ TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
     }
 };
 
-/**
- * @description Passes a weapon choice to the weapon selector.
- * @param {string} weapon - weapon name to select.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_selectWeapon = function (weapon) {
     this.m_weaponSelector.m_selectWeapon(weapon);
 };
 
-/**
- * @description Looks up where a weapon sits in the selector order.
- * @param {string} weapon - weapon name.
- * @returns {number} - weapon index.
- */
+
 TerraTactics.scene.Game.prototype.m_getWeaponIndex = function (weapon) {
     return this.m_weaponSelector.m_getWeaponIndex(weapon);
 };
 
-/**
- * @description Moves weapon selection through the selector list.
- * @param {number} index - weapon index.
- * @param {number} direction - direction to search for available weapons.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_selectWeaponAt = function (index, direction) {
     this.m_weaponSelector.m_selectWeaponAt(index, direction);
 };
 
-/**
- * @description Refreshes cooldown values shown on the weapon icons.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_updateAttackCooldowns = function () {
     this.m_weaponSelector.m_updateAttackCooldowns();
 };
 
-/**
- * @description Tells the projectile manager to fire at the aim target.
- * @param {number} targetX - x-coordinate of target position.
- * @param {number} targetY - y-coordinate of target position.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_fireActiveWeapon = function (targetX, targetY) {
     this.m_projectiles.m_fireActiveWeapon(targetX, targetY);
 };
 
-/**
- * @description True when the active character can currently aim a shot.
- * @returns {boolean} - true if aiming is allowed.
- */
+
 TerraTactics.scene.Game.prototype.m_canAim = function () {
     if (this.m_activePlayer != null &&
         this.m_activePlayer.character != null &&
@@ -399,13 +345,7 @@ TerraTactics.scene.Game.prototype.m_canAim = function () {
     return false;
 };
 
-/**
- * @description Stores the current aim source and target position.
- * @param {string} input - input source used for aiming.
- * @param {number} targetX - x-coordinate of aim target.
- * @param {number} targetY - y-coordinate of aim target.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_beginAim = function (input, targetX, targetY) {
     if (!this.m_canAim()) {
         return;
@@ -423,19 +363,13 @@ TerraTactics.scene.Game.prototype.m_beginAim = function (input, targetX, targetY
     }
 };
 
-/**
- * @description Clears the active aiming state.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_cancelAim = function () {
     this.m_isAiming = false;
     this.m_aimInput = null;
 };
 
-/**
- * @description Shoots toward the stored aim target, then stops aiming.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_fireAim = function () {
     if (this.m_isAiming) {
         this.m_fireActiveWeapon(this.m_aimTargetX, this.m_aimTargetY);
@@ -444,18 +378,12 @@ TerraTactics.scene.Game.prototype.m_fireAim = function () {
     this.m_cancelAim();
 };
 
-/**
- * @description Lets the gamepad aim controller update the shot preview.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_updateGamepadAim = function () {
     this.m_gamepadAimController.update();
 };
 
-/**
- * @description Lets active controls change weapons or fire from the UI flow.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
     if (this.m_projectiles.m_hasProjectile()) {
         return;
@@ -469,18 +397,12 @@ TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
     this.m_weaponSelector.m_updateInput(this.m_controls);
 };
 
-/**
- * @description Lets the player input controller move or jump the active character.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_updatePlayerInput = function () {
     this.m_playerInputController.update();
 };
 
-/**
- * @description Starts a fresh ten-second timer for the current turn.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
     if (this.m_roundTimer !== null) {
         this.timers.remove(this.m_roundTimer);
@@ -507,10 +429,7 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
 
 };
 
-/**
- * @description Ends the turn when the timer expires and no shot is flying.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
     this.m_tick3SecSound.stop();
     this.m_roundTimer = null;
@@ -520,10 +439,7 @@ TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
     }
 };
 
-/**
- * @description Switches turns, refreshes UI, resets speed, and spawns a pickup.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_endTurn = function () {
     if (this.m_tick3SecSound !== null) {
         this.m_tick3SecSound.stop();
@@ -549,11 +465,7 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_powerUps.m_spawnPowerUp(types[randomType]);
 };
 
-/**
- * @description Draws the dotted shot preview for the current aim target.
- * @param {TerraTactics.scene.Character} source - character aiming the weapon.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
     if (source === null || source.m_health <= 0 || !this.m_isAiming) {
         return;
@@ -581,11 +493,7 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
     }
 };
 
-/**
- * @description Freezes match timers and shows the winner message.
- * @param {string} text - winner text to display.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
     if (this.m_globalTimer !== null) {
         this.timers.remove(this.m_globalTimer);
@@ -608,10 +516,7 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
     this.stage.addChild(winnerText);
 };
 
-/**
- * @description Keeps the turn arrow floating above the active character.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.m_updateArrow = function () {
     if (this.m_activePlayer != null && this.m_activePlayer.character != null) {
         this.m_activeArrow.centerX = this.m_activePlayer.character.centerX;
@@ -620,13 +525,6 @@ TerraTactics.scene.Game.prototype.m_updateArrow = function () {
 };
 
 
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.m_artboard.canvas.clear();
@@ -695,18 +593,11 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         }
 };
 
-/**
- * @description Cleans up this object before it leaves the scene.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.Game.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };
 
-//------------------------------------------------------------------------------
-// Public getter and setter methods
-//------------------------------------------------------------------------------
 
 Object.defineProperty(TerraTactics.scene.Game.prototype, "activeWeapon", {
     get: function () {

@@ -1,7 +1,5 @@
 
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
 
 /**
  * @description Weapon icon used for selecting attacks and showing cooldowns.
@@ -32,15 +30,11 @@ TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
     this.animation.gotoAndStop("idle", 0);
 };
 
-//inheritance
 
 TerraTactics.scene.Attacks.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.Attacks.prototype.constructor = TerraTactics.scene.Attacks;
 
-/**
- * @description Runs the icon callback when this weapon can be selected.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Attacks.prototype.m_click = function () {
     if (typeof this.m_onClick === "function" && this.m_cd === 0) {
         this.m_onClick(this.m_weapon, this);
@@ -49,11 +43,7 @@ TerraTactics.scene.Attacks.prototype.m_click = function () {
     }
 };
 
-/**
- * @description Chooses idle, selected, or cooldown animation for the icon.
- * @param {boolean} selected - true if this attack icon is selected.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Attacks.prototype.m_selected = function (selected) {
     if (selected && this.m_cd === 0) {
         this.animation.gotoAndPlay("selected", 0);
@@ -64,10 +54,7 @@ TerraTactics.scene.Attacks.prototype.m_selected = function (selected) {
     }
 };
 
-/**
- * @description Shows cooldown animation while the weapon is unavailable.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Attacks.prototype.m_playAnimation = function () {
     if (this.m_cd > 0) {
         this.animation.gotoAndPlay("onCooldown", 0);
@@ -77,20 +64,10 @@ TerraTactics.scene.Attacks.prototype.m_playAnimation = function () {
 };
 
 
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.Attacks.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 };
 
-//------------------------------------------------------------------------------
-// Public getter and setter methods
-//------------------------------------------------------------------------------
 
 Object.defineProperty(TerraTactics.scene.Attacks.prototype, "setCooldown", {
     set: function (cooldown) {

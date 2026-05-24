@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Boots Rune with TerraTactics scenes, resources, and input settings.
@@ -9,9 +8,7 @@
  */
 TerraTactics.system.Main = function() {
 
-    //--------------------------------------------------------------------------
-    // Super call
-    //--------------------------------------------------------------------------
+
     rune.system.Application.call(this, {
         developer: "com.terratactics",
         app: "TerraTactics",
@@ -25,9 +22,6 @@ TerraTactics.system.Main = function() {
     });
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.system.Main.prototype = Object.create(rune.system.Application.prototype);
 TerraTactics.system.Main.prototype.constructor = TerraTactics.system.Main;

@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Opening menu with play and exit options.
@@ -11,28 +10,15 @@
 TerraTactics.scene.MainMenu = function () {
 
 
-    // Super call
-    //--------------------------------------------------------------------------
     rune.scene.Scene.call(this);
 
 };
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.scene.MainMenu.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
 
-/**
- * @description Sets up this object after Rune creates it.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.MainMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
@@ -46,13 +32,12 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     this.stage.addChild(this.ExitGame);
 
 
-    // group of menu items (controller/keyboard navigation)
     this.m_menuItems = [this.PlayGame, this.ExitGame];
 
-    // controls (keyboard / gamepad)
+
     this.m_controls = new TerraTactics.util.Controls(0);
 
-    // selection index for keyboard/gamepad navigation
+
     this.m_selectedIndex = 0;
     this.m_updateSelection = function () {
         for (var i = 0; i < this.m_menuItems.length; i++) {
@@ -81,13 +66,7 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     this.m_updateSelection();
 };
 
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.MainMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
@@ -124,11 +103,7 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
     }
 };
 
-/**
- * @description Cleans up this object before it leaves the scene.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.MainMenu.prototype.dispose = function () {
     this.m_menuItems = null;
     this.m_updateSelection = null;

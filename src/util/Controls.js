@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Combines keyboard and gamepad input for one player.
@@ -10,38 +9,16 @@
  */
 TerraTactics.util.Controls = function (playerID) {
 
-    //--------------------------------------------------------------------------
-    // Private properties
-    //--------------------------------------------------------------------------
 
-    /**
-     * Player ID.
-     *
-     * @type {number}
-     * @private
-     */
     this.m_playerID = playerID || 0;
 
-    /**
-     * Gamepad handler.
-     *
-     * @type {TerraTactics.util.MappingGamepad}
-     * @private
-     */
+
     this.m_gamepad = new TerraTactics.util.MappingGamepad(this.m_playerID);
 
-    /**
-     * Keyboard handler.
-     *
-     * @type {TerraTactics.util.MappingKeyboard}
-     * @private
-     */
+
     this.m_keyboard = new TerraTactics.util.MappingKeyboard(this.m_playerID);
 };
 
-//------------------------------------------------------------------------------
-// Public getter and setter methods
-//------------------------------------------------------------------------------
 
 Object.defineProperty(TerraTactics.util.Controls.prototype, "up", {
     get: function () {

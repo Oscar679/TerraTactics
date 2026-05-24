@@ -1,7 +1,5 @@
 
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
 
 /**
  * @description Health UI connected to one character.
@@ -24,16 +22,11 @@ TerraTactics.scene.HealthBar = function (x, y, character) {
     this.m_healthBar.y = this.y + 12;
 };
 
-//inheritance
 
 TerraTactics.scene.HealthBar.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.HealthBar.prototype.constructor = TerraTactics.scene.HealthBar;
 
-/**
- * @description Switches the health bar between active and inactive animation.
- * @param {boolean} active - true if the related player is active.
- * @returns {undefined}
- */
+
 TerraTactics.scene.HealthBar.prototype.m_active = function (active) {
     if (active) {
         this.animation.gotoAndPlay("active", 0);
@@ -42,10 +35,7 @@ TerraTactics.scene.HealthBar.prototype.m_active = function (active) {
     }
 };
 
-/**
- * @description Copies the character's health into the progress bar.
- * @returns {undefined}
- */
+
 TerraTactics.scene.HealthBar.prototype.update = function () {
     rune.display.Sprite.prototype.update.call(this);
 

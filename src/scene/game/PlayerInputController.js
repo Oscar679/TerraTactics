@@ -1,6 +1,5 @@
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
+
 
 /**
  * @description Applies movement input to the active character.
@@ -12,10 +11,7 @@ TerraTactics.scene.PlayerInputController = function (gameScene) {
     this.m_gameScene = gameScene;
 };
 
-/**
- * @description Moves, flips, and jumps the active character from input.
- * @returns {undefined}
- */
+
 TerraTactics.scene.PlayerInputController.prototype.update = function () {
     if (this.m_gameScene.m_projectiles.m_hasProjectile()) {
         return;

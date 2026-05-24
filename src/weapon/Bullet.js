@@ -1,7 +1,5 @@
 
-//------------------------------------------------------------------------------
-// Constructor scope
-//------------------------------------------------------------------------------
+
 
 /**
  * @description Builds a projectile with movement, damage, and knockback.
@@ -19,12 +17,10 @@
 TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
 
 
-    // Super call
-    //--------------------------------------------------------------------------
     rune.display.Sprite.call(this, x, y, 6, 6, "bullet");
 
     this.hitbox.set(1, 1, 1, 1);
-  //  this.hitbox.debug = true;
+
 
     this.m_velocityX = vx;
     this.m_velocityY = vy;
@@ -33,39 +29,19 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
     this.m_knockback = knockback;
 };
 
-/**
- * @description Downward force applied to bullets every tick.
- * @type {number}
- */
+
 TerraTactics.scene.Bullet.GRAVITY = 0.1;
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
 
 TerraTactics.scene.Bullet.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.Bullet.prototype.constructor = TerraTactics.scene.Bullet;
 
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
-//------------------------------------------------------------------------------
 
-/**
- * @description Sets up this object after Rune creates it.
- *
- * @returns {undefined}
- */
 TerraTactics.scene.Bullet.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
-/**
- * @description Runs this object's per-tick game logic.
- *
- * @param {number} step fixed time step from the engine.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.Bullet.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.x += this.m_velocityX;
@@ -73,11 +49,7 @@ TerraTactics.scene.Bullet.prototype.update = function (step) {
     this.m_velocityY += this.m_gravity;
 };
 
-/**
- * @description Cleans up this object before it leaves the scene.
- *
- * @returns {undefined}
- */
+
 TerraTactics.scene.Bullet.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
 };

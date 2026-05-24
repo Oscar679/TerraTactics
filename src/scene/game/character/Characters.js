@@ -49,10 +49,7 @@ TerraTactics.scene.Characters = function (stage, roles) {
     this.m_syncActivePlayers();
 };
 
-/**
- * @description Syncs player active flags with the current turn index.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Characters.prototype.m_syncActivePlayers = function () {
     for (var i = 0; i < this.m_playerOrder.length; i++) {
         var playerId = this.m_playerOrder[i];
@@ -60,10 +57,7 @@ TerraTactics.scene.Characters.prototype.m_syncActivePlayers = function () {
     }
 };
 
-/**
- * @description Advances the turn order and resets the next player to pistol.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Characters.prototype.switchTurn = function () {
     this.m_currentPlayerIndex = (this.m_currentPlayerIndex + 1) % this.m_playerOrder.length;
     var activePlayer = this.getActive;
@@ -74,11 +68,7 @@ TerraTactics.scene.Characters.prototype.switchTurn = function () {
     this.m_syncActivePlayers();
 };
 
-/**
- * @description Ticks down a character's weapon cooldowns at turn start.
- * @param {TerraTactics.scene.Character} character - character whose cooldowns should be adjusted.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
     for (var cd in character.m_weaponState.cooldowns) {
         if (character.m_weaponState.cooldowns.hasOwnProperty(cd)) {
@@ -89,21 +79,13 @@ TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
     }
 };
 
-/**
- * @description Removes health from a character and plays the pain sound.
- * @param {TerraTactics.scene.Character} character - character taking damage.
- * @param {number} damage - amount of damage to apply.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Characters.prototype.m_damageTaken = function (character, damage) {
     character.m_health -= damage;
     this.m_ouchSound.play();
 };
 
-/**
- * @description Plays a clean jump sound without the walk loop underneath.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
     if (this.m_isWalkSoundPlaying) {
         this.m_walkSound.stop();
@@ -113,20 +95,16 @@ TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
     this.m_jumpSound.play(true);
 };
 
-/**
- * @description Pushes a character back inside the left and right walls.
- * @param {TerraTactics.scene.Character} player - character to check against boundaries.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
-    // left wall
+
     if (player.left < this.leftWall) {
         player.left = this.leftWall;
         player.m_grounded = false;
         player.m_velocityY = 2;
     }
 
-    // right wall
+
     if (player.right > this.rightWall) {
         player.right = this.rightWall;
         player.m_grounded = false;
@@ -135,11 +113,6 @@ TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
 };
 
 
-/**
- * @description Runs per-frame character collision, death, lava, sound, and winner checks.
- * @param {rune.tilemap.TilemapLayer} tilemapLayer - tilemap layer used for collision checks.
- * @returns {undefined}
- */
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
     for (var playerId in this.m_players) {
         var playerEntry = this.m_players[playerId];
@@ -217,11 +190,7 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
     }
 };
 
-/**
- * @description Removes a defeated character from the stage and turn order.
- * @param {Object} playerEntry - player entry to dispose.
- * @returns {undefined}
- */
+
 TerraTactics.scene.Characters.prototype.m_disposeCharacter = function (playerEntry) {
     var character = playerEntry.character;
 
@@ -243,9 +212,6 @@ TerraTactics.scene.Characters.prototype.m_disposeCharacter = function (playerEnt
     character.dispose();
 };
 
-//------------------------------------------------------------------------------
-// Public getter and setter methods
-//------------------------------------------------------------------------------
 
 Object.defineProperty(TerraTactics.scene.Characters.prototype, "getActive", {
     get: function () {
