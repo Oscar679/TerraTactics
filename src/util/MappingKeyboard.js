@@ -3,16 +3,57 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Maps keyboard keys into the controls the game expects.
  * @constructor
- *
  * @class
- * @classdesc
- *
- * Keyboard input mapping.
  */
 TerraTactics.util.MappingKeyboard = function () {
+};
+
+//------------------------------------------------------------------------------
+// Private prototype methods
+//------------------------------------------------------------------------------
+
+/**
+ * @description Returns Rune's keyboard handler when the app is running.
+ * @returns {rune.input.Keyboard|null} - keyboard handler if available.
+ */
+TerraTactics.util.MappingKeyboard.prototype.m_getKeyboard = function () {
+    if (rune.system.Application.instance !== null) {
+        return rune.system.Application.instance.inputs.keyboard;
+    }
+
+    return null;
+};
+
+/**
+ * @description Checks the current held state for a keyboard key.
+ * @param {string} key - key name.
+ * @returns {boolean} - true if the key is held.
+ */
+TerraTactics.util.MappingKeyboard.prototype.m_pressed = function (key) {
+    var keyboard = this.m_getKeyboard();
+    return keyboard !== null ? keyboard.pressed(key) : false;
+};
+
+/**
+ * @description Checks whether a keyboard key was pressed this tick.
+ * @param {string} key - key name.
+ * @returns {boolean} - true if the key was just pressed.
+ */
+TerraTactics.util.MappingKeyboard.prototype.m_justPressed = function (key) {
+    var keyboard = this.m_getKeyboard();
+    return keyboard !== null ? keyboard.justPressed(key) : false;
+};
+
+/**
+ * @description Checks whether a keyboard key was released this tick.
+ * @param {string} key - key name.
+ * @returns {boolean} - true if the key was just released.
+ */
+TerraTactics.util.MappingKeyboard.prototype.m_justReleased = function (key) {
+    var keyboard = this.m_getKeyboard();
+    return keyboard !== null ? keyboard.justReleased(key) : false;
 };
 
 //------------------------------------------------------------------------------
@@ -90,60 +131,3 @@ Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "weaponNext",
         return this.m_justPressed("E");
     }
 });
-
-//------------------------------------------------------------------------------
-// Private prototype methods
-//------------------------------------------------------------------------------
-
-/**
- * Gets the Rune keyboard handler.
- *
- * @returns {rune.input.Keyboard|null}
- * @private
- */
-TerraTactics.util.MappingKeyboard.prototype.m_getKeyboard = function () {
-    if (rune.system.Application.instance !== null) {
-        return rune.system.Application.instance.inputs.keyboard;
-    }
-
-    return null;
-};
-
-/**
- * Reads a held key.
- *
- * @param {string} key Key name.
- *
- * @returns {boolean}
- * @private
- */
-TerraTactics.util.MappingKeyboard.prototype.m_pressed = function (key) {
-    var keyboard = this.m_getKeyboard();
-    return keyboard !== null ? keyboard.pressed(key) : false;
-};
-
-/**
- * Reads a just-pressed key.
- *
- * @param {string} key Key name.
- *
- * @returns {boolean}
- * @private
- */
-TerraTactics.util.MappingKeyboard.prototype.m_justPressed = function (key) {
-    var keyboard = this.m_getKeyboard();
-    return keyboard !== null ? keyboard.justPressed(key) : false;
-};
-
-/**
- * Reads a just-released key.
- *
- * @param {string} key Key name.
- *
- * @returns {boolean}
- * @private
- */
-TerraTactics.util.MappingKeyboard.prototype.m_justReleased = function (key) {
-    var keyboard = this.m_getKeyboard();
-    return keyboard !== null ? keyboard.justReleased(key) : false;
-};

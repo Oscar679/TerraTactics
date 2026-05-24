@@ -3,26 +3,16 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Screen where players choose which side their controllers control.
  * @constructor
  * @extends rune.scene.Scene
- *
  * @class
- * @classdesc
- * 
- * Options scene.
  */
 TerraTactics.scene.ControllerMenu = function () {
 
 
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
-
     rune.scene.Scene.call(this);
 };
 
@@ -38,8 +28,7 @@ TerraTactics.scene.ControllerMenu.prototype.constructor = TerraTactics.scene.Con
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
@@ -81,6 +70,12 @@ TerraTactics.scene.ControllerMenu.prototype.init = function () {
     this.stage.addChild(this.m_continueText);
 };
 
+/**
+ * @description Slides a controller icon toward its chosen slot.
+ * @param {rune.display.Sprite} target - controller sprite to move.
+ * @param {number} x - destination x-coordinate.
+ * @returns {undefined}
+ */
 TerraTactics.scene.ControllerMenu.prototype.m_startTween = function (target, x) {
     target.isPlayingTween = true;
 
@@ -98,10 +93,22 @@ TerraTactics.scene.ControllerMenu.prototype.m_startTween = function (target, x) 
     });
 };
 
+/**
+ * @description Calculates the x-position that centers one sprite inside another.
+ * @param {rune.display.Sprite} container - container sprite.
+ * @param {rune.display.Sprite} target - target sprite.
+ * @returns {number} - centered x-coordinate.
+ */
 TerraTactics.scene.ControllerMenu.prototype.m_getCenteredX = function (container, target) {
     return container.centerX - target.width * 0.5;
 };
 
+/**
+ * @description Sends a controller icon to player one, player two, or the middle.
+ * @param {rune.display.Sprite} target - controller sprite to move.
+ * @param {string} side - side to move controller to.
+ * @returns {undefined}
+ */
 TerraTactics.scene.ControllerMenu.prototype.m_moveController = function (target, side) {
     if (target.isPlayingTween) {
         return;
@@ -120,10 +127,9 @@ TerraTactics.scene.ControllerMenu.prototype.m_moveController = function (target,
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -166,10 +172,7 @@ TerraTactics.scene.ControllerMenu.prototype.update = function (step) {
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
+ * @description Cleans up this object before it leaves the scene.
  *
  * @returns {undefined}
  */

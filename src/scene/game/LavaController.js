@@ -3,14 +3,10 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Creates the rising lava hazard and checks who falls into it.
  * @constructor
- *
  * @class
- * @classdesc
- *
- * Handles lava movement and lava death checks.
+ * @param {TerraTactics.scene.Game} gameScene - game scene this helper works with.
  */
 TerraTactics.scene.LavaController = function (gameScene) {
     this.m_gameScene = gameScene;
@@ -29,6 +25,12 @@ TerraTactics.scene.LavaController = function (gameScene) {
     });
 };
 
+/**
+ * @description Marks any player touching the lava as dead.
+ * @param {Object} activePlayer - active player entry.
+ * @param {Array} inactivePlayers - inactive player entries.
+ * @returns {undefined}
+ */
 TerraTactics.scene.LavaController.prototype.update = function (activePlayer, inactivePlayers) {
     if (activePlayer != null && activePlayer.character != null) {
         if (activePlayer.character.bottom >= this.m_lava.top) {
@@ -46,6 +48,10 @@ TerraTactics.scene.LavaController.prototype.update = function (activePlayer, ina
         }
     }
 };
+
+//------------------------------------------------------------------------------
+// Public getter and setter methods
+//------------------------------------------------------------------------------
 
 Object.defineProperty(TerraTactics.scene.LavaController.prototype, "lava", {
     get: function () {

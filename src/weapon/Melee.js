@@ -5,25 +5,16 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Sets up the melee weapon stats and sounds.
  * @constructor
  * @extends TerraTactics.scene.Weapon
- *
  * @class
- * @classdesc
- * 
- * Melee Class Extends Weapon.
  */
 TerraTactics.scene.Melee = function () {
 
 
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
     TerraTactics.scene.Weapon.call(this);
 
     this.m_speed = 0.05; // Magic Number
@@ -48,8 +39,7 @@ TerraTactics.scene.Melee.prototype.constructor = TerraTactics.scene.Melee;
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
@@ -58,10 +48,9 @@ TerraTactics.scene.Melee.prototype.init = function () {
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -70,10 +59,7 @@ TerraTactics.scene.Melee.prototype.update = function (step) {
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
+ * @description Cleans up this object before it leaves the scene.
  *
  * @returns {undefined}
  */

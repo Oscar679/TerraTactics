@@ -1,4 +1,9 @@
-// Handler for Character.js
+/**
+ * @description Manages both player characters, their turns, sounds, and deaths.
+ * @constructor
+ * @param {rune.display.DisplayObjectContainer} stage - stage that characters are added to.
+ * @param {Object} roles - selected roles for each player.
+ */
 TerraTactics.scene.Characters = function (stage, roles) {
     this.m_stage = stage;
     this.m_roles = roles;
@@ -8,7 +13,7 @@ TerraTactics.scene.Characters = function (stage, roles) {
     this.m_jumpSound = this.m_soundChannel.get("jump");
     this.m_walkSound = this.m_soundChannel.get("walk");
     this.m_ouchSound = this.m_soundChannel.get("ouch");
-    this.m_lavaShizzle = this.m_soundChannel.get("lava_shizzle"); 
+    this.m_lavaShizzle = this.m_soundChannel.get("lava_shizzle");
 
     this.m_isWalkSoundPlaying = false;
 
@@ -44,6 +49,10 @@ TerraTactics.scene.Characters = function (stage, roles) {
     this.m_syncActivePlayers();
 };
 
+/**
+ * @description Syncs player active flags with the current turn index.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Characters.prototype.m_syncActivePlayers = function () {
     for (var i = 0; i < this.m_playerOrder.length; i++) {
         var playerId = this.m_playerOrder[i];
@@ -51,31 +60,25 @@ TerraTactics.scene.Characters.prototype.m_syncActivePlayers = function () {
     }
 };
 
-TerraTactics.scene.Characters.prototype.getActive = function () {
-    return this.m_players[this.m_playerOrder[this.m_currentPlayerIndex]];
-};
-
-TerraTactics.scene.Characters.prototype.getInactive = function () {
-    var currentPlayerId = this.m_playerOrder[this.m_currentPlayerIndex];
-    return this.m_playerOrder
-        .filter(function (playerId) {
-            return playerId !== currentPlayerId;
-        })
-        .map(function (playerId) {
-            return this.m_players[playerId];
-        }, this);
-};
-
+/**
+ * @description Advances the turn order and resets the next player to pistol.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Characters.prototype.switchTurn = function () {
     this.m_currentPlayerIndex = (this.m_currentPlayerIndex + 1) % this.m_playerOrder.length;
-    var activePlayer = this.getActive();
+    var activePlayer = this.getActive;
     if (activePlayer != null && activePlayer.character != null) {
         this.adjustCooldowns(activePlayer.character);
-        activePlayer.character.m_setWeapon("pistol");
+        activePlayer.character.weapon = "pistol";
     }
     this.m_syncActivePlayers();
 };
 
+/**
+ * @description Ticks down a character's weapon cooldowns at turn start.
+ * @param {TerraTactics.scene.Character} character - character whose cooldowns should be adjusted.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
     for (var cd in character.m_weaponState.cooldowns) {
         if (character.m_weaponState.cooldowns.hasOwnProperty(cd)) {
@@ -86,11 +89,21 @@ TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
     }
 };
 
+/**
+ * @description Removes health from a character and plays the pain sound.
+ * @param {TerraTactics.scene.Character} character - character taking damage.
+ * @param {number} damage - amount of damage to apply.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Characters.prototype.m_damageTaken = function (character, damage) {
     character.m_health -= damage;
     this.m_ouchSound.play();
 };
 
+/**
+ * @description Plays a clean jump sound without the walk loop underneath.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
     if (this.m_isWalkSoundPlaying) {
         this.m_walkSound.stop();
@@ -100,34 +113,11 @@ TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
     this.m_jumpSound.play(true);
 };
 
-TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
-    // we need to send the player that won, not died.
-    if (playerEntry == null || playerEntry.character == null) {
-        return;
-    }
-
-    switch (playerEntry.id) {
-        case "player1":
-            this.m_winnerText = "Player 1 Wins!";
-            break;
-        case "player2":
-            this.m_winnerText = "Player 2 Wins!";
-            break;
-        case "player3":
-            this.m_winnerText = "Player 3 Wins!";
-            break;
-        case "draw":
-            this.m_winnerText = "Draw!";
-            break;
-        default:
-            break;
-    }
-};
-
-TerraTactics.scene.Characters.prototype.getWinnerText = function () {
-    return this.m_winnerText;
-};
-
+/**
+ * @description Pushes a character back inside the left and right walls.
+ * @param {TerraTactics.scene.Character} player - character to check against boundaries.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
     // left wall
     if (player.left < this.leftWall) {
@@ -144,30 +134,12 @@ TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
     }
 };
 
-Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldWidth", {
-    get: function () {
-        return this.m_stage.m_map.widthInTiles * this.m_stage.m_map.tileWidth;
-    }
-});
 
-Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldHeight", {
-    get: function () {
-        return this.m_stage.m_map.heightInTiles * this.m_stage.m_map.tileHeight;
-    }
-});
-
-Object.defineProperty(TerraTactics.scene.Characters.prototype, "leftWall", {
-    get: function () {
-        return 0;
-    }
-});
-
-Object.defineProperty(TerraTactics.scene.Characters.prototype, "rightWall", {
-    get: function () {
-        return 400;
-    }
-});
-
+/**
+ * @description Runs per-frame character collision, death, lava, sound, and winner checks.
+ * @param {rune.tilemap.TilemapLayer} tilemapLayer - tilemap layer used for collision checks.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
     for (var playerId in this.m_players) {
         var playerEntry = this.m_players[playerId];
@@ -190,13 +162,13 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         }
     }
 
-    if (!this.getActive() && this.getInactive().length === 0) {
-        this.m_setWinnerText("DRAW");
+    if (!this.getActive && this.getInactive.length === 0) {
+        this.winnerText = "draw";
     }
 
-    if (this.getInactive().length === 0) {
-        var activePlayer = this.getActive();
-        this.m_setWinnerText(activePlayer);
+    if (this.getInactive.length === 0) {
+        var activePlayer = this.getActive;
+        this.winnerText = activePlayer;
     }
 
     for (var playerId in this.m_players) {
@@ -215,7 +187,7 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
             }
         }
     }
-    var activePlayer = this.getActive();
+    var activePlayer = this.getActive;
     if (
         activePlayer != null &&
         activePlayer.character != null) {
@@ -245,6 +217,11 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
     }
 };
 
+/**
+ * @description Removes a defeated character from the stage and turn order.
+ * @param {Object} playerEntry - player entry to dispose.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Characters.prototype.m_disposeCharacter = function (playerEntry) {
     var character = playerEntry.character;
 
@@ -265,3 +242,78 @@ TerraTactics.scene.Characters.prototype.m_disposeCharacter = function (playerEnt
     this.m_stage.removeChild(character.m_healthBar);
     character.dispose();
 };
+
+//------------------------------------------------------------------------------
+// Public getter and setter methods
+//------------------------------------------------------------------------------
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "getActive", {
+    get: function () {
+        return this.m_players[this.m_playerOrder[this.m_currentPlayerIndex]];
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "getInactive", {
+    get: function () {
+        var currentPlayerId = this.m_playerOrder[this.m_currentPlayerIndex];
+        return this.m_playerOrder
+            .filter(function (playerId) {
+                return playerId !== currentPlayerId;
+            })
+            .map(function (playerId) {
+                return this.m_players[playerId];
+            }, this);
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "winnerText", {
+    get: function () {
+        return this.m_winnerText;
+    },
+    set: function (value) {
+        if (value == null || value.character == null) {
+            return;
+        }
+
+        switch (value.id) {
+            case "player1":
+                this.m_winnerText = "Player 1 Wins!";
+                break;
+            case "player2":
+                this.m_winnerText = "Player 2 Wins!";
+                break;
+            case "player3":
+                this.m_winnerText = "Player 3 Wins!";
+                break;
+            case "draw":
+                this.m_winnerText = "Draw!";
+                break;
+            default:
+                break;
+        }
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldWidth", {
+    get: function () {
+        return this.m_stage.m_map.widthInTiles * this.m_stage.m_map.tileWidth;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldHeight", {
+    get: function () {
+        return this.m_stage.m_map.heightInTiles * this.m_stage.m_map.tileHeight;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "leftWall", {
+    get: function () {
+        return 0;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "rightWall", {
+    get: function () {
+        return 400;
+    }
+});

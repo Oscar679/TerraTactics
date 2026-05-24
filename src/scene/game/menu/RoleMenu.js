@@ -3,26 +3,16 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Screen where each player picks a character role.
  * @constructor
  * @extends rune.scene.Scene
- *
  * @class
- * @classdesc
- * 
- * Options scene.
  */
 TerraTactics.scene.RoleMenu = function () {
 
 
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
-
     rune.scene.Scene.call(this);
 };
 
@@ -38,8 +28,7 @@ TerraTactics.scene.RoleMenu.prototype.constructor = TerraTactics.scene.RoleMenu;
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
@@ -100,6 +89,12 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
     };
 };
 
+/**
+ * @description Converts a role index into the role name stored for a player.
+ * @param {string} player - player id to store role for.
+ * @param {number} role - selected role index.
+ * @returns {undefined}
+ */
 TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
     switch (role) {
         case 0:
@@ -117,10 +112,9 @@ TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -168,10 +162,7 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
+ * @description Cleans up this object before it leaves the scene.
  *
  * @returns {undefined}
  */

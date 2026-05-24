@@ -3,15 +3,13 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Creates a playable character with movement, health, role, and weapons.
  * @constructor
  * @extends rune.display.Sprite
- *
  * @class
- * @classdesc
- *
- * Character object.
+ * @param {number} x - x-coordinate of spawn point.
+ * @param {number} y - y-coordinate of spawn point.
+ * @param {string} role - role assigned to the character.
  */
 TerraTactics.scene.Character = function (x, y, role) {
 
@@ -44,9 +42,6 @@ TerraTactics.scene.Character = function (x, y, role) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
     this.hitbox.set(8, 4, 8, 16);
-    // this.hitbox.debug = true;
-    //this.hitbox.debugColor = "green";
-
 
     this.animation.create("idle", [0, 1, 2, 3], 6, true);
     this.animation.create("walk", [4, 5, 6, 7], 6, true);
@@ -74,10 +69,11 @@ TerraTactics.scene.Character = function (x, y, role) {
 TerraTactics.scene.Character.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.Character.prototype.constructor = TerraTactics.scene.Character;
 
-TerraTactics.scene.Character.prototype.m_getHealth = function () {
-    return this.m_health;
-}
-
+/**
+ * @description True when the given weapon is off cooldown.
+ * @param {string} weapon - weapon to be checked.
+ * @returns {boolean} - if weapon not on cooldown, true, otherwise false.
+ */
 TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
     if (this.m_weaponState.cooldowns[weapon] === 0) {
         return true;
@@ -86,24 +82,12 @@ TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
     }
 }
 
-TerraTactics.scene.Character.prototype.m_setWeapon = function (weapon) {
-    this.m_weaponState.currentWeapon = weapon;
-}
-
-TerraTactics.scene.Character.prototype.m_getWeapon = function () {
-    return this.m_weaponState.currentWeapon;
-}
-
-TerraTactics.scene.Character.prototype.m_setCooldown = function (weapon) {
-    var cooldown = TerraTactics.data.Weapons[weapon].cooldown;
-
-    if (cooldown > 0) {
-        this.m_weaponState.cooldowns[weapon] = cooldown + 1;
-    } else {
-        this.m_weaponState.cooldowns[weapon] = 0;
-    }
-}
-
+/**
+ * @description Asks the equipped weapon to create a projectile.
+ * @param {number} targetX - x-coordinate of mouse position.
+ * @param {number} targetY - y-coordinate of mouse position.
+ * @returns {TerraTactics.scene.Bullet} - fired projectile.
+ */
 TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, targetY) {
     var weapon = this.m_guns[this.m_weaponState.currentWeapon];
 
@@ -117,67 +101,27 @@ TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, tar
     return weapon.m_fireProjectile(this, targetX, targetY);
 };
 
-TerraTactics.scene.Character.prototype.m_getCollided = function () {
-    return this.m_collided;
-};
 
-TerraTactics.scene.Character.prototype.m_setCollided = function (value) {
-    this.m_collided = value;
-};
-
+/**
+ * @description Changes animation only when a different one is needed.
+ * @param {string} name - name of animation to play.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
     if (!this.animation.current || this.animation.current.name !== name) {
         this.animation.gotoAndPlay(name, 0);
     }
 };
 
-Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
-    get: function () {
-        return this.m_role;
-    }
-});
-
-Object.defineProperty(TerraTactics.scene.Character.prototype, "getCurrentCooldown", {
-}, {
-    get: function () {
-        var weapon = this.m_getWeapon();
-        return this.m_weaponState.cooldowns[weapon] || 0;
-    }
-});
-
-Object.defineProperty(TerraTactics.scene.Character.prototype, "maxHealth", {
-    get: function () {
-        return this.m_maxHealth;
-    }
-});
-
-Object.defineProperty(TerraTactics.scene.Character.prototype, "health", {
-    get: function () {
-        return this.m_health;
-    },
-    set: function (value) {
-        this.m_health = value;
-    }
-});
-
-Object.defineProperty(TerraTactics.scene.Character.prototype, "speed", {
-    get: function () {
-        return this.m_speed;
-    },
-    set: function (value) {
-        this.m_speed = value;
-    }
-});
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once per "tick". The method is used for
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -209,6 +153,73 @@ TerraTactics.scene.Character.prototype.update = function (step) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 };
 
+/**
+ * @description Cleans up this object before it leaves the scene.
+ *
+ * @returns {undefined}
+ */
 TerraTactics.scene.Character.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
 };
+
+//------------------------------------------------------------------------------
+// Public getter and setter methods
+//------------------------------------------------------------------------------
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "weapon", {
+    get: function () {
+        return this.m_weaponState.currentWeapon;
+    },
+    set: function (value) {
+        this.m_weaponState.currentWeapon = value;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
+    get: function () {
+        return this.m_role;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "getCurrentCooldown", {
+    get: function () {
+        var weapon = this.weapon;
+        return this.m_weaponState.cooldowns[weapon] || 0;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "maxHealth", {
+    get: function () {
+        return this.m_maxHealth;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "health", {
+    get: function () {
+        return this.m_health;
+    },
+    set: function (value) {
+        this.m_health = value;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "speed", {
+    get: function () {
+        return this.m_speed;
+    },
+    set: function (value) {
+        this.m_speed = value;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "cooldown", {
+    set: function (value) {
+        var cooldown = TerraTactics.data.Weapons[value].cooldown;
+
+        if (cooldown > 0) {
+            this.m_weaponState.cooldowns[value] = cooldown + 1;
+        } else {
+            this.m_weaponState.cooldowns[value] = 0;
+        }
+    }
+});

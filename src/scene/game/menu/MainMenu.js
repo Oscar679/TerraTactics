@@ -3,26 +3,16 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Opening menu with play and exit options.
  * @constructor
  * @extends rune.scene.Scene
- *
  * @class
- * @classdesc
- * 
- * Options scene.
  */
 TerraTactics.scene.MainMenu = function () {
 
 
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
-
     rune.scene.Scene.call(this);
 
 };
@@ -39,8 +29,7 @@ TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
@@ -93,10 +82,9 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -131,17 +119,13 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
             try {
                 window.close();
             } catch (err) {
-                console.log('Exit requested');
             }
         }
     }
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
+ * @description Cleans up this object before it leaves the scene.
  *
  * @returns {undefined}
  */

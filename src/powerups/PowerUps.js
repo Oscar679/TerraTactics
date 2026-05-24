@@ -5,25 +5,17 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Spawns, applies, despawns, and resets powerups during play.
  * @constructor
  * @extends rune.display.Sprite
- *
  * @class
- * @classdesc
- * 
- * Abstract base class for all weapons.
+ * @param {Object} gameScene - game scene this helper works with.
  */
 TerraTactics.scene.PowerUps = function (gameScene) {
 
-
+    //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
     rune.display.Sprite.call(this);
 
     this.m_gameScene = gameScene;
@@ -53,14 +45,17 @@ TerraTactics.scene.PowerUps.prototype.constructor = TerraTactics.scene.PowerUps;
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
 TerraTactics.scene.PowerUps.prototype.init = function () {
 };
 
+/**
+ * @description Picks a random x-position inside the playable map.
+ * @returns {number} - a randomized value between 5 and map width.
+ */
 TerraTactics.scene.PowerUps.prototype.m_randomizeXValue = function () {
     var min = 5;
     var max = this.m_stage.m_map.widthInTiles *
@@ -69,7 +64,12 @@ TerraTactics.scene.PowerUps.prototype.m_randomizeXValue = function () {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-TerraTactics.scene.PowerUps.prototype.m_spawnPowerUp = function (type, x, y) {
+/**
+ * @description Drops a powerup at a valid tile column.
+ * @param {string} type - type of powerup.
+ * @returns {void}
+ */
+TerraTactics.scene.PowerUps.prototype.m_spawnPowerUp = function (type) {
     var powerUp = this.m_powerUps[type];
 
     if (powerUp === null || powerUp === undefined) {
@@ -78,7 +78,7 @@ TerraTactics.scene.PowerUps.prototype.m_spawnPowerUp = function (type, x, y) {
     var spawnX = null;
     var tempX = null;
     var attempts = 0;
-    var maxAttempts = 100;
+    var maxAttempts = 1000;
 
     while (spawnX === null && attempts < maxAttempts) {
         tempX = this.m_randomizeXValue();
@@ -91,11 +91,17 @@ TerraTactics.scene.PowerUps.prototype.m_spawnPowerUp = function (type, x, y) {
     }
 
     powerUp.x = spawnX.x - powerUp.width * powerUp.scaleX / 2;
-    powerUp.y = y || -50;
+    powerUp.y = -50;
     powerUp.velocity = 0;
     powerUp.grounded = false;
 };
 
+/**
+ * @description Applies the pickup effect to the player who collected it.
+ * @param {Object} powerUp - the powerup object.
+ * @param {Object} player - the target of powerup buffs.
+ * @returns {void}
+ */
 TerraTactics.scene.PowerUps.prototype.m_applyPowerUp = function (powerUp, player) {
     switch (powerUp.type) {
         case "health":
@@ -114,6 +120,11 @@ TerraTactics.scene.PowerUps.prototype.m_applyPowerUp = function (powerUp, player
     }
 };
 
+/**
+ * @description Hides a collected powerup above the screen and marks it grounded.
+ * @param {Object} powerUp - the powerup object.
+ * @returns {void}
+ */
 TerraTactics.scene.PowerUps.prototype.m_deSpawnPowerUp = function (powerUp) {
     powerUp.x = 0;
     powerUp.y = -50;
@@ -121,16 +132,21 @@ TerraTactics.scene.PowerUps.prototype.m_deSpawnPowerUp = function (powerUp) {
     powerUp.grounded = true;
 };
 
+/**
+ * @description Restores both players to normal movement speed.
+ * @param {Object} activePlayer - the active player.
+ * @param {Object} inActivePlayer - the inactive player.
+ * @returns {void}
+ */
 TerraTactics.scene.PowerUps.prototype.m_resetPowerUps = function (activePlayer, inActivePlayer) {
     activePlayer.speed = 1;
     inActivePlayer.speed = 1;
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -160,10 +176,7 @@ TerraTactics.scene.PowerUps.prototype.update = function (tilemapLayer, activePla
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
+ * @description Cleans up this object before it leaves the scene.
  *
  * @returns {undefined}
  */

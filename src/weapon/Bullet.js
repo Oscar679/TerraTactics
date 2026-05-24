@@ -4,25 +4,23 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
+ * @description Builds a projectile with movement, damage, and knockback.
  *
  * @constructor
  * @extends rune.display.Sprite
- *
  * @class
- * @classdesc
- * 
- * Options scene.
+ * @param {number} x - x-coordinate of bullet spawn point.
+ * @param {number} y - y-coordinate of bullet spawn point.
+ * @param {number} vx - horizontal velocity of bullet.
+ * @param {number} vy - vertical velocity of bullet.
+ * @param {number} damage - amount of damage dealt by bullet.
+ * @param {number} knockback - amount of knockback applied by bullet.
  */
 TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
 
 
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
     rune.display.Sprite.call(this, x, y, 6, 6, "bullet");
 
     this.hitbox.set(1, 1, 1, 1);
@@ -35,6 +33,10 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
     this.m_knockback = knockback;
 };
 
+/**
+ * @description Downward force applied to bullets every tick.
+ * @type {number}
+ */
 TerraTactics.scene.Bullet.GRAVITY = 0.1;
 
 //------------------------------------------------------------------------------
@@ -49,8 +51,7 @@ TerraTactics.scene.Bullet.prototype.constructor = TerraTactics.scene.Bullet;
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
@@ -59,10 +60,9 @@ TerraTactics.scene.Bullet.prototype.init = function () {
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -74,10 +74,7 @@ TerraTactics.scene.Bullet.prototype.update = function (step) {
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
+ * @description Cleans up this object before it leaves the scene.
  *
  * @returns {undefined}
  */

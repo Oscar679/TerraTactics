@@ -5,25 +5,17 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Shared falling and type behavior for all powerups.
  * @constructor
  * @extends rune.display.Sprite
- *
  * @class
- * @classdesc
- * 
- * Abstract base class for all weapons.
+ *
  */
 TerraTactics.scene.PowerUp = function () {
 
-
+    //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
     rune.display.Sprite.call(this);
     this.m_grounded = true;
     this.m_velocityY = 0;
@@ -46,14 +38,41 @@ TerraTactics.scene.PowerUp.prototype.constructor = TerraTactics.scene.PowerUp;
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
 TerraTactics.scene.PowerUp.prototype.init = function () {
     throw new Error("Child classes must implement this method.");
 };
+
+
+/**
+ * @description Runs this object's per-tick game logic.
+ *
+ * @param {number} step fixed time step from the engine.
+ *
+ * @returns {undefined}
+ */
+TerraTactics.scene.PowerUp.prototype.update = function (step) {
+    if (!this.m_grounded) {
+        this.m_velocityY += this.m_gravity;
+        this.y += this.m_velocityY;
+    }
+};
+
+/**
+ * @description Cleans up this object before it leaves the scene.
+ *
+ * @returns {undefined}
+ */
+TerraTactics.scene.PowerUp.prototype.dispose = function () {
+    throw new Error("Child classes must implement this method.");
+};
+
+//------------------------------------------------------------------------------
+// Public getter and setter methods
+//------------------------------------------------------------------------------
 
 Object.defineProperty(TerraTactics.scene.PowerUp.prototype, "grounded", {
     get: function () {
@@ -78,30 +97,3 @@ Object.defineProperty(TerraTactics.scene.PowerUp.prototype, "type", {
         return this.m_type;
     },
 });
-
-/**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
- *
- * @param {number} step Fixed time step.
- *
- * @returns {undefined}
- */
-TerraTactics.scene.PowerUp.prototype.update = function (step) {
-    if (!this.m_grounded) {
-        this.m_velocityY += this.m_gravity;
-        this.y += this.m_velocityY;
-    }
-};
-
-/**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
- *
- * @returns {undefined}
- */
-TerraTactics.scene.PowerUp.prototype.dispose = function () {
-    throw new Error("Child classes must implement this method.");
-};

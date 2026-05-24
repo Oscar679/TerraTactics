@@ -2,28 +2,17 @@
 // Constructor scope
 //------------------------------------------------------------------------------
 
-/** 
- * Creates a new Requests object.
- * 
+/**
+ * @description Resource bundle loaded by Rune before the game starts.
  * @constructor
  * @extends rune.resource.Requests
- * 
  * @class
- * @classdesc
- * 
- * This class includes (bakes) resource files used by the application. A 
- * resource file is made available by reference (URI) or base64-encoded string. 
- * Tip: Use Rune-tools to easily bake resource files into this class.
  */
 TerraTactics.data.Requests = function() {
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
-    /**
-     * Extend rune.resource.Requests
-     */
     rune.resource.Requests.call(this);
 };
 
@@ -39,7 +28,8 @@ TerraTactics.data.Requests.prototype.constructor = TerraTactics.data.Requests;
 //------------------------------------------------------------------------------
 
 /**
- * @inheritDoc
+ * @description Registers the images, sounds, and maps baked into this file.
+ * @returns {undefined}
  */
 TerraTactics.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);

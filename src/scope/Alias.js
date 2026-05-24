@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------
 
 /**
- * Exports the application to the global scope.
+ * @description Makes TerraTactics available on window when running in a browser.
  */
 if (typeof window !== "undefined") {
     if (typeof window.TerraTactics === "undefined") {
@@ -12,8 +12,7 @@ if (typeof window !== "undefined") {
 }
 
 /**
- * Install the application to Rune OS. If the application is executed within 
- * Rune OS.
+ * @description Registers TerraTactics with Rune OS when that environment exists.
  */
 if (typeof window !== "undefined" && typeof window.runeos === "object") {
     window.runeos.install(TerraTactics);

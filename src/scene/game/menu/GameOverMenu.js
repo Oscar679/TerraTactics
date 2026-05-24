@@ -3,26 +3,17 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description End screen showing the winner with restart and exit choices.
  * @constructor
  * @extends rune.scene.Scene
- *
  * @class
- * @classdesc
- * 
- * Options scene.
+ * @param {string} winnerText - text describing the winner.
  */
 TerraTactics.scene.GameOverMenu = function (winnerText) {
 
 
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
-
     rune.scene.Scene.call(this);
 
     this.m_winner = winnerText;
@@ -40,8 +31,7 @@ TerraTactics.scene.GameOverMenu.prototype.constructor = TerraTactics.scene.GameO
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
@@ -75,6 +65,10 @@ TerraTactics.scene.GameOverMenu.prototype.init = function () {
     this.m_updateSelection();
 };
 
+/**
+ * @description Highlights the currently selected game over menu option.
+ * @returns {undefined}
+ */
 TerraTactics.scene.GameOverMenu.prototype.m_updateSelection = function () {
     this.m_menuItems.forEach(function (item) {
         if (item === this.m_menuItems[this.m_selectedIndex]) {
@@ -91,10 +85,9 @@ TerraTactics.scene.GameOverMenu.prototype.m_updateSelection = function () {
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -125,17 +118,13 @@ TerraTactics.scene.GameOverMenu.prototype.update = function (step) {
             try {
                 window.close();
             } catch (err) {
-                console.log('Exit requested');
             }
         }
     }
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
+ * @description Cleans up this object before it leaves the scene.
  *
  * @returns {undefined}
  */

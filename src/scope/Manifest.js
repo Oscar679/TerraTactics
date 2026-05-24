@@ -3,8 +3,7 @@
 //------------------------------------------------------------------------------
 
 /**
- * The application namespace.
- * 
+ * @description Root namespace for TerraTactics code.
  * @namespace TerraTactics
  */
 var TerraTactics = function() {
@@ -12,7 +11,7 @@ var TerraTactics = function() {
     //--------------------------------------------------------------------------
     // Public static scope
     //--------------------------------------------------------------------------
-    
+
     /**
      * Public scope.
      *
@@ -24,10 +23,10 @@ var TerraTactics = function() {
     //--------------------------------------------------------------------------
     // Package structure
     //--------------------------------------------------------------------------
-    
+
     /**
-     * This package contains classes that represent data, or that are used to 
-     * manage data. Data can consist of concrete information, or of raw data 
+     * This package contains classes that represent data, or that are used to
+     * manage data. Data can consist of concrete information, or of raw data
      * such as resource files.
      *
      * @namespace data
@@ -35,10 +34,10 @@ var TerraTactics = function() {
      * @since 1.0
      */
     m_this.data = {};
-    
+
     /**
-     * This package includes the scenes that make up the application. Scenes 
-     * are used to represent graphical parts (also known as views) of an 
+     * This package includes the scenes that make up the application. Scenes
+     * are used to represent graphical parts (also known as views) of an
      * application.
      *
      * @namespace scene
@@ -64,7 +63,7 @@ var TerraTactics = function() {
      * @since 1.0
      */
     m_this.util = {};
-    
+
     //--------------------------------------------------------------------------
     // Return public scope object
     //--------------------------------------------------------------------------
@@ -80,15 +79,13 @@ var TerraTactics = function() {
 //------------------------------------------------------------------------------
 
 /**
- * The secret bootstrap. This method enables simple startup of the application, 
- * without knowledge of the internal package structure or the classes included 
- * in it.
- *
- * @ignore
+ * @description Creates and starts the TerraTactics application.
+ * @param {Function} callback - callback executed when the application starts.
+ * @returns {TerraTactics.system.Main} - started application instance.
  */
 TerraTactics.bootstrap = function(callback) {
     var app = new TerraTactics.system.Main();
         app.start(callback);
-        
+
     return app;
 };

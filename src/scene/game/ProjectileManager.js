@@ -3,24 +3,30 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Owns the active projectile from firing until impact or cleanup.
  * @constructor
- *
  * @class
- * @classdesc
- *
- * Handles projectile firing, collision, cleanup and turn completion.
+ * @param {TerraTactics.scene.Game} gameScene - game scene this helper works with.
  */
 TerraTactics.scene.ProjectileManager = function (gameScene) {
     this.m_gameScene = gameScene;
     this.m_bullet = null;
 };
 
+/**
+ * @description True while a bullet is still in the world.
+ * @returns {boolean} - true if a projectile exists.
+ */
 TerraTactics.scene.ProjectileManager.prototype.m_hasProjectile = function () {
     return this.m_bullet !== null;
 };
 
+/**
+ * @description Creates the active player's bullet if the weapon can fire.
+ * @param {number} targetX - x-coordinate of target position.
+ * @param {number} targetY - y-coordinate of target position.
+ * @returns {undefined}
+ */
 TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (targetX, targetY) {
     var activePlayer = this.m_gameScene.m_activePlayer;
     var weapon = null;
@@ -31,17 +37,21 @@ TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (ta
         return;
     }
 
-    weapon = activePlayer.character.m_getWeapon();
+    weapon = activePlayer.character.weapon;
 
     if (activePlayer.character.m_canFire(weapon)) {
         this.m_bullet = activePlayer.character.m_fireProjectile(targetX, targetY);
         this.m_gameScene.m_bullet = this.m_bullet;
-        activePlayer.character.m_setCooldown(weapon);
+        activePlayer.character.cooldown = weapon;
         this.m_gameScene.m_updateAttackCooldowns();
         this.m_gameScene.stage.addChild(this.m_bullet);
     }
 };
 
+/**
+ * @description Cleans up the current bullet, then passes the turn.
+ * @returns {undefined}
+ */
 TerraTactics.scene.ProjectileManager.prototype.m_bulletHit = function () {
     this.m_gameScene.stage.removeChild(this.m_bullet);
     this.m_bullet = null;
@@ -49,6 +59,12 @@ TerraTactics.scene.ProjectileManager.prototype.m_bulletHit = function () {
     this.m_gameScene.m_endTurn();
 };
 
+/**
+ * @description Pushes a hit character away from the projectile impact.
+ * @param {TerraTactics.scene.Character} player - player character hit by the projectile.
+ * @param {TerraTactics.scene.Bullet} source - projectile causing knockback.
+ * @returns {undefined}
+ */
 TerraTactics.scene.ProjectileManager.prototype.m_knockback = function (player, source) {
     if (player.centerX < source.centerX) {
         player.x -= source.m_knockback;
@@ -60,6 +76,11 @@ TerraTactics.scene.ProjectileManager.prototype.m_knockback = function (player, s
     player.m_velocityY = -2;
 };
 
+/**
+ * @description Breaks the map tile hit by a bullet, including edge variants.
+ * @param {rune.geom.Rectangle} hitbox - projectile hitbox.
+ * @returns {undefined}
+ */
 TerraTactics.scene.ProjectileManager.prototype.m_destroyTileAtHitbox = function (hitbox) {
     var indexes = this.m_gameScene.stage.m_map.front.getTileIndexesInRect(hitbox);
 
@@ -98,6 +119,11 @@ TerraTactics.scene.ProjectileManager.prototype.m_destroyTileAtHitbox = function 
     }
 };
 
+/**
+ * @description Checks bullet hits against terrain, players, and screen bounds.
+ * @param {Array} inactivePlayers - inactive player entries that can be hit.
+ * @returns {undefined}
+ */
 TerraTactics.scene.ProjectileManager.prototype.update = function (inactivePlayers) {
     if (this.m_bullet !== null) {
         if (this.m_bullet.hitTest(this.m_gameScene.stage.m_map.front)) {

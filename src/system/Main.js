@@ -3,24 +3,15 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new instance of the Main class.
- *
+ * @description Boots Rune with TerraTactics scenes, resources, and input settings.
  * @constructor
- * 
  * @class
- * @classdesc
- * 
- * Entry point class.
  */
 TerraTactics.system.Main = function() {
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
-    /**
-     * Extend (Rune) Application.
-     */
     rune.system.Application.call(this, {
         developer: "com.terratactics",
         app: "TerraTactics",

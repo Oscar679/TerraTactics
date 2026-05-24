@@ -3,14 +3,10 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description Keeps analog aiming smooth and pointed at the active target.
  * @constructor
- *
  * @class
- * @classdesc
- *
- * Handles gamepad aim smoothing and aim target updates.
+ * @param {TerraTactics.scene.Game} gameScene - game scene this helper works with.
  */
 TerraTactics.scene.GamepadAimController = function (gameScene) {
     this.m_gameScene = gameScene;
@@ -18,17 +14,14 @@ TerraTactics.scene.GamepadAimController = function (gameScene) {
     this.m_gamepadAimY = 0;
 };
 
+/**
+ * @description Reads the stick and updates the current gamepad aim target.
+ * @returns {undefined}
+ */
 TerraTactics.scene.GamepadAimController.prototype.update = function () {
     var aimLength = 180;
     var aimX = this.m_gameScene.m_controls.aimX;
     var aimY = this.m_gameScene.m_controls.aimY;
-
-    var pads = navigator.getGamepads();
-    var pad = pads && pads[0];
-
-    if (pad) {
-        console.log(pad.axes[0], pad.axes[1]);
-    }
 
     var length = Math.sqrt(aimX * aimX + aimY * aimY);
 

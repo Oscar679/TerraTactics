@@ -3,23 +3,14 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
- *
+ * @description First screen shown before entering the main menu.
  * @constructor
  * @extends rune.scene.Scene
- *
  * @class
- * @classdesc
- *
- * Intro scene.
  */
 TerraTactics.scene.Intro = function () {
     // Super call
     //--------------------------------------------------------------------------
-
-    /**
-     * Calls the constructor method of the super class.
-     */
     rune.scene.Scene.call(this);
 };
 
@@ -30,6 +21,10 @@ TerraTactics.scene.Intro = function () {
 TerraTactics.scene.Intro.prototype = Object.create(rune.scene.Scene.prototype);
 TerraTactics.scene.Intro.prototype.constructor = TerraTactics.scene.Intro;
 
+/**
+ * @description Leaves the intro once and loads the main menu.
+ * @returns {undefined}
+ */
 TerraTactics.scene.Intro.prototype.m_continue = function () {
     if (this.m_done !== true) {
         this.m_done = true;
@@ -42,8 +37,7 @@ TerraTactics.scene.Intro.prototype.m_continue = function () {
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated.
- * The method is used to create objects to be used within the scene.
+ * @description Sets up this object after Rune creates it.
  *
  * @returns {undefined}
  */
@@ -71,7 +65,6 @@ TerraTactics.scene.Intro.prototype.init = function () {
     var m_this = this;
 
     this.m_onKeyDown = function (e) {
-        console.log(e.key);
         m_this.m_continue();
     }
 
@@ -82,10 +75,9 @@ TerraTactics.scene.Intro.prototype.init = function () {
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for
- * calculations such as application logic.
+ * @description Runs this object's per-tick game logic.
  *
- * @param {number} step Fixed time step.
+ * @param {number} step fixed time step from the engine.
  *
  * @returns {undefined}
  */
@@ -104,10 +96,7 @@ TerraTactics.scene.Intro.prototype.update = function (step) {
 };
 
 /**
- * This method is automatically called once just before the scene ends. Use
- * the method to reset references and remove objects that no longer need to
- * exist when the scene is destroyed. The process is performed in order to
- * avoid memory leaks.
+ * @description Cleans up this object before it leaves the scene.
  *
  * @returns {undefined}
  */
