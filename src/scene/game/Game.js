@@ -619,7 +619,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
 
     this.m_projectiles.update(this.m_inActivePlayers);
 
-    this.m_lavaController.update(this.m_activePlayer, this.m_inActivePlayers);
+    this.m_lavaController.m_checkCollisions(this.m_activePlayer, this.m_inActivePlayers);
 
     var oldActivePlayer = this.m_activePlayer;
 
