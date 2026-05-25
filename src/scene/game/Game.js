@@ -371,7 +371,7 @@ TerraTactics.scene.Game.prototype.m_getActiveWeapon = function () {
         return null;
     }
 
-    weaponName = this.m_activePlayer.character.m_getWeapon();
+    weaponName = this.m_activePlayer.character.weapon;
     weapon = TerraTactics.data.Weapons[weaponName];
 
     return weapon || null;

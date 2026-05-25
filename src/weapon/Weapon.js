@@ -145,6 +145,10 @@ TerraTactics.scene.Weapon.prototype.m_getRoleSpecificStats = function (player) {
 };
 
 TerraTactics.scene.Weapon.prototype.m_fireProjectile = function (player, targetX, targetY) {
+if (player.weapon === "melee") {
+    
+}
+
     var projectile = this.m_getProjectileData(player, targetX, targetY);
     this.m_playFireSound();
     var stats = this.m_getRoleSpecificStats(player);

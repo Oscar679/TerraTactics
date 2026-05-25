@@ -74,24 +74,12 @@ TerraTactics.scene.Character = function (x, y, role) {
 TerraTactics.scene.Character.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.Character.prototype.constructor = TerraTactics.scene.Character;
 
-TerraTactics.scene.Character.prototype.m_getHealth = function () {
-    return this.m_health;
-}
-
 TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
     if (this.m_weaponState.cooldowns[weapon] === 0) {
         return true;
     } else {
         return false;
     }
-}
-
-TerraTactics.scene.Character.prototype.m_setWeapon = function (weapon) {
-    this.m_weaponState.currentWeapon = weapon;
-}
-
-TerraTactics.scene.Character.prototype.m_getWeapon = function () {
-    return this.m_weaponState.currentWeapon;
 }
 
 TerraTactics.scene.Character.prototype.m_setCooldown = function (weapon) {
@@ -117,19 +105,29 @@ TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, tar
     return weapon.m_fireProjectile(this, targetX, targetY);
 };
 
-TerraTactics.scene.Character.prototype.m_getCollided = function () {
-    return this.m_collided;
-};
-
-TerraTactics.scene.Character.prototype.m_setCollided = function (value) {
-    this.m_collided = value;
-};
-
 TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
     if (!this.animation.current || this.animation.current.name !== name) {
         this.animation.gotoAndPlay(name, 0);
     }
 };
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "weapon", {
+    get: function () {
+        return this.m_weaponState.currentWeapon;
+    },
+    set: function (value) {
+        this.m_weaponState.currentWeapon = value;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "collided", {
+    get: function () {
+        return this.m_collided;
+    },
+    set: function (value) {
+        this.m_collided = value;
+    }
+});
 
 Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
     get: function () {
@@ -140,7 +138,7 @@ Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
 Object.defineProperty(TerraTactics.scene.Character.prototype, "getCurrentCooldown", {
 }, {
     get: function () {
-        var weapon = this.m_getWeapon();
+        var weapon = this.weapon;
         return this.m_weaponState.cooldowns[weapon] || 0;
     }
 });

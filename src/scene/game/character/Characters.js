@@ -16,7 +16,7 @@ TerraTactics.scene.Characters = function (stage, roles) {
     this.m_jumpSound = this.m_soundChannel.get("jump");
     this.m_walkSound = this.m_soundChannel.get("walk");
     this.m_ouchSound = this.m_soundChannel.get("ouch");
-    this.m_lavaShizzle = this.m_soundChannel.get("lava_shizzle"); 
+    this.m_lavaShizzle = this.m_soundChannel.get("lava_shizzle");
 
     this.m_isWalkSoundPlaying = false;
 
@@ -79,7 +79,7 @@ TerraTactics.scene.Characters.prototype.switchTurn = function () {
     var activePlayer = this.getActive();
     if (activePlayer != null && activePlayer.character != null) {
         this.adjustCooldowns(activePlayer.character);
-        activePlayer.character.m_setWeapon("pistol");
+        activePlayer.character.weapon = "pistol";
     }
     this.m_syncActivePlayers();
 };

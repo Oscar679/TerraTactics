@@ -31,7 +31,7 @@ TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (ta
         return;
     }
 
-    weapon = activePlayer.character.m_getWeapon();
+    weapon = activePlayer.character.weapon;
 
     if (activePlayer.character.m_canFire(weapon)) {
         this.m_bullet = activePlayer.character.m_fireProjectile(targetX, targetY);
