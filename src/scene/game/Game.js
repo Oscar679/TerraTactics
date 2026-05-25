@@ -653,5 +653,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
  * @returns {undefined}
  */
 TerraTactics.scene.Game.prototype.dispose = function () {
+    this.m_themeMusic.stop();
     rune.scene.Scene.prototype.dispose.call(this);
 };

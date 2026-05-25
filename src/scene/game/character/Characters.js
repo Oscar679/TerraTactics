@@ -110,9 +110,6 @@ TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
 
 TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
     // we need to send the player that won, not died.
-    if (playerEntry == null || playerEntry.character == null) {
-        return;
-    }
 
     switch (playerEntry.id) {
         case "player1":

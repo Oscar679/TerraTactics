@@ -19,8 +19,6 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/menu/ControllerMenu.js" \
 --js "./../../src/scene/game/menu/RoleMenu.js" \
 --js "./../../src/scene/game/menu/GameOverMenu.js" \
---js "./../../src/scene/game/options/Options.js" \
---js "./../../src/scene/game/credits/Credits.js" \
 --js "./../../src/powerups/PowerUp.js" \
 --js "./../../src/powerups/Health.js" \
 --js "./../../src/powerups/Speed.js" \

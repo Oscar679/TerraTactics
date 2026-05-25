@@ -108,7 +108,7 @@ TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, tar
 
 TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
     if (!this.animation.current || this.animation.current.name !== name) {
-        this.animation.gotoAndPlay(name, 0);    
+        this.animation.gotoAndPlay(name, 0);
     }
 };
 
@@ -137,7 +137,6 @@ Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
 });
 
 Object.defineProperty(TerraTactics.scene.Character.prototype, "getCurrentCooldown", {
-}, {
     get: function () {
         var weapon = this.weapon;
         return this.m_weaponState.cooldowns[weapon] || 0;
