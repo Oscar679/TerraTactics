@@ -132,9 +132,6 @@ TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry)
     }
 };
 
-TerraTactics.scene.Characters.prototype.getWinnerText = function () {
-    return this.m_winnerText;
-};
 
 TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
     // left wall
@@ -151,6 +148,12 @@ TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
         player.m_velocityY = 2;
     }
 };
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "winnerText", {
+    get: function () {
+        return this.m_winnerText;
+    }
+});
 
 Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldWidth", {
     get: function () {

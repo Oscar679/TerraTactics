@@ -34,10 +34,19 @@ TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (ta
     weapon = activePlayer.character.weapon;
 
     if (activePlayer.character.m_canFire(weapon)) {
-        this.m_bullet = activePlayer.character.m_fireProjectile(targetX, targetY);
-        this.m_gameScene.m_bullet = this.m_bullet;
+        this.m_bullet = activePlayer.character.m_fireProjectile(targetX, targetY, this.m_gameScene);
+
         activePlayer.character.m_setCooldown(weapon);
         this.m_gameScene.m_updateAttackCooldowns();
+
+        if (this.m_bullet === null) {
+            if (weapon === "melee") {
+                this.m_gameScene.m_endTurn();
+                return;
+            }
+        }
+
+        this.m_gameScene.m_bullet = this.m_bullet;
         this.m_gameScene.stage.addChild(this.m_bullet);
     }
 };

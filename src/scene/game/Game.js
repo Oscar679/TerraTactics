@@ -508,6 +508,21 @@ TerraTactics.scene.Game.prototype.m_drawArc = function (source) {
         return;
     }
 
+    if (source.weapon === "melee") {
+        this.m_artboard.canvas.drawArc(
+            source.centerX,
+            source.centerY,
+            15,
+            0,
+            Math.PI * 2,
+            "#ffcc00",
+            2,
+            false
+        );
+
+        return;
+    }
+
     var projectile = weapon.m_getProjectileData(source, this.m_aimTargetX, this.m_aimTargetY);
     var x = projectile.x;
     var y = projectile.y;
@@ -570,14 +585,14 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         this.m_tick3SecSound.stop();
         this.m_turnChangeSound.stop();
         if (!this.m_gameOverLoaded) {
-            this.application.scenes.load([new TerraTactics.scene.GameOverMenu(this.m_characters.getWinnerText())]);
+            this.application.scenes.load([new TerraTactics.scene.GameOverMenu(this.m_characters.winnerText)]);
         }
         this.m_gameOverLoaded = true;
         return;
     }
 
-    if (this.m_characters.getWinnerText() !== null) {
-        this.m_displayWinner(this.m_characters.getWinnerText());
+    if (this.m_characters.winnerText !== null) {
+        this.m_displayWinner(this.m_characters.winnerText);
         if (this.m_activePlayer != null && this.m_activePlayer.character != null) {
             this.m_activePlayer.character.m_grounded = true;
         }

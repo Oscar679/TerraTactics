@@ -57,8 +57,8 @@ TerraTactics.scene.WeaponSelector.prototype.m_selectWeapon = function (weapon) {
 
     if (this.m_gameScene.m_activePlayer != null &&
         this.m_gameScene.m_activePlayer.character != null) {
-        previousWeapon = this.m_gameScene.m_activePlayer.character.m_getWeapon();
-        this.m_gameScene.m_activePlayer.character.m_setWeapon(weapon);
+        previousWeapon = this.m_gameScene.m_activePlayer.character.weapon;
+        this.m_gameScene.m_activePlayer.character.weapon = weapon;
         if (previousWeapon !== weapon) {
             selectedWeapon = this.m_gameScene.m_getActiveWeapon();
             if (selectedWeapon !== null && typeof selectedWeapon.m_playSwitchSound === "function") {

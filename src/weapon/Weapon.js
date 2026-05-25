@@ -61,6 +61,15 @@ TerraTactics.scene.Weapon.prototype.init = function () {
 };
 
 TerraTactics.scene.Weapon.prototype.m_getProjectileData = function (player, targetX, targetY) {
+    if (player.weapon === "melee") {
+        return {
+            x: player.centerX,
+            y: player.y + 2,
+            vx: 0,
+            vy: 0
+        };
+    }
+
     var dx = targetX - player.centerX;
     var dy = targetY - player.centerY;
 
@@ -144,10 +153,16 @@ TerraTactics.scene.Weapon.prototype.m_getRoleSpecificStats = function (player) {
     };
 };
 
-TerraTactics.scene.Weapon.prototype.m_fireProjectile = function (player, targetX, targetY) {
-if (player.weapon === "melee") {
-    
-}
+TerraTactics.scene.Weapon.prototype.m_fireProjectile = function (player, targetX, targetY, scene) {
+    var gameScene = scene;
+    if (player.weapon === "melee") {
+        console.log(player.weapon);
+        var projectile = this.m_getProjectileData(player, targetX, targetY);
+        this.m_playFireSound();
+        var stats = this.m_getRoleSpecificStats(player);
+        this.m_attack(player, projectile.x, projectile.y, stats.damage, stats.knockback, gameScene);
+        return null;
+    }
 
     var projectile = this.m_getProjectileData(player, targetX, targetY);
     this.m_playFireSound();

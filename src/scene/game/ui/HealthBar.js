@@ -20,7 +20,7 @@ TerraTactics.scene.HealthBar = function (x, y, character) {
     this.m_character = character;
     console.log(this.m_character);
     this.m_maxHealth = 100;
-    this.m_health = this.m_character.m_getHealth();
+    this.m_health = this.m_character.health;
     this.m_healthBar = new rune.ui.Progressbar(20, 3, "#000000", "#ff004d");
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
@@ -35,6 +35,6 @@ TerraTactics.scene.HealthBar.prototype.constructor = TerraTactics.scene.HealthBa
 TerraTactics.scene.HealthBar.prototype.update = function () {
     rune.display.Sprite.prototype.update.call(this);
 
-    this.m_health = this.m_character.m_getHealth();
+    this.m_health = this.m_character.health;
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 };

@@ -92,8 +92,9 @@ TerraTactics.scene.Character.prototype.m_setCooldown = function (weapon) {
     }
 }
 
-TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, targetY) {
+TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, targetY, scene) {
     var weapon = this.m_guns[this.m_weaponState.currentWeapon];
+    var gameScene = scene;
 
     if (!weapon || !weapon.m_fireProjectile) {
         throw new Error("Invalid weapon");
@@ -102,12 +103,12 @@ TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, tar
     this.m_movingLeft = false;
     this.m_movingRight = false;
 
-    return weapon.m_fireProjectile(this, targetX, targetY);
+    return weapon.m_fireProjectile(this, targetX, targetY, gameScene);
 };
 
 TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
     if (!this.animation.current || this.animation.current.name !== name) {
-        this.animation.gotoAndPlay(name, 0);
+        this.animation.gotoAndPlay(name, 0);    
     }
 };
 
