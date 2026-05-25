@@ -11,7 +11,7 @@
  * @class
  * @classdesc
  *
- * Character object.
+ * Playable character with movement, health and weapons.
  */
 TerraTactics.scene.Character = function (x, y, role) {
 

@@ -12,8 +12,8 @@
  *
  * @class
  * @classdesc
- * 
- * Abstract base class for all weapons.
+ *
+ * Abstract base class for all powerups.
  */
 TerraTactics.scene.PowerUp = function () {
 

@@ -11,7 +11,7 @@
  * @class
  * @classdesc
  *
- * Intro scene.
+ * Intro scene shown before the main menu.
  */
 TerraTactics.scene.Intro = function () {
     // Super call

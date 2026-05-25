@@ -12,8 +12,8 @@
  *
  * @class
  * @classdesc
- * 
- * Abstract base class for all weapons.
+ *
+ * Handles spawning, applying and resetting powerups.
  */
 TerraTactics.scene.PowerUps = function (gameScene) {
 

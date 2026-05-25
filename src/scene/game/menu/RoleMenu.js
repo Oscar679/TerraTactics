@@ -10,8 +10,8 @@
  *
  * @class
  * @classdesc
- * 
- * Options scene.
+ *
+ * Role selection scene.
  */
 TerraTactics.scene.RoleMenu = function () {
 

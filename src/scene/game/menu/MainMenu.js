@@ -10,8 +10,8 @@
  *
  * @class
  * @classdesc
- * 
- * Options scene.
+ *
+ * Main menu scene.
  */
 TerraTactics.scene.MainMenu = function () {
 

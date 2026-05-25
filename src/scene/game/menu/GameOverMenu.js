@@ -10,8 +10,8 @@
  *
  * @class
  * @classdesc
- * 
- * Options scene.
+ *
+ * Game over scene with restart and exit choices.
  */
 TerraTactics.scene.GameOverMenu = function (winnerText) {
 

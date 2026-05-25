@@ -12,8 +12,8 @@
  *
  * @class
  * @classdesc
- * 
- * Abstract base class for all weapons.
+ *
+ * Speed pickup that boosts a character's movement.
  */
 TerraTactics.scene.Speed = function (x, y, stage) {
 

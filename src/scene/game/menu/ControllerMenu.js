@@ -10,8 +10,8 @@
  *
  * @class
  * @classdesc
- * 
- * Options scene.
+ *
+ * Controller selection scene.
  */
 TerraTactics.scene.ControllerMenu = function () {
 

@@ -12,8 +12,8 @@
  *
  * @class
  * @classdesc
- * 
- * Abstract base class for all weapons.
+ *
+ * Health pickup that restores part of a character's health.
  */
 TerraTactics.scene.Health = function (x, y, gameScene) {
 

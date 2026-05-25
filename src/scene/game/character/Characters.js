@@ -1,4 +1,12 @@
-// Handler for Character.js
+/**
+ * Creates a new object.
+ *
+ * @constructor
+ * @class
+ * @classdesc
+ *
+ * Handles both player characters and their turn state.
+ */
 TerraTactics.scene.Characters = function (stage, roles) {
     this.m_stage = stage;
     this.m_roles = roles;
