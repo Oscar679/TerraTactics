@@ -60,7 +60,7 @@ TerraTactics.scene.ProjectileManager.prototype.m_applyExplosion = function (x, y
     explosionGraphic.moveTo(x, y);
 
     this.m_explosionTimer = this.m_gameScene.timers.create({
-        duration: 300,
+        duration: 600,
         onComplete: function () {
             explosionGraphic.y = -50;
         },
@@ -126,14 +126,38 @@ TerraTactics.scene.ProjectileManager.prototype.m_destroyTileAtHitbox = function 
         } else {
             this.m_gameScene.stage.m_map.front.setTileValueAt(index, 0);
         }
-
         return;
+    }
+};
+
+TerraTactics.scene.ProjectileManager.prototype.radiusDamage = function (bullet, inactivePlayers) {
+    for (var i = 0; i < inactivePlayers.length; i++) {
+        if (inactivePlayers[i].character !== null) {
+            var distance = rune.util.Math.distance(this.m_bullet.x, this.m_bullet.y, inactivePlayers[i].character.x, inactivePlayers[i].character.y);
+            console.log(distance);
+            if (distance <= 24) {
+                this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.8);
+                this.m_knockback(inactivePlayers[i].character, this.m_bullet);
+            }
+            else if (distance <= 48) {
+                this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.6);
+                this.m_knockback(inactivePlayers[i].character, this.m_bullet);
+            } else if (distance <= 72) {
+                this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.4);
+                this.m_knockback(inactivePlayers[i].character, this.m_bullet);
+            }
+            else if (distance <= 96) {
+                this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.2);
+                this.m_knockback(inactivePlayers[i].character, this.m_bullet);
+            }
+        }
     }
 };
 
 TerraTactics.scene.ProjectileManager.prototype.update = function (inactivePlayers) {
     if (this.m_bullet !== null) {
         if (this.m_bullet.hitTest(this.m_gameScene.stage.m_map.front)) {
+            this.radiusDamage(this.m_bullet, inactivePlayers);
             this.m_destroyTileAtHitbox(this.m_bullet.hitbox);
             this.m_bulletHit(this.m_gameScene.m_activePlayer.character.weapon, this.m_bullet);
             return;
