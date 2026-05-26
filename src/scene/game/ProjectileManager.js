@@ -139,15 +139,11 @@ TerraTactics.scene.ProjectileManager.prototype.radiusDamage = function (bullet, 
                 this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.8);
                 this.m_knockback(inactivePlayers[i].character, this.m_bullet);
             }
-            else if (distance <= 48) {
+            else if (distance <= 38) {
                 this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.6);
                 this.m_knockback(inactivePlayers[i].character, this.m_bullet);
-            } else if (distance <= 72) {
+            } else if (distance <= 60) {
                 this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.4);
-                this.m_knockback(inactivePlayers[i].character, this.m_bullet);
-            }
-            else if (distance <= 96) {
-                this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.2);
                 this.m_knockback(inactivePlayers[i].character, this.m_bullet);
             }
         }
