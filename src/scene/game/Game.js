@@ -280,6 +280,8 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_explosionGraphic.scaleY = 1.5;
 
     this.m_startRoundTimer();
+    this.m_updateAttackCooldowns();
+    this.m_selectWeapon("pistol");
 };
 
 TerraTactics.scene.Game.prototype.getCoordinatesForPowerUp = function (tempX) {
@@ -493,8 +495,8 @@ TerraTactics.scene.Game.prototype.m_endTurn = function () {
     this.m_activePlayer = this.m_characters.getActive();
     this.m_inActivePlayers = this.m_characters.getInactive();
     this.m_startRoundTimer();
-    this.m_selectWeapon("pistol");
     this.m_updateAttackCooldowns();
+    this.m_selectWeapon("pistol");
 
     var randomType = Math.floor(Math.random() * 2);
     var types = ["health", "speed"];
