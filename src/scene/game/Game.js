@@ -52,7 +52,8 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_soundChannel = new rune.media.SoundChannel();
     this.m_tick3SecSound = this.m_soundChannel.get("tick_3_sec");
     this.m_turnChangeSound = this.m_soundChannel.get("turn_change");
-
+    this.m_victory = this.m_soundChannel.get("victory");
+    this.m_victory.loop = false;
     this.m_themeMusic = this.m_soundChannel.get("theme_music");
     this.m_themeMusic.loop = true;
     this.m_themeMusic.volume = 0.5;
@@ -582,12 +583,16 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     this.m_updateArrow();
 
     if (this.m_gameEnd === true) {
+        if (this.m_victory.ended ) {
+            return;
+        }
         this.m_tick3SecSound.stop();
+        this.m_victory.play();
         this.m_turnChangeSound.stop();
-        if (!this.m_gameOverLoaded) {
+     /*   if (!this.m_gameOverLoaded) {
             this.application.scenes.load([new TerraTactics.scene.GameOverMenu(this.m_characters.winnerText)]);
         }
-        this.m_gameOverLoaded = true;
+        this.m_gameOverLoaded = true; */
         return;
     }
 
@@ -654,5 +659,6 @@ TerraTactics.scene.Game.prototype.update = function (step) {
  */
 TerraTactics.scene.Game.prototype.dispose = function () {
     this.m_themeMusic.stop();
+    this.m_victory.stop();
     rune.scene.Scene.prototype.dispose.call(this);
 };
