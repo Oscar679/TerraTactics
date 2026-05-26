@@ -7,10 +7,12 @@
  * Creates a new object.
  *
  * @constructor
+ * @extends rune.display.Sprite
+ *
  * @class
  * @classdesc
- * 
- * UI class for switching attacks.
+ *
+ * Attack icon for selecting a weapon and showing its cooldown.
  */
 TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
     rune.display.Sprite.call(this, x, y, 48, 48, weapon);
@@ -46,7 +48,7 @@ TerraTactics.scene.Attacks.prototype.m_click = function () {
 };
 
 TerraTactics.scene.Attacks.prototype.m_selected = function (selected) {
-    if (selected) {
+    if (selected && this.m_cd === 0) {
         this.animation.gotoAndPlay("selected", 0);
     } else if (this.m_cd > 0) {
         this.animation.gotoAndPlay("onCooldown", 0);

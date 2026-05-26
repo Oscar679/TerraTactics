@@ -10,8 +10,8 @@
  *
  * @class
  * @classdesc
- * 
- * Options scene.
+ *
+ * Main menu scene.
  */
 TerraTactics.scene.MainMenu = function () {
 
@@ -23,7 +23,7 @@ TerraTactics.scene.MainMenu = function () {
      * Calls the constructor method of the super class.
      */
 
-   rune.scene.Scene.call(this);
+    rune.scene.Scene.call(this);
 
 };
 
@@ -47,23 +47,18 @@ TerraTactics.scene.MainMenu.prototype.constructor = TerraTactics.scene.MainMenu;
 TerraTactics.scene.MainMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
-      this.bg = new rune.display.Graphic(0, 0, 400, 225, "background");
+    this.bg = new rune.display.Graphic(0, 0, 400, 225, "background");
     this.stage.addChild(this.bg);
 
-    this.PlayGame = new rune.display.Sprite(150, 100, 96, 96, "Selectedplaygame");
+    this.PlayGame = new rune.display.Sprite(160, 60, 96, 96, "Selectedplaygame");
     this.stage.addChild(this.PlayGame);
 
-     this.Credits = new rune.display.Sprite(190, 100, 96, 96, "SelectedCredits");
-    this.stage.addChild(this.Credits);
-
-     this.Option = new rune.display.Sprite(230, 100, 96, 96, "OptionSelected");
-    this.stage.addChild(this.Option);
-
-     this.ExitGame = new rune.display.Sprite(260, 100, 96, 96, "ExitGame");
+    this.ExitGame = new rune.display.Sprite(160, 110, 96, 96, "ExitGame");
     this.stage.addChild(this.ExitGame);
 
+
     // group of menu items (controller/keyboard navigation)
-    this.m_menuItems = [this.PlayGame, this.Credits, this.Option, this.ExitGame];
+    this.m_menuItems = [this.PlayGame, this.ExitGame];
 
     // controls (keyboard / gamepad)
     this.m_controls = new TerraTactics.util.Controls(0);
@@ -131,11 +126,7 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
     if (this.m_controls.confirm) {
         var sel = this.m_menuItems[this.m_selectedIndex];
         if (sel === this.PlayGame) {
-            this.application.scenes.load([new TerraTactics.scene.Game()]);
-        } else if (sel === this.Credits) {
-            this.application.scenes.load([new TerraTactics.scene.Credits()]);
-        } else if (sel === this.Option) {
-            this.application.scenes.load([new TerraTactics.scene.Options()]);
+            this.application.scenes.load([new TerraTactics.scene.ControllerMenu()]);
         } else if (sel === this.ExitGame) {
             try {
                 window.close();

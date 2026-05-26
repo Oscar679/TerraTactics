@@ -1,6 +1,15 @@
-// Handler for Character.js
-TerraTactics.scene.Characters = function (stage) {
+/**
+ * Creates a new object.
+ *
+ * @constructor
+ * @class
+ * @classdesc
+ *
+ * Handles both player characters and their turn state.
+ */
+TerraTactics.scene.Characters = function (stage, roles) {
     this.m_stage = stage;
+    this.m_roles = roles;
 
     this.m_soundChannel = new rune.media.SoundChannel();
 
@@ -11,8 +20,8 @@ TerraTactics.scene.Characters = function (stage) {
 
     this.m_isWalkSoundPlaying = false;
 
-    var character1 = new TerraTactics.scene.Character(70, 10, "ninja");
-    var character2 = new TerraTactics.scene.Character(100, 10, "bomber");
+    var character1 = new TerraTactics.scene.Character(70, 10, this.m_roles["player1"]);
+    var character2 = new TerraTactics.scene.Character(250, 10, this.m_roles["player2"]);
 
     this.m_players = {
         player1: {
@@ -70,7 +79,7 @@ TerraTactics.scene.Characters.prototype.switchTurn = function () {
     var activePlayer = this.getActive();
     if (activePlayer != null && activePlayer.character != null) {
         this.adjustCooldowns(activePlayer.character);
-        activePlayer.character.m_setWeapon("pistol");
+        activePlayer.character.weapon = "pistol";
     }
     this.m_syncActivePlayers();
 };
@@ -101,9 +110,6 @@ TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
 
 TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
     // we need to send the player that won, not died.
-    if (playerEntry == null || playerEntry.character == null) {
-        return;
-    }
 
     switch (playerEntry.id) {
         case "player1":
@@ -115,14 +121,14 @@ TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry)
         case "player3":
             this.m_winnerText = "Player 3 Wins!";
             break;
+        case "draw":
+            this.m_winnerText = "Draw!";
+            break;
         default:
             break;
     }
 };
 
-TerraTactics.scene.Characters.prototype.getWinnerText = function () {
-    return this.m_winnerText;
-};
 
 TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
     // left wall
@@ -139,6 +145,12 @@ TerraTactics.scene.Characters.prototype.hitBoundary = function (player) {
         player.m_velocityY = 2;
     }
 };
+
+Object.defineProperty(TerraTactics.scene.Characters.prototype, "winnerText", {
+    get: function () {
+        return this.m_winnerText;
+    }
+});
 
 Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldWidth", {
     get: function () {
@@ -160,7 +172,7 @@ Object.defineProperty(TerraTactics.scene.Characters.prototype, "leftWall", {
 
 Object.defineProperty(TerraTactics.scene.Characters.prototype, "rightWall", {
     get: function () {
-        return this.worldWidth;
+        return 400;
     }
 });
 
@@ -184,6 +196,10 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         if (character !== null && character.m_health <= 0) {
             this.m_disposeCharacter(playerEntry);
         }
+    }
+
+    if (!this.getActive() && this.getInactive().length === 0) {
+        this.m_setWinnerText("DRAW");
     }
 
     if (this.getInactive().length === 0) {
@@ -224,11 +240,15 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         }
     }
 
-    if (activePlayer != null &&
-        activePlayer.character != null) {
-        if (activePlayer.character.left < this.leftWall ||
-            activePlayer.character.right > this.rightWall) {
-            this.hitBoundary(activePlayer.character);
+    for (var playerId in this.m_players) {
+        var playerEntry = this.m_players[playerId];
+        var character = playerEntry.character;
+
+        if (character !== null) {
+            if (character.left < this.leftWall ||
+                character.right > this.rightWall) {
+                this.hitBoundary(character);
+            }
         }
     }
 };
