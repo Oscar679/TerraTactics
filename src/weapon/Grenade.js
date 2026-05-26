@@ -26,7 +26,7 @@ TerraTactics.scene.Grenade = function () {
      */
     TerraTactics.scene.Weapon.call(this);
 
-    this.m_speed = 0.1; // Magic Number
+    this.m_speed = 0.03; // Magic Number
     this.m_damage = 50; // Magic Number
     this.m_knockback = 5; // Magic Number
     this.m_cooldown = 2; // Magic Number
@@ -60,7 +60,7 @@ TerraTactics.scene.Grenade.prototype.m_fireProjectile = function (player, target
     var projectile = this.m_getProjectileData(player, targetX, targetY);
     this.m_playFireSound();
     var stats = this.m_getRoleSpecificStats(player);
-    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, stats.damage, stats.knockback);
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, stats.damage, stats.knockback, player.weapon);
 };
 
 /**
