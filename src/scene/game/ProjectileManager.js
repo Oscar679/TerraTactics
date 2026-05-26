@@ -15,6 +15,7 @@
 TerraTactics.scene.ProjectileManager = function (gameScene) {
     this.m_gameScene = gameScene;
     this.m_bullet = null;
+    this.m_explosionTimer = null;
 };
 
 TerraTactics.scene.ProjectileManager.prototype.m_hasProjectile = function () {
@@ -51,7 +52,30 @@ TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (ta
     }
 };
 
-TerraTactics.scene.ProjectileManager.prototype.m_bulletHit = function () {
+TerraTactics.scene.ProjectileManager.prototype.m_applyExplosion = function (x, y) {
+    var explosionGraphic = this.m_gameScene.m_explosionGraphic;
+    console.log("graphic position:" + explosionGraphic.x + "," + explosionGraphic.y);
+    console.log("bullet position:" + x + "," + y);
+    this.m_gameScene.stage.addChild(explosionGraphic);
+    explosionGraphic.moveTo(x, y);
+
+    this.m_explosionTimer = this.m_gameScene.timers.create({
+        duration: 300,
+        onComplete: function () {
+            explosionGraphic.y = -50;
+        },
+        scope: this
+    });
+};
+
+TerraTactics.scene.ProjectileManager.prototype.m_bulletHit = function (weapon, target) {
+    console.log(this.m_bullet);
+    if (weapon === "grenade") {
+        console.log("is grenade");
+        console.log(this.m_bullet);
+        console.log(target);
+        this.m_applyExplosion(target.x, target.y - 15);
+    }
     this.m_gameScene.stage.removeChild(this.m_bullet);
     this.m_bullet = null;
     this.m_gameScene.m_bullet = null;
@@ -111,7 +135,7 @@ TerraTactics.scene.ProjectileManager.prototype.update = function (inactivePlayer
     if (this.m_bullet !== null) {
         if (this.m_bullet.hitTest(this.m_gameScene.stage.m_map.front)) {
             this.m_destroyTileAtHitbox(this.m_bullet.hitbox);
-            this.m_bulletHit();
+            this.m_bulletHit(this.m_gameScene.m_activePlayer.character.weapon, this.m_bullet);
             return;
         }
     }
@@ -121,7 +145,7 @@ TerraTactics.scene.ProjectileManager.prototype.update = function (inactivePlayer
             if (inactivePlayers[i].character !== null && this.m_bullet.hitTest(inactivePlayers[i].character)) {
                 this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage);
                 this.m_knockback(inactivePlayers[i].character, this.m_bullet);
-                this.m_bulletHit();
+                this.m_bulletHit(this.m_gameScene.m_activePlayer.character.weapon, inactivePlayers[i].character);
                 return;
             }
         }

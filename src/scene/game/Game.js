@@ -273,6 +273,12 @@ TerraTactics.scene.Game.prototype.init = function () {
     //   this.test.animation.create("idle", [0, 1, 2], 6, true);
     //  this.stage.addChild(this.test); 
 
+    this.m_explosionGraphic = new rune.display.Sprite(0, -50, 24, 24, "grenadeexplosion");
+    this.m_explosionGraphic.animation.create("idle", [0, 1, 2], 3, true);
+    this.m_explosionGraphic.animation.play("idle");
+    this.m_explosionGraphic.scaleX = 1.5;
+    this.m_explosionGraphic.scaleY = 1.5;
+
     this.m_startRoundTimer();
 };
 

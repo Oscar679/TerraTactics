@@ -19,13 +19,13 @@ TerraTactics.scene.LavaController = function (gameScene) {
     rune.display.Sprite.call(this, 0, 225, 400, 225, "lava");
     this.m_gameScene.stage.addChild(this);
 
-    this.animation.create("idle", [0, 1, 2], 1, true);
+    this.animation.create("idle", [0, 1, 2], 1.5, true);
     this.animation.play("idle");
 
     this.m_lavaTween = this.m_gameScene.tweens.create({
         target: this,
         scope: this.m_gameScene,
-        duration: 700000,
+        duration: 300000,
         easing: rune.tween.Linear.easeIn,
         args: {
             y: -225

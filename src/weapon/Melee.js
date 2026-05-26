@@ -56,6 +56,17 @@ TerraTactics.scene.Melee.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
+//overwrite superclass method
+TerraTactics.scene.Melee.prototype.m_fireProjectile = function (player, targetX, targetY, scene) {
+    var gameScene = scene;
+    console.log(player.weapon);
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
+    this.m_playFireSound();
+    var stats = this.m_getRoleSpecificStats(player);
+    this.m_attack(player, projectile.x, projectile.y, stats.damage, stats.knockback, gameScene);
+    return null;
+};
+
 TerraTactics.scene.Melee.prototype.m_attack = function (player, x, y, damage, knockback, scene) {
     var gameScene = scene;
     var inactivePlayers = gameScene.m_characters.getInactive();

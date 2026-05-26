@@ -55,6 +55,14 @@ TerraTactics.scene.Grenade.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
+//overwrite superclass method
+TerraTactics.scene.Grenade.prototype.m_fireProjectile = function (player, targetX, targetY) {
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
+    this.m_playFireSound();
+    var stats = this.m_getRoleSpecificStats(player);
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, stats.damage, stats.knockback);
+};
+
 /**
  * This method is automatically executed once per "tick". The method is used for 
  * calculations such as application logic.
@@ -64,7 +72,6 @@ TerraTactics.scene.Grenade.prototype.init = function () {
  * @returns {undefined}
  */
 TerraTactics.scene.Grenade.prototype.update = function (step) {
-    rune.display.Sprite.prototype.update.call(this, step);
 };
 
 /**
