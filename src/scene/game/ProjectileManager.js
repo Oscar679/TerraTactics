@@ -61,6 +61,9 @@ TerraTactics.scene.ProjectileManager.prototype.m_applyExplosion = function (x, y
 
     this.m_explosionTimer = this.m_gameScene.timers.create({
         duration: 600,
+        onStart: function () {
+            this.m_explosionGraphic.animation.play("idle");
+        },
         onComplete: function () {
             explosionGraphic.y = -50;
         },
