@@ -26,7 +26,7 @@ TerraTactics.scene.Grenade = function () {
      */
     TerraTactics.scene.Weapon.call(this);
 
-    this.m_speed = 0.1; // Magic Number
+    this.m_speed = 0.03; // Magic Number
     this.m_damage = 50; // Magic Number
     this.m_knockback = 5; // Magic Number
     this.m_cooldown = 2; // Magic Number
@@ -55,6 +55,14 @@ TerraTactics.scene.Grenade.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 };
 
+//overwrite superclass method
+TerraTactics.scene.Grenade.prototype.m_fireProjectile = function (player, targetX, targetY) {
+    var projectile = this.m_getProjectileData(player, targetX, targetY);
+    this.m_playFireSound();
+    var stats = this.m_getRoleSpecificStats(player);
+    return new TerraTactics.scene.Bullet(projectile.x, projectile.y, projectile.vx, projectile.vy, stats.damage, stats.knockback, player.weapon);
+};
+
 /**
  * This method is automatically executed once per "tick". The method is used for 
  * calculations such as application logic.
@@ -64,7 +72,6 @@ TerraTactics.scene.Grenade.prototype.init = function () {
  * @returns {undefined}
  */
 TerraTactics.scene.Grenade.prototype.update = function (step) {
-    rune.display.Sprite.prototype.update.call(this, step);
 };
 
 /**

@@ -26,10 +26,6 @@ TerraTactics.scene.GamepadAimController.prototype.update = function () {
     var pads = navigator.getGamepads();
     var pad = pads && pads[0];
 
-    if (pad) {
-        console.log(pad.axes[0], pad.axes[1]);
-    }
-
     var length = Math.sqrt(aimX * aimX + aimY * aimY);
 
     if (length < TerraTactics.util.MappingGamepad.AIM_DEADZONE) {
