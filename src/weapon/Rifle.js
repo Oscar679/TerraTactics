@@ -26,7 +26,7 @@ TerraTactics.scene.Rifle = function () {
      */
     TerraTactics.scene.Weapon.call(this);
 
-    this.m_speed = 0.07; // Magic Number
+    this.m_speed = 0.05; // Magic Number
     this.m_damage = 50; // Magic Number
     this.m_knockback = 3; // Magic Number
     this.m_cooldown = 1; // Magic Number
