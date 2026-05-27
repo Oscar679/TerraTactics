@@ -51,6 +51,12 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
 
     this.m_background.animation.create("idle", [0, 1, 2, 3], 3, true);
 
+    this.m_dpad = new rune.display.Sprite(175, 30, 48, 48, "dpad");
+
+    this.m_dpad.animation.create("idle", [0, 1], 1, true);
+
+    this.stage.addChild(this.m_dpad);
+
     this.m_player1Container = new rune.display.Sprite(5, 30, 128, 128, "Player1");
     this.stage.addChild(this.m_player1Container);
 
@@ -98,6 +104,36 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
         "player1": "",
         "player2": ""
     };
+
+    this.m_continueText = new rune.text.BitmapField("PRESS ANY KEY TO CONTINUE");
+    this.m_continueText.width = this.m_continueText.textWidth;
+    this.m_continueText.height = this.m_continueText.textHeight;
+    this.m_continueText.centerX = this.m_background.m_width / 2.2;
+    this.m_continueText.centerY = this.m_background.m_height / 1.4;
+    this.m_continueText.visible = false;
+    this.stage.addChild(this.m_continueText);
+
+    this.m_leftArrow1 = new rune.display.Sprite(this.m_player1Container.x, this.m_player1Container.centerY, 48, 48, "arrowleft");
+    this.m_rightArrow1 = new rune.display.Sprite(this.m_player1Container.x + 114, this.m_player1Container.centerY, 48, 48, "arrowright");
+
+    this.m_leftArrow1.scaleX = 0.5;
+    this.m_leftArrow1.scaleY = 0.5;
+    this.m_rightArrow1.scaleY = 0.5;
+    this.m_rightArrow1.scaleX = 0.5;
+
+    this.stage.addChild(this.m_leftArrow1);
+    this.stage.addChild(this.m_rightArrow1);
+
+    this.m_leftArrow2 = new rune.display.Sprite(this.m_player2Container.x, this.m_player2Container.centerY, 48, 48, "arrowleft");
+    this.m_rightArrow2 = new rune.display.Sprite(this.m_player2Container.x + 114, this.m_player2Container.centerY, 48, 48, "arrowright");
+
+    this.m_leftArrow2.scaleX = 0.5;
+    this.m_leftArrow2.scaleY = 0.5;
+    this.m_rightArrow2.scaleX = 0.5;
+    this.m_rightArrow2.scaleY = 0.5;
+
+    this.stage.addChild(this.m_leftArrow2);
+    this.stage.addChild(this.m_rightArrow2);
 };
 
 TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
@@ -133,6 +169,16 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
     this.m_rolesPlayer1.animation.gotoAndPlay("role" + (this.m_selectedRolePlayer1 + 1), 0);
     this.m_rolesPlayer2.animation.gotoAndPlay("role" + (this.m_selectedRolePlayer2 + 1), 0);
 
+    if (this.m_player1Locked && this.m_player2Locked) {
+        this.m_continueText.visible = true;
+    } else {
+        this.m_continueText.visible = false;
+    }
+
+    if ((this.m_player1Locked && this.m_player2Locked) && (this.m_player1Controls.anyButton || this.m_player2Controls.anyButton)) {
+        this.application.scenes.load([new TerraTactics.scene.Game(this.m_selectedRoles)]);
+    }
+
     if (!this.m_player1Locked) {
         if (this.m_player1Controls.justLeft && this.m_selectedRolePlayer1 > 0) {
             this.m_selectedRolePlayer1--;
@@ -159,11 +205,6 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
         if (this.m_player2Controls.confirm) {
             this.m_confirmRole("player2", this.m_selectedRolePlayer2);
         }
-    }
-
-    if (this.m_selectedRoles["player1"] !== "" &&
-        this.m_selectedRoles["player2"] !== "") {
-        this.application.scenes.load([new TerraTactics.scene.Game(this.m_selectedRoles)]);
     }
 };
 

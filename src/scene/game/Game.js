@@ -253,7 +253,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     console.log(this.stage.m_map);
 
     //add arrows to characters
-    this.m_activeArrow = new rune.display.Sprite(0, 0, 32, 32, "arrow");
+    this.m_activeArrow = new rune.display.Sprite(0, 0, 48, 48, "arrowdown");
     this.m_activeArrow.scaleX = 0.3;
     this.m_activeArrow.scaleY = 0.3;
 
@@ -436,6 +436,9 @@ TerraTactics.scene.Game.prototype.m_updateWeaponUiInput = function () {
     }
 
     if (this.m_controls.firePressed) {
+        if (this.m_activePlayer.character.weapon === "melee") {
+            this.m_fireActiveWeapon(this.m_activePlayer.character.centerX, this.m_activePlayer.character.centerY);
+        }
         this.m_fireAim();
         return;
     }
@@ -573,8 +576,8 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
 
 TerraTactics.scene.Game.prototype.m_updateArrow = function () {
     if (this.m_activePlayer != null && this.m_activePlayer.character != null) {
-        this.m_activeArrow.centerX = this.m_activePlayer.character.centerX;
-        this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 38 + this.m_bounceValue.y;
+        this.m_activeArrow.centerX = this.m_activePlayer.character.centerX + 4;
+        this.m_activeArrow.centerY = this.m_activePlayer.character.centerY - 28 + this.m_bounceValue.y;
     }
 };
 

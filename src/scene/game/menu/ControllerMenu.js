@@ -49,7 +49,7 @@ TerraTactics.scene.ControllerMenu.prototype.init = function () {
     this.m_player1Controls = new TerraTactics.util.Controls(0);
     this.m_player2Controls = new TerraTactics.util.Controls(1);
 
-    this.m_background = new rune.display.Sprite(0, 0, 432, 240, "controllerMenuBackground");
+    this.m_background = new rune.display.Sprite(0, 0, 432, 225, "controllerMenuBackground");
     this.stage.addChild(this.m_background);
 
     this.m_background.animation.create("idle", [0, 1, 2, 3], 3, true);
@@ -74,7 +74,9 @@ TerraTactics.scene.ControllerMenu.prototype.init = function () {
     this.m_gamepad2.side = "middle";
     this.m_gamepad2.middleX = this.m_gamepad2.x;
 
-    this.m_continueText = new rune.text.BitmapField("PRESS X TO CHOOSE ROLES", "");
+    this.m_continueText = new rune.text.BitmapField("PRESS ANY KEY TO CONTINUE");
+    this.m_continueText.width = this.m_continueText.textWidth;
+    this.m_continueText.height = this.m_continueText.textHeight;
     this.m_continueText.centerX = this.m_background.m_width / 2.2;
     this.m_continueText.centerY = this.m_background.m_height / 1.4;
     this.m_continueText.visible = false;
@@ -136,29 +138,29 @@ TerraTactics.scene.ControllerMenu.prototype.update = function (step) {
         this.m_continueText.visible = false;
     }
 
-    if ((this.m_gamepad1.chosenSide && this.m_gamepad2.chosenSide) && (this.m_player1Controls.confirm || this.m_player2Controls.confirm)) {
+    if ((this.m_gamepad1.chosenSide && this.m_gamepad2.chosenSide) && (this.m_player1Controls.anyButton || this.m_player2Controls.anyButton)) {
         this.application.scenes.load([new TerraTactics.scene.RoleMenu()]);
     }
 
-    if (this.m_player1Controls.justLeft) {
+    if (this.m_player1Controls.left) {
         if (this.m_gamepad1.side === "middle") {
             this.m_moveController(this.m_gamepad1, "left");
         }
     }
 
-    if (this.m_player1Controls.justRight) {
+    if (this.m_player1Controls.right) {
         if (this.m_gamepad1.side === "left") {
             this.m_moveController(this.m_gamepad1, "middle");
         }
     }
 
-    if (this.m_player2Controls.justRight) {
+    if (this.m_player2Controls.right) {
         if (this.m_gamepad2.side === "middle") {
             this.m_moveController(this.m_gamepad2, "right");
         }
     }
 
-    if (this.m_player2Controls.justLeft) {
+    if (this.m_player2Controls.left) {
         if (this.m_gamepad2.side === "right") {
             this.m_moveController(this.m_gamepad2, "middle");
         }

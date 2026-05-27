@@ -293,6 +293,13 @@ Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "confirm", {
     }
 });
 
+Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "confirmHeld", {
+    get: function () {
+        return this.m_pressed(TerraTactics.util.MappingGamepad.BUTTON_CROSS) ||
+            this.m_pressed(TerraTactics.util.MappingGamepad.BUTTON_OPTIONS);
+    }
+});
+
 /**
  * Previous weapon.
  *
@@ -534,3 +541,32 @@ TerraTactics.util.MappingGamepad.prototype.m_justReleased = function (button) {
 
     return false;
 };
+
+Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "anyButton", {
+    get: function () {
+        var gamepads = navigator.getGamepads ? navigator.getGamepads() : null;
+        var gamepad = gamepads !== null ? gamepads[this.m_playerID] : null;
+
+        if (gamepad === null ||
+            gamepad === undefined ||
+            gamepad.buttons === null ||
+            gamepad.buttons === undefined) {
+            return false;
+        }
+
+        for (var i = 0; i < gamepad.buttons.length; i++) {
+            if (i === TerraTactics.util.MappingGamepad.BUTTON_DPAD_LEFT ||
+                i === TerraTactics.util.MappingGamepad.BUTTON_DPAD_RIGHT) {
+                continue;
+            }
+
+            if (gamepad.buttons[i] !== null &&
+                gamepad.buttons[i] !== undefined &&
+                gamepad.buttons[i].pressed) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+});

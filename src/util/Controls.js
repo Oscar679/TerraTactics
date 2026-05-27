@@ -352,3 +352,15 @@ Object.defineProperty(TerraTactics.util.Controls.prototype, "aiming", {
         return this.m_gamepad.aiming;
     }
 });
+
+Object.defineProperty(TerraTactics.util.Controls.prototype, "anyButton", {
+    get: function () {
+        return this.m_gamepad.anyButton;
+    }
+});
+
+Object.defineProperty(TerraTactics.util.Controls.prototype, "confirmHeld", {
+    get: function () {
+        return this.m_keyboard.confirm || this.m_gamepad.confirmHeld;
+    }
+});

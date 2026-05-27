@@ -19,10 +19,17 @@ TerraTactics.scene.WeaponSelector = function (gameScene) {
 
     this.m_attacks = new rune.display.DisplayGroup(this.m_gameScene.m_camera);
 
-    this.attack1 = new TerraTactics.scene.Attacks(80, 170, "pistol", selectWeapon);
-    this.attack2 = new TerraTactics.scene.Attacks(155, 170, "rifle", selectWeapon);
-    this.attack3 = new TerraTactics.scene.Attacks(230, 170, "grenade", selectWeapon);
-    this.attack4 = new TerraTactics.scene.Attacks(290, 170, "melee", selectWeapon);
+    this.m_L1Button = new rune.display.Sprite(20, 170, 48, 48, "L1");
+    this.m_R1Button = new rune.display.Sprite(345, 170, 48, 48, "R1");
+
+
+    this.m_gameScene.stage.addChild(this.m_L1Button);
+    this.m_gameScene.stage.addChild(this.m_R1Button);
+
+    this.attack1 = new TerraTactics.scene.Attacks(85, 170, "pistol", selectWeapon);
+    this.attack2 = new TerraTactics.scene.Attacks(150, 170, "rifle", selectWeapon);
+    this.attack3 = new TerraTactics.scene.Attacks(215, 170, "grenade", selectWeapon);
+    this.attack4 = new TerraTactics.scene.Attacks(280, 170, "melee", selectWeapon);
 
     this.m_attacks.addMember(this.attack1);
     this.m_attacks.addMember(this.attack2);
