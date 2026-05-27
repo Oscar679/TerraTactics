@@ -92,7 +92,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     });
 
     // create containers
-    this.m_timerContainer = new rune.display.DisplayObjectContainer(105, 8, 190, 148);
+    this.m_timerContainer = new rune.display.DisplayObjectContainer(115, 2, 190, 148);
     this.m_globalTimerContainer = new rune.display.DisplayObjectContainer(90, 0, 96, 48);
     this.m_roundTimerContainer = new rune.display.DisplayObjectContainer(30, 0, 96, 48);
 

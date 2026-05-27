@@ -27,13 +27,13 @@ TerraTactics.scene.Characters = function (stage, roles) {
         player1: {
             id: "player1",
             character: character1,
-            healthBar: new TerraTactics.scene.HealthBar(4, 0, character1),
+            healthBar: new TerraTactics.scene.HealthBar(4, -4, character1),
             active: true
         },
         player2: {
             id: "player2",
             character: character2,
-            healthBar: new TerraTactics.scene.HealthBar(302, 0, character2),
+            healthBar: new TerraTactics.scene.HealthBar(264, -4, character2),
             active: false
         }
     };

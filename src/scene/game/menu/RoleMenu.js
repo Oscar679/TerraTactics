@@ -134,11 +134,11 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
     this.m_rolesPlayer2.animation.gotoAndPlay("role" + (this.m_selectedRolePlayer2 + 1), 0);
 
     if (!this.m_player1Locked) {
-        if (this.m_player1Controls.justUp && this.m_selectedRolePlayer1 > 0) {
+        if (this.m_player1Controls.justLeft && this.m_selectedRolePlayer1 > 0) {
             this.m_selectedRolePlayer1--;
         }
 
-        if (this.m_player1Controls.justDown && this.m_selectedRolePlayer1 < 2) {
+        if (this.m_player1Controls.justRight && this.m_selectedRolePlayer1 < 2) {
             this.m_selectedRolePlayer1++;
         }
 
@@ -148,11 +148,11 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
     }
 
     if (!this.m_player2Locked) {
-        if (this.m_player2Controls.justUp && this.m_selectedRolePlayer2 > 0) {
+        if (this.m_player2Controls.justLeft && this.m_selectedRolePlayer2 > 0) {
             this.m_selectedRolePlayer2--;
         }
 
-        if (this.m_player2Controls.justDown && this.m_selectedRolePlayer2 < 2) {
+        if (this.m_player2Controls.justRight && this.m_selectedRolePlayer2 < 2) {
             this.m_selectedRolePlayer2++;
         }
 

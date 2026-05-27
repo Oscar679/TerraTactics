@@ -152,13 +152,13 @@ TerraTactics.scene.ControllerMenu.prototype.update = function (step) {
         }
     }
 
-    if (this.m_player2Controls.justUp) {
+    if (this.m_player2Controls.justRight) {
         if (this.m_gamepad2.side === "middle") {
             this.m_moveController(this.m_gamepad2, "right");
         }
     }
 
-    if (this.m_player2Controls.justDown) {
+    if (this.m_player2Controls.justLeft) {
         if (this.m_gamepad2.side === "right") {
             this.m_moveController(this.m_gamepad2, "middle");
         }

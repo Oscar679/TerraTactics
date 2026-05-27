@@ -17,7 +17,7 @@
 TerraTactics.scene.TimeBar = function (x, y) {
     rune.display.Sprite.call(this, x, y, 96, 48, "time-bar");
 
-    this.scaleY = 0.8;
+    this.scaleY = 0.5;
 };
 
 //inheritance
