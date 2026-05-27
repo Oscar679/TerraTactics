@@ -14,7 +14,7 @@
  * 
  * Options scene.
  */
-TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
+TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback, type) {
 
 
     // Super call
@@ -23,10 +23,15 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback) {
     /**
      * Calls the constructor method of the super class.
      */
-    rune.display.Sprite.call(this, x, y, 6, 6, "bullet");
+    this.m_type = type;
+    if (this.m_type === "grenade") {
+        rune.display.Sprite.call(this, x, y, 6, 6, "grenadeprojectile");
+    } else {
+        rune.display.Sprite.call(this, x, y, 6, 6, "bullet");
+    }
 
     this.hitbox.set(1, 1, 1, 1);
-  //  this.hitbox.debug = true;
+    //  this.hitbox.debug = true;
 
     this.m_velocityX = vx;
     this.m_velocityY = vy;

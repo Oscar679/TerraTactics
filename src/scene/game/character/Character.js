@@ -11,21 +11,20 @@
  * @class
  * @classdesc
  *
- * Character object.
+ * Playable character with movement, health and weapons.
  */
-TerraTactics.scene.Character = function (x, y) {
+TerraTactics.scene.Character = function (x, y, role) {
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-
-    //rune.display.Sprite.call(this, x, y, 25, 18, "character_2_25x18");
-    rune.display.Sprite.call(this, x, y, 24, 48, "ninja-24x48");
+    rune.display.Sprite.call(this, x, y, 24, 24, role);
 
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
 
+    this.m_role = role;
     this.m_grounded = false;
     this.m_velocityY = 0;
     this.m_gravity = 0.2;
@@ -36,6 +35,7 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_isJumping = false;
     this.m_isTouchingLava = false;
     this.m_airborneTicks = 0;
+    this.m_speed = 1;
 
     this.m_maxHealth = 100;
     this.m_health = this.m_maxHealth;
@@ -44,8 +44,8 @@ TerraTactics.scene.Character = function (x, y) {
     this.m_healthBar.progress = this.m_health / this.m_maxHealth;
 
     this.hitbox.set(8, 4, 8, 16);
-    this.hitbox.debug = true;
-    this.hitbox.debugColor = "green";
+    // this.hitbox.debug = true;
+    //this.hitbox.debugColor = "green";
 
 
     this.animation.create("idle", [0, 1, 2, 3], 6, true);
@@ -74,24 +74,12 @@ TerraTactics.scene.Character = function (x, y) {
 TerraTactics.scene.Character.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.Character.prototype.constructor = TerraTactics.scene.Character;
 
-TerraTactics.scene.Character.prototype.m_getHealth = function () {
-    return this.m_health;
-}
-
 TerraTactics.scene.Character.prototype.m_canFire = function (weapon) {
     if (this.m_weaponState.cooldowns[weapon] === 0) {
         return true;
     } else {
         return false;
     }
-}
-
-TerraTactics.scene.Character.prototype.m_setWeapon = function (weapon) {
-    this.m_weaponState.currentWeapon = weapon;
-}
-
-TerraTactics.scene.Character.prototype.m_getWeapon = function () {
-    return this.m_weaponState.currentWeapon;
 }
 
 TerraTactics.scene.Character.prototype.m_setCooldown = function (weapon) {
@@ -104,8 +92,9 @@ TerraTactics.scene.Character.prototype.m_setCooldown = function (weapon) {
     }
 }
 
-TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, targetY) {
+TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, targetY, scene) {
     var weapon = this.m_guns[this.m_weaponState.currentWeapon];
+    var gameScene = scene;
 
     if (!weapon || !weapon.m_fireProjectile) {
         throw new Error("Invalid weapon");
@@ -114,15 +103,7 @@ TerraTactics.scene.Character.prototype.m_fireProjectile = function (targetX, tar
     this.m_movingLeft = false;
     this.m_movingRight = false;
 
-    return weapon.m_fireProjectile(this, targetX, targetY);
-};
-
-TerraTactics.scene.Character.prototype.m_getCollided = function () {
-    return this.m_collided;
-};
-
-TerraTactics.scene.Character.prototype.m_setCollided = function (value) {
-    this.m_collided = value;
+    return weapon.m_fireProjectile(this, targetX, targetY, gameScene);
 };
 
 TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
@@ -130,6 +111,61 @@ TerraTactics.scene.Character.prototype.m_playAnimation = function (name) {
         this.animation.gotoAndPlay(name, 0);
     }
 };
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "weapon", {
+    get: function () {
+        return this.m_weaponState.currentWeapon;
+    },
+    set: function (value) {
+        this.m_weaponState.currentWeapon = value;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "collided", {
+    get: function () {
+        return this.m_collided;
+    },
+    set: function (value) {
+        this.m_collided = value;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
+    get: function () {
+        return this.m_role;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "getCurrentCooldown", {
+    get: function () {
+        var weapon = this.weapon;
+        return this.m_weaponState.cooldowns[weapon] || 0;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "maxHealth", {
+    get: function () {
+        return this.m_maxHealth;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "health", {
+    get: function () {
+        return this.m_health;
+    },
+    set: function (value) {
+        this.m_health = value;
+    }
+});
+
+Object.defineProperty(TerraTactics.scene.Character.prototype, "speed", {
+    get: function () {
+        return this.m_speed;
+    },
+    set: function (value) {
+        this.m_speed = value;
+    }
+});
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
