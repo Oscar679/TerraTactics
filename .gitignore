@@ -2,4 +2,4 @@ node_modules/
 dist/
 log/
 .env
-data/resource
+src/data/resource/Requests.js
