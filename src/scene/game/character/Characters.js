@@ -110,7 +110,7 @@ TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
 
 TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
     // we need to send the player that won, not died.
-    if (playerEntry === "Draw" || playerEntry === "DRAW" || playerEntry === null) {
+    if (playerEntry === "Draw" || playerEntry === "DRAW" || playerEntry == null) {
         this.m_winnerText = "Draw";
         return;
     }
@@ -121,8 +121,6 @@ TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry)
             break;
         case "player2":
             this.m_winnerText = "Player 2 Wins!";
-            break;
-        default:
             break;
     }
 };

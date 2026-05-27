@@ -57,6 +57,12 @@ TerraTactics.scene.GameOverMenu.prototype.init = function () {
     this.playGame = new rune.display.Sprite(160, 80, 96, 96, "Selectedplaygame");
     this.exitGame = new rune.display.Sprite(160, 130, 96, 96, "ExitGame");
 
+    this.playGame.animation.create("idle", [0], 1, true);
+    this.exitGame.animation.create("idle", [0], 1, true);
+
+    this.playGame.animation.create("selected", [1, 2], 6, true);
+    this.exitGame.animation.create("selected", [1, 2], 6, true);
+
     this.stage.addChild(this.playGame);
     this.stage.addChild(this.exitGame);
 
@@ -78,14 +84,9 @@ TerraTactics.scene.GameOverMenu.prototype.init = function () {
 TerraTactics.scene.GameOverMenu.prototype.m_updateSelection = function () {
     this.m_menuItems.forEach(function (item) {
         if (item === this.m_menuItems[this.m_selectedIndex]) {
-            item.scaleX = 1.05;
-            item.scaleY = 1.05;
-            item.alpha = 1.0;
-
+            item.animation.gotoAndPlay("selected");
         } else {
-            item.scaleX = 1.0;
-            item.scaleY = 1.0;
-            item.alpha = 0.7;
+            item.animation.gotoAndPlay("idle");
         }
     }, this);
 };

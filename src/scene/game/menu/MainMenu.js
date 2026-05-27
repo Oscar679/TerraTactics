@@ -61,9 +61,6 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     this.playGame.animation.create("selected", [1, 2], 6, true);
     this.exitGame.animation.create("selected", [1, 2], 6, true);
 
-    this.playGame.isSelected = false;
-    this.exitGame.isSelected = false;
-
     this.stage.addChild(this.playGame);
     this.stage.addChild(this.exitGame);
 

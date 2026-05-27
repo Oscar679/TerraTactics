@@ -62,6 +62,8 @@ TerraTactics.scene.Game.prototype.init = function () {
     // load tilemap
     this.stage.m_map.load("map");
 
+    this.m_mapCopyFront = this.stage.m_map.front.data.slice();
+
     this.m_camera = this.cameras.getCameraAt(0);
 
     this.m_time = 0;
@@ -590,16 +592,19 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     this.m_updateArrow();
 
     if (this.m_gameEnd === true) {
-        if (this.m_victory.ended ) {
+        if (this.m_victory.ended) {
             return;
         }
         this.m_tick3SecSound.stop();
         this.m_victory.play();
         this.m_turnChangeSound.stop();
-     /*   if (!this.m_gameOverLoaded) {
+        if (!this.m_gameOverLoaded) {
+            for (var i = 0; i < this.m_mapCopyFront.length; i++) {
+                this.stage.m_map.front.setTileValueAt(i, this.m_mapCopyFront[i]);
+            }
             this.application.scenes.load([new TerraTactics.scene.GameOverMenu(this.m_characters.winnerText)]);
         }
-        this.m_gameOverLoaded = true; */
+        this.m_gameOverLoaded = true;
         return;
     }
 
