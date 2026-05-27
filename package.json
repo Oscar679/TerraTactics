@@ -1,21 +1,35 @@
 {
   "name": "TerraTactics",
-  "version": "%VERSION%",
+  "version": "1.0.0",
   "description": "An awesome Rune-based application.",
   "main": "bin/bootstrap.js",
-  "directories": {
-    "lib": "lib"
-  },
   "scripts": {
     "test": "electron ./bin-debug/bootstrap.js",
     "start": "electron ./bin/bootstrap.js",
-    "build": "cd ./scripts/shell && bash ./build.sh"
+    "build": "cd ./scripts/shell && bash ./build.sh",
+    "dist": "npm run build && electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.terratactics.game",
+    "productName": "TerraTactics",
+    "files": [
+      "bin/**/*",
+      "dist/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "portable"
+    }
   },
   "author": "Uncredited Rune developer",
   "license": "MIT",
   "devDependencies": {
+    "electron": "*",
+    "electron-builder": "^26.8.1",
     "google-closure-compiler": "*",
-    "jsdoc": "*",
-    "electron": "*"
+    "jsdoc": "*"
   }
 }

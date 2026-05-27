@@ -3,3 +3,4 @@ dist/
 log/
 .env
 src/data/resource/Requests.js
+release/

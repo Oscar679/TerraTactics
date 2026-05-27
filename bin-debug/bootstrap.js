@@ -1,3 +1,4 @@
+const path = require('path');
 const { app, BrowserWindow } = require('electron');
 
 function createWindow() {
@@ -12,7 +13,7 @@ function createWindow() {
     });
 
     win.setBackgroundColor("#000000");
-    win.loadFile('./index.html');
+    win.loadFile(path.join(__dirname, 'index.html'));
     win.setFullScreen(true);
 }
 
