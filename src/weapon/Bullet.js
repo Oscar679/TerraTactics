@@ -31,7 +31,6 @@ TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback, type) {
     }
 
     this.hitbox.set(1, 1, 2, 2);
-    //  this.hitbox.debug = true;
 
     this.m_velocityX = vx;
     this.m_velocityY = vy;
