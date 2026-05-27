@@ -965,6 +965,181 @@
             "rightEdge": true,
             "leftEdge": false,
             "bottomEdge": true
+        },
+        {
+            "value": 52,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 58,
+            "collision": "0x1111",
+            "rightEdge": true,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 53,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 26,
+            "collision": "0x1111",
+            "rightEdge": true,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 51,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": true,
+            "bottomEdge": true
+        },
+        {
+            "value": 54,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 56,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": true,
+            "bottomEdge": true
+        },
+        {
+            "value": 57,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": true,
+            "bottomEdge": true
+        },
+        {
+            "value": 9,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 10,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 17,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 18,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 19,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": true,
+            "bottomEdge": true
+        },
+        {
+            "value": 20,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 21,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 23,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 24,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 28,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": true,
+            "bottomEdge": true
+        },
+        {
+            "value": 29,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 30,
+            "collision": "0x1111",
+            "rightEdge": true,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 40,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 44,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 47,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 48,
+            "collision": "0x1111",
+            "rightEdge": true,
+            "leftEdge": false,
+            "bottomEdge": true
+        },
+        {
+            "value": 55,
+            "collision": "0x1111",
+            "rightEdge": false,
+            "leftEdge": false,
+            "bottomEdge": true
         }
     ]
 }
