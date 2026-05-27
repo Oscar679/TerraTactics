@@ -63,6 +63,15 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
     this.m_player2Container = new rune.display.Sprite(260, 30, 128, 128, "Player2");
     this.stage.addChild(this.m_player2Container);
 
+    this.m_player1Container.animation.create("idle", [0], 1, true);
+    this.m_player2Container.animation.create("idle", [0], 1, true);
+
+    this.m_player1Container.animation.gotoAndPlay("idle", 0);
+    this.m_player2Container.animation.gotoAndPlay("idle", 0);
+
+    this.m_player1Container.animation.create("locked", [1], 1, true);
+    this.m_player2Container.animation.create("locked", [1], 1, true);
+
     // controls (keyboard / gamepad)
     this.m_player1Controls = new TerraTactics.util.Controls(0);
     this.m_player2Controls = new TerraTactics.util.Controls(1);
@@ -205,6 +214,14 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
         if (this.m_player2Controls.confirm) {
             this.m_confirmRole("player2", this.m_selectedRolePlayer2);
         }
+    }
+
+    if (this.m_player1Locked) {
+        this.m_player1Container.animation.gotoAndPlay("locked", 0);
+    }
+
+    if (this.m_player2Locked) {
+        this.m_player2Container.animation.gotoAndPlay("locked", 0);
     }
 };
 
