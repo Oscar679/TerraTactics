@@ -119,7 +119,7 @@ TerraTactics.scene.GameOverMenu.prototype.update = function (step) {
     }
     if (this.m_player1Controls.confirm || this.m_player2Controls.confirm) {
         if (this.m_selectedIndex === 0) {
-            this.application.scenes.load([new TerraTactics.scene.ControllerMenu()]);
+            this.application.scenes.load([new TerraTactics.scene.RoleMenu()]);
         }
 
         if (this.m_selectedIndex === 1) {
