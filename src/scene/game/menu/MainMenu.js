@@ -24,7 +24,6 @@ TerraTactics.scene.MainMenu = function () {
      */
 
     rune.scene.Scene.call(this);
-
 };
 
 //------------------------------------------------------------------------------
@@ -50,46 +49,37 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     this.bg = new rune.display.Graphic(0, 0, 400, 225, "background");
     this.stage.addChild(this.bg);
 
-    this.PlayGame = new rune.display.Sprite(160, 60, 96, 96, "Selectedplaygame");
-    this.stage.addChild(this.PlayGame);
+    this.m_player1Controls = new TerraTactics.util.Controls(0);
+    this.m_player2Controls = new TerraTactics.util.Controls(1);
 
-    this.ExitGame = new rune.display.Sprite(160, 110, 96, 96, "ExitGame");
-    this.stage.addChild(this.ExitGame);
+    this.playGame = new rune.display.Sprite(160, 80, 96, 96, "Selectedplaygame");
+    this.exitGame = new rune.display.Sprite(160, 130, 96, 96, "ExitGame");
 
+    this.playGame.animation.create("idle", [0], 1, true);
+    this.exitGame.animation.create("idle", [0], 1, true);
 
-    // group of menu items (controller/keyboard navigation)
-    this.m_menuItems = [this.PlayGame, this.ExitGame];
+    this.playGame.animation.create("selected", [1, 2], 6, true);
+    this.exitGame.animation.create("selected", [1, 2], 6, true);
 
-    // controls (keyboard / gamepad)
-    this.m_controls = new TerraTactics.util.Controls(0);
+    this.playGame.isSelected = false;
+    this.exitGame.isSelected = false;
 
-    // selection index for keyboard/gamepad navigation
+    this.stage.addChild(this.playGame);
+    this.stage.addChild(this.exitGame);
+
     this.m_selectedIndex = 0;
-    this.m_updateSelection = function () {
-        for (var i = 0; i < this.m_menuItems.length; i++) {
-            var it = this.m_menuItems[i];
-            if (!it) continue;
-            if (i === this.m_selectedIndex) {
-                if (typeof it.m_selected === 'function') {
-                    it.m_selected(true);
-                } else {
-                    it.scaleX = 1.05;
-                    it.scaleY = 1.05;
-                    it.alpha = 1.0;
-                }
-            } else {
-                if (typeof it.m_selected === 'function') {
-                    it.m_selected(false);
-                } else {
-                    it.scaleX = 1.0;
-                    it.scaleY = 1.0;
-                    it.alpha = 0.7;
-                }
-            }
-        }
-    }.bind(this);
-
+    this.m_menuItems = [this.playGame, this.exitGame];
     this.m_updateSelection();
+};
+
+TerraTactics.scene.MainMenu.prototype.m_updateSelection = function () {
+    this.m_menuItems.forEach(function (item) {
+        if (item === this.m_menuItems[this.m_selectedIndex]) {
+            item.animation.gotoAndPlay("selected");
+        } else {
+            item.animation.gotoAndPlay("idle");
+        }
+    }, this);
 };
 
 /**
@@ -103,11 +93,7 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 TerraTactics.scene.MainMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    if (!this.m_controls) {
-        this.m_controls = new TerraTactics.util.Controls(0);
-    }
-
-    if (this.m_controls.justUp) {
+    if (this.m_player1Controls.justUp || this.m_player2Controls.justUp) {
         this.m_selectedIndex -= 1;
         if (this.m_selectedIndex < 0) {
             this.m_selectedIndex = this.m_menuItems.length - 1;
@@ -115,19 +101,19 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
         this.m_updateSelection();
     }
 
-    if (this.m_controls.justDown) {
+    if (this.m_player1Controls.justDown || this.m_player2Controls.justDown) {
         this.m_selectedIndex += 1;
         if (this.m_selectedIndex >= this.m_menuItems.length) {
             this.m_selectedIndex = 0;
         }
         this.m_updateSelection();
     }
-
-    if (this.m_controls.confirm) {
-        var sel = this.m_menuItems[this.m_selectedIndex];
-        if (sel === this.PlayGame) {
+    if (this.m_player1Controls.confirm || this.m_player2Controls.confirm) {
+        if (this.m_selectedIndex === 0) {
             this.application.scenes.load([new TerraTactics.scene.ControllerMenu()]);
-        } else if (sel === this.ExitGame) {
+        }
+
+        if (this.m_selectedIndex === 1) {
             try {
                 window.close();
             } catch (err) {
@@ -146,9 +132,5 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
  * @returns {undefined}
  */
 TerraTactics.scene.MainMenu.prototype.dispose = function () {
-    this.m_menuItems = null;
-    this.m_updateSelection = null;
-    this.m_controls = null;
-
     rune.scene.Scene.prototype.dispose.call(this);
 };
