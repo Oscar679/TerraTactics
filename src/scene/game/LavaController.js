@@ -42,7 +42,7 @@ TerraTactics.scene.LavaController.prototype.constructor = TerraTactics.scene.Lav
 
 TerraTactics.scene.LavaController.prototype.m_checkCollisions = function (activePlayer, inactivePlayers) {
     if (activePlayer != null && activePlayer.character != null) {
-        if (activePlayer.character.bottom >= this.top) {
+        if (activePlayer.character.bottom >= this.top + 18) {
             activePlayer.character.m_isTouchingLava = true;
             activePlayer.character.m_health = 0;
         }
@@ -50,7 +50,7 @@ TerraTactics.scene.LavaController.prototype.m_checkCollisions = function (active
 
     for (var i = 0; i < inactivePlayers.length; i++) {
         if (inactivePlayers[i].character !== null) {
-            if (inactivePlayers[i].character.bottom >= this.top) {
+            if (inactivePlayers[i].character.bottom >= this.top + 18) {
                 inactivePlayers[i].character.m_isTouchingLava = true;
                 inactivePlayers[i].character.m_health = 0;
             }

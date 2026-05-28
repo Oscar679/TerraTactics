@@ -95,8 +95,20 @@ TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
 };
 
 TerraTactics.scene.Characters.prototype.m_damageTaken = function (character, damage) {
+    var char = character;
     character.m_health -= damage;
     this.m_ouchSound.play();
+    this.m_feedback = new rune.timer.Timer({
+        duration: 1000,
+        repeat: 2,
+        onStart: function () {
+            char.alpha = 0.6;
+        },
+        onComplete: function () {
+            char.alpha = 1;
+        },
+        scope: this
+    });
 };
 
 TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {

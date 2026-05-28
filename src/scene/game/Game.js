@@ -69,12 +69,12 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_time = 0;
 
     // round timer string
-    this.m_roundTimeString = new rune.text.BitmapField("10");
+    this.m_roundTimeString = new rune.text.BitmapField("10", "Font20ptwhite");
     this.m_roundTimeString.width = this.m_roundTimeString.textWidth;
     this.m_roundTimeString.height = this.m_roundTimeString.textHeight;
 
     // global timer string
-    this.m_timeString = new rune.text.BitmapField("00:00");
+    this.m_timeString = new rune.text.BitmapField("00:00", "Font20ptwhite");
     this.m_timeString.width = this.m_timeString.textWidth;
     this.m_timeString.height = this.m_timeString.textHeight;
 
@@ -85,7 +85,6 @@ TerraTactics.scene.Game.prototype.init = function () {
             this.m_time++;
             this.m_second = this.m_time % 60;
             this.m_minute = Math.floor(this.m_time / 60);
-
             this.m_timeString.text = this.m_padNumber(this.m_minute) + ":" + this.m_padNumber(this.m_second);
         },
         scope: this
@@ -132,9 +131,11 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_globalTimerContainer.addChild(this.m_timeString);
     this.m_globalTimerContainer.addChild(this.m_globalTitle);
 
+
     this.m_roundTimerContainer.addChild(this.roundTimeBar);
     this.m_roundTimerContainer.addChild(this.m_roundTimeString);
     this.m_roundTimerContainer.addChild(this.m_roundTitle);
+
 
     this.m_cloud1 = new rune.display.Sprite(80, 8, 96, 48, "cloud");
     this.m_cloud2 = new rune.display.Sprite(180, 25, 96, 48, "cloud");
@@ -479,6 +480,16 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
 TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
     this.m_tick3SecSound.stop();
     this.m_roundTimer = null;
+
+    if (this.m_activePlayer != null && this.m_activePlayer.character != null) {
+        this.m_activePlayer.character.m_playAnimation("idle");
+    }
+
+    for (var i = 0; i < this.m_inActivePlayers.length; i++) {
+        if (this.m_inActivePlayers[i] !== null && this.m_inActivePlayers[i].character !== null) {
+            this.m_inActivePlayers[i].character.m_playAnimation("idle");
+        }
+    }
 
     if (!this.m_projectiles.m_hasProjectile()) {
         this.m_endTurn();
