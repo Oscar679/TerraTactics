@@ -7,9 +7,10 @@
  *
  * Handles both player characters and their turn state.
  */
-TerraTactics.scene.Characters = function (stage, roles) {
+TerraTactics.scene.Characters = function (stage, roles, gameScene) {
     this.m_stage = stage;
     this.m_roles = roles;
+    this.m_gameScene = gameScene;
 
     this.m_soundChannel = new rune.media.SoundChannel();
 
@@ -98,15 +99,26 @@ TerraTactics.scene.Characters.prototype.m_damageTaken = function (character, dam
     var char = character;
     character.m_health -= damage;
     this.m_ouchSound.play();
-    this.m_feedback = new rune.timer.Timer({
-        duration: 1000,
-        repeat: 2,
+    this.m_gameScene.timers.create({
+        duration: 250,
+        repeat: 3,
+
         onStart: function () {
             char.alpha = 0.6;
         },
+
+        onTick: function () {
+            if (char.alpha === 1) {
+                char.alpha = 0.7;
+            } else {
+                char.alpha = 1;
+            }
+        },
+
         onComplete: function () {
             char.alpha = 1;
         },
+
         scope: this
     });
 };

@@ -69,12 +69,12 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_time = 0;
 
     // round timer string
-    this.m_roundTimeString = new rune.text.BitmapField("10", "Font20ptwhite");
+    this.m_roundTimeString = new rune.text.BitmapField("10", "Font8ptwhite");
     this.m_roundTimeString.width = this.m_roundTimeString.textWidth;
     this.m_roundTimeString.height = this.m_roundTimeString.textHeight;
 
     // global timer string
-    this.m_timeString = new rune.text.BitmapField("00:00", "Font20ptwhite");
+    this.m_timeString = new rune.text.BitmapField("00:00", "Font8ptwhite");
     this.m_timeString.width = this.m_timeString.textWidth;
     this.m_timeString.height = this.m_timeString.textHeight;
 
@@ -215,7 +215,7 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_powerUps = new TerraTactics.scene.PowerUps(this);
 
-    this.m_characters = new TerraTactics.scene.Characters(this.stage, this.m_roles);
+    this.m_characters = new TerraTactics.scene.Characters(this.stage, this.m_roles, this);
 
     //add healthbars to stage
     for (var playerId in this.m_characters.m_players) {
