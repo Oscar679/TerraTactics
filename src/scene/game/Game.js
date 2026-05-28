@@ -109,8 +109,8 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.roundTimeBar.scaleX = 0.6;
     this.roundTimeBar.scaleY = 0.8;
 
-    this.m_globalTitle = new rune.text.BitmapField("TOTAL");
-    this.m_roundTitle = new rune.text.BitmapField("TURN");
+    this.m_globalTitle = new rune.text.BitmapField("TOTAL", "Font8ptwhite");
+    this.m_roundTitle = new rune.text.BitmapField("TURN", "Font8ptwhite");
 
     var globalTimerCenterX = this.totalTimeBar.x + this.totalTimeBar.width * this.totalTimeBar.scaleX / 2;
     var roundTimerCenterX = this.roundTimeBar.x + this.roundTimeBar.width * this.roundTimeBar.scaleX / 2;
@@ -575,7 +575,7 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
 
     this.m_weaponSelector.m_remove();
 
-    var winnerText = new rune.text.BitmapField(text);
+    var winnerText = new rune.text.BitmapField(text, "Font8ptwhite");
 
     winnerText.centerX = 200;
     winnerText.centerY = 112;

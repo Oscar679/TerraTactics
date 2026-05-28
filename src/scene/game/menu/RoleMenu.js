@@ -114,7 +114,7 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
         "player2": ""
     };
 
-    this.m_continueText = new rune.text.BitmapField("PRESS ANY KEY TO CONTINUE");
+    this.m_continueText = new rune.text.BitmapField("PRESS ANY KEY TO CONTINUE", "Font8ptwhite");
     this.m_continueText.width = this.m_continueText.textWidth;
     this.m_continueText.height = this.m_continueText.textHeight;
     this.m_continueText.centerX = this.m_background.m_width / 2.2;

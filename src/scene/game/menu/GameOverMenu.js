@@ -69,7 +69,7 @@ TerraTactics.scene.GameOverMenu.prototype.init = function () {
     this.m_selectedIndex = 0;
     this.m_menuItems = [this.playGame, this.exitGame];
 
-    this.m_winnerText = new rune.text.BitmapField(this.m_winner);
+    this.m_winnerText = new rune.text.BitmapField(this.m_winner, "Font8ptwhite");
 
     this.m_winnerText.centerX = 200;
     this.m_winnerText.centerY = 45;

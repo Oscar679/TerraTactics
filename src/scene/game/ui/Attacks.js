@@ -23,7 +23,12 @@ TerraTactics.scene.Attacks = function (x, y, weapon, onClick) {
 
     this.m_cd = 0;
 
-    this.m_cdText = new rune.text.BitmapField(this.m_cd.toString());
+    this.m_cdText = new rune.text.BitmapField(this.m_cd.toString(), "Font8ptwhite");
+
+    this.m_cdText.width = this.m_cdText.textWidth;
+    this.m_cdText.height = this.m_cdText.textHeight;
+    this.m_cdText.centerX = this.width / 2;
+    this.m_cdText.y = this.height - this.m_cdText.height - 7;
 
     this.addChild(this.m_cdText);
 
