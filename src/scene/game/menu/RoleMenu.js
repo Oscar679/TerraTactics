@@ -143,6 +143,8 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
 
     this.stage.addChild(this.m_leftArrow2);
     this.stage.addChild(this.m_rightArrow2);
+
+    this.m_delayFinished = false;
 };
 
 TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
@@ -184,8 +186,20 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
         this.m_continueText.visible = false;
     }
 
-    if ((this.m_player1Locked && this.m_player2Locked) && (this.m_player1Controls.anyButton || this.m_player2Controls.anyButton)) {
-        this.application.scenes.load([new TerraTactics.scene.Game(this.m_selectedRoles)]);
+    if (this.m_player1Locked && this.m_player2Locked) {
+        this.timers.create({
+            duration: 500,
+            repeat: 0,
+            onComplete: function () {
+                this.m_delayFinished = true;
+            },
+            scope: this
+        });
+        if (this.m_delayFinished) {
+            if (this.m_player1Controls.anyButton || this.m_player2Controls.anyButton) {
+                this.application.scenes.load([new TerraTactics.scene.Game(this.m_selectedRoles)]);
+            }
+        }
     }
 
     if (!this.m_player1Locked) {
