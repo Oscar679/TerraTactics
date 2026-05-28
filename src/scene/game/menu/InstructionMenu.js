@@ -51,6 +51,17 @@ TerraTactics.scene.InstructionMenu.prototype.init = function () {
 
     this.m_background = new rune.display.Sprite(0, 0, 400, 225, "instructions");
     this.stage.addChild(this.m_background);
+
+    this.m_delayFinished = false;
+
+    this.timers.create({
+        duration: 3000,
+        repeat: 0,
+        onComplete: function () {
+            this.m_delayFinished = true;
+        },
+        scope: this
+    });
 };
 
 /**
@@ -64,8 +75,10 @@ TerraTactics.scene.InstructionMenu.prototype.init = function () {
 TerraTactics.scene.InstructionMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    if (this.m_player1Controls.anyButton || this.m_player2Controls.anyButton) {
-        this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
+    if (this.m_delayFinished) {
+        if (this.m_player1Controls.anyButton || this.m_player2Controls.anyButton) {
+            this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
+        }
     }
 };
 
