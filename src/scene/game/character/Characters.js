@@ -197,6 +197,16 @@ Object.defineProperty(TerraTactics.scene.Characters.prototype, "rightWall", {
 });
 
 TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
+
+    var inActivePlayers = this.getInactive();
+    if (inActivePlayers !== null) {
+        for (var i = 0; i < inActivePlayers.length; i++) {
+            if (inActivePlayers[i].character !== null) {
+                inActivePlayers[i].character.m_playAnimation("idle");
+            }
+        }
+    }
+    
     for (var playerId in this.m_players) {
         var playerEntry = this.m_players[playerId];
         var character = playerEntry.character;
@@ -271,6 +281,7 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
             }
         }
     }
+
 };
 
 TerraTactics.scene.Characters.prototype.m_disposeCharacter = function (playerEntry) {
