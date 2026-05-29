@@ -131,6 +131,11 @@ TerraTactics.scene.ControllerMenu.prototype.m_moveController = function (target,
  */
 TerraTactics.scene.ControllerMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
+    var p1Left = this.m_player1Controls.left || this.m_player1Controls.aimX < -0.5;
+    var p1Right = this.m_player1Controls.right || this.m_player1Controls.aimX > 0.5;
+
+    var p2Left = this.m_player2Controls.left || this.m_player2Controls.aimX < -0.5;
+    var p2Right = this.m_player2Controls.right || this.m_player2Controls.aimX > 0.5;
 
     if (this.m_gamepad1.chosenSide && this.m_gamepad2.chosenSide) {
         this.m_continueText.visible = true;
@@ -142,25 +147,25 @@ TerraTactics.scene.ControllerMenu.prototype.update = function (step) {
         this.application.scenes.load([new TerraTactics.scene.RoleMenu()]);
     }
 
-    if (this.m_player1Controls.left) {
+    if (p1Left) {
         if (this.m_gamepad1.side === "middle") {
             this.m_moveController(this.m_gamepad1, "left");
         }
     }
 
-    if (this.m_player1Controls.right) {
+    if (p1Right) {
         if (this.m_gamepad1.side === "left") {
             this.m_moveController(this.m_gamepad1, "middle");
         }
     }
 
-    if (this.m_player2Controls.right) {
+    if (p2Right) {
         if (this.m_gamepad2.side === "middle") {
             this.m_moveController(this.m_gamepad2, "right");
         }
     }
 
-    if (this.m_player2Controls.left) {
+    if (p2Left) {
         if (this.m_gamepad2.side === "right") {
             this.m_moveController(this.m_gamepad2, "middle");
         }

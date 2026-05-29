@@ -68,6 +68,8 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     this.stage.addChild(this.m_instructions);
     this.stage.addChild(this.m_exitGame);
 
+    this.m_yAxisLocked = false;
+
     this.m_selectedIndex = 0;
     this.m_menuItems = [this.m_playGame, this.m_instructions, this.m_exitGame];
     this.m_updateSelection();
@@ -93,17 +95,30 @@ TerraTactics.scene.MainMenu.prototype.m_updateSelection = function () {
  */
 TerraTactics.scene.MainMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
+    var aimYValue = 0;
 
-    if (this.m_player1Controls.justUp || this.m_player2Controls.justUp) {
+    if (this.m_player1Controls.aimY < -0.5 || this.m_player1Controls.aimY > 0.5) {
+        aimYValue = this.m_player1Controls.aimY;
+    } else if (this.m_player2Controls.aimY < -0.5 || this.m_player2Controls.aimY > 0.5) {
+        aimYValue = this.m_player2Controls.aimY;
+    }
+
+    if (aimYValue === 0) {
+        this.m_yAxisLocked = false;
+    }
+
+    if (this.m_player1Controls.justUp || this.m_player2Controls.justUp || !this.m_yAxisLocked && aimYValue < -0.5) {
         this.m_selectedIndex -= 1;
+        this.m_yAxisLocked = true;
         if (this.m_selectedIndex < 0) {
             this.m_selectedIndex = this.m_menuItems.length - 1;
         }
         this.m_updateSelection();
     }
 
-    if (this.m_player1Controls.justDown || this.m_player2Controls.justDown) {
+    if (this.m_player1Controls.justDown || this.m_player2Controls.justDown || !this.m_yAxisLocked && aimYValue > 0.5) {
         this.m_selectedIndex += 1;
+        this.m_yAxisLocked = true;
         if (this.m_selectedIndex >= this.m_menuItems.length) {
             this.m_selectedIndex = 0;
         }

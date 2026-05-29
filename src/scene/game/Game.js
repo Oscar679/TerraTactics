@@ -575,14 +575,18 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
 
     this.m_weaponSelector.m_remove();
 
-    var winnerText = new rune.text.BitmapField(text, "Font8ptwhite");
+    var winnerUi = null;
 
-    winnerText.centerX = 200;
-    winnerText.centerY = 112;
-    winnerText.scaleX = 2;
-    winnerText.scaleY = 2;
-
-    this.stage.addChild(winnerText);
+    if (this.m_characters.winnerText === "Player 1 Wins!") {
+        winnerUi = new rune.display.Sprite(0, 0, 400, 400, "player1Win");
+    } else if (this.m_characters.winnerText === "Player 2 Wins!") {
+        winnerUi = new rune.display.Sprite(0, 0, 400, 400, "player2Win");
+    } else {
+        winnerUi = new rune.display.Sprite(0, 0, 48, 48, "draw");
+    }
+    if (winnerUi !== null) {
+        this.stage.addChild(winnerUi);
+    }
 };
 
 TerraTactics.scene.Game.prototype.m_updateArrow = function () {
@@ -616,7 +620,8 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             for (var i = 0; i < this.m_mapCopyFront.length; i++) {
                 this.stage.m_map.front.setTileValueAt(i, this.m_mapCopyFront[i]);
             }
-            this.application.scenes.load([new TerraTactics.scene.GameOverMenu(this.m_characters.winnerText)]);
+
+            //   this.application.scenes.load([new TerraTactics.scene.GameOverMenu(this.m_characters.winnerText)]);
         }
         this.m_gameOverLoaded = true;
         return;
