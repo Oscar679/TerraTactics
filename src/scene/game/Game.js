@@ -574,19 +574,19 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
     }
 
     this.m_weaponSelector.m_remove();
-
-    var winnerUi = null;
-
-    if (this.m_characters.winnerText === "Player 1 Wins!") {
-        winnerUi = new rune.display.Sprite(0, 0, 400, 400, "player1Win");
-    } else if (this.m_characters.winnerText === "Player 2 Wins!") {
-        winnerUi = new rune.display.Sprite(0, 0, 400, 400, "player2Win");
-    } else {
-        winnerUi = new rune.display.Sprite(0, 0, 48, 48, "draw");
+    var winner = null;
+    switch (text) {
+        case "Player 1 Wins!":
+            winner = "player1Win"
+            break;
+        case "Player 2 Wins!":
+            winner = "player2Win";
+            break;
+        case "Draw!":
+            winner = "draw";
+            break;
     }
-    if (winnerUi !== null) {
-        this.stage.addChild(winnerUi);
-    }
+    this.m_winnerScreenController = new TerraTactics.scene.WinnerScreenController(60, 30, this, winner);
 };
 
 TerraTactics.scene.Game.prototype.m_updateArrow = function () {
@@ -610,6 +610,13 @@ TerraTactics.scene.Game.prototype.update = function (step) {
     this.m_updateArrow();
 
     if (this.m_gameEnd === true) {
+        if (this.m_playerControls.player1.confirm || this.m_playerControls.player2.confirm) {
+            this.application.scenes.load([new TerraTactics.scene.RoleMenu()]);
+        }
+
+        if (this.m_playerControls.player1.circle || this.m_playerControls.player2.circle) {
+            this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
+        }
         if (this.m_victory.ended) {
             return;
         }
@@ -620,14 +627,13 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             for (var i = 0; i < this.m_mapCopyFront.length; i++) {
                 this.stage.m_map.front.setTileValueAt(i, this.m_mapCopyFront[i]);
             }
-
-            //   this.application.scenes.load([new TerraTactics.scene.GameOverMenu(this.m_characters.winnerText)]);
         }
         this.m_gameOverLoaded = true;
         return;
     }
 
     if (this.m_characters.winnerText !== null) {
+        this.m_lavaController.m_disposeTween();
         this.m_displayWinner(this.m_characters.winnerText);
         if (this.m_activePlayer != null && this.m_activePlayer.character != null) {
             this.m_activePlayer.character.m_grounded = true;

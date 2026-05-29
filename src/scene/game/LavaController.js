@@ -40,6 +40,10 @@ TerraTactics.scene.LavaController = function (gameScene) {
 TerraTactics.scene.LavaController.prototype = Object.create(rune.display.Sprite.prototype);
 TerraTactics.scene.LavaController.prototype.constructor = TerraTactics.scene.LavaController;
 
+TerraTactics.scene.LavaController.prototype.m_disposeTween = function () {
+    this.m_gameScene.tweens.remove(this.m_lavaTween);
+};
+
 TerraTactics.scene.LavaController.prototype.m_checkCollisions = function (activePlayer, inactivePlayers) {
     if (activePlayer != null && activePlayer.character != null) {
         if (activePlayer.character.bottom >= this.top + 18) {

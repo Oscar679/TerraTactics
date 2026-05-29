@@ -88,6 +88,12 @@ Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "leftUp", {
     }
 });
 
+Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "circle", {
+    get: function () {
+        return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_CIRCLE);
+    }
+});
+
 /**
  * Up, once per press.
  *

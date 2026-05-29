@@ -268,6 +268,12 @@ Object.defineProperty(TerraTactics.util.Controls.prototype, "confirm", {
     }
 });
 
+Object.defineProperty(TerraTactics.util.Controls.prototype, "circle", {
+    get: function () {
+        return this.m_keyboard.circle || this.m_gamepad.circle;
+    }
+});
+
 /**
  * Previous weapon.
  *

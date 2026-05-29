@@ -57,14 +57,20 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
 
     this.stage.addChild(this.m_dpad);
 
-    this.m_player1Container = new rune.display.Sprite(5, 30, 128, 128, "Player1");
+    this.m_player1Container = new rune.display.Sprite(5, 30, 128, 128, "Player1stats");
     this.stage.addChild(this.m_player1Container);
 
-    this.m_player2Container = new rune.display.Sprite(260, 30, 128, 128, "Player2");
+    this.m_player2Container = new rune.display.Sprite(260, 30, 128, 128, "Player2stats");
     this.stage.addChild(this.m_player2Container);
 
     this.m_player1Container.animation.create("idle", [0], 1, true);
     this.m_player2Container.animation.create("idle", [0], 1, true);
+    this.m_player1Container.animation.create("role1", [0], 1, true);
+    this.m_player2Container.animation.create("role1", [0], 1, true);
+    this.m_player1Container.animation.create("role2", [1], 1, true);
+    this.m_player2Container.animation.create("role2", [1], 1, true);
+    this.m_player1Container.animation.create("role3", [2], 1, true);
+    this.m_player2Container.animation.create("role3", [2], 1, true);
 
     this.m_player1Container.animation.gotoAndPlay("idle", 0);
     this.m_player2Container.animation.gotoAndPlay("idle", 0);
@@ -98,10 +104,16 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
     this.m_rolesPlayer1.animation.create("role1", [0], 1, true);
     this.m_rolesPlayer1.animation.create("role2", [1], 1, true);
     this.m_rolesPlayer1.animation.create("role3", [2], 1, true);
+    this.m_rolesPlayer1.animation.create("locked3", [3], 1, true);
+    this.m_rolesPlayer1.animation.create("locked4", [4], 1, true);
+    this.m_rolesPlayer1.animation.create("locked5", [5], 1, true);
 
     this.m_rolesPlayer2.animation.create("role1", [0], 1, true);
     this.m_rolesPlayer2.animation.create("role2", [1], 1, true);
     this.m_rolesPlayer2.animation.create("role3", [2], 1, true);
+    this.m_rolesPlayer2.animation.create("locked3", [3], 1, true);
+    this.m_rolesPlayer2.animation.create("locked4", [4], 1, true);
+    this.m_rolesPlayer2.animation.create("locked5", [5], 1, true);
 
     this.m_rolesPlayer1.animation.gotoAndPlay("role1", 0);
     this.m_rolesPlayer2.animation.gotoAndPlay("role1", 0);
@@ -166,6 +178,23 @@ TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
 };
 
 TerraTactics.scene.RoleMenu.prototype.m_updateUIStats = function (role1, role2) {
+    if (this.m_player1Locked) {
+        console.log('test');
+        console.log("role" + role1);
+        this.m_rolesPlayer1.animation.gotoAndPlay("locked" + (role1 + 3), 0);
+    }
+    if (!this.m_player1Locked) {
+        this.m_rolesPlayer1.animation.gotoAndPlay("role" + (role1 + 1), 0);
+        this.m_player1Container.animation.gotoAndPlay("role" + (role1 + 1), 0);
+    }
+
+    if (this.m_player2Locked) {
+        this.m_rolesPlayer2.animation.gotoAndPlay("locked" + (role2 + 3), 0);
+    }
+    if (!this.m_player2Locked) {
+        this.m_rolesPlayer2.animation.gotoAndPlay("role" + (role2 + 1), 0);
+        this.m_player2Container.animation.gotoAndPlay("role" + (role2 + 1), 0);
+    }
 };
 
 /**
