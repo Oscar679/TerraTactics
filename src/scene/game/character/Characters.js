@@ -125,7 +125,9 @@ TerraTactics.scene.Characters.prototype.m_damageTaken = function (character, dam
 
 TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
     if (this.m_isWalkSoundPlaying) {
-        this.m_walkSound.stop();
+        if (!this.m_walkSound.paused) {
+            this.m_walkSound.stop();
+        }
         this.m_isWalkSoundPlaying = false;
     }
 
@@ -252,7 +254,9 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
             }
         } else {
             if (this.m_isWalkSoundPlaying) {
-                this.m_walkSound.stop();
+                if (!this.m_walkSound.paused) {
+                    this.m_walkSound.stop();
+                }
                 this.m_isWalkSoundPlaying = false;
             }
         }

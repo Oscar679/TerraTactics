@@ -19,7 +19,6 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/menu/InstructionMenu.js" \
 --js "./../../src/scene/game/menu/ControllerMenu.js" \
 --js "./../../src/scene/game/menu/RoleMenu.js" \
---js "./../../src/scene/game/menu/GameOverMenu.js" \
 --js "./../../src/powerups/PowerUp.js" \
 --js "./../../src/powerups/Health.js" \
 --js "./../../src/powerups/Speed.js" \
@@ -29,6 +28,7 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/LavaController.js" \
 --js "./../../src/scene/game/GamepadAimController.js" \
 --js "./../../src/scene/game/PlayerInputController.js" \
+--js "./../../src/scene/game/WinnerScreenController.js" \
 --js "./../../src/scene/game/Game.js" \
 --js "./../../src/scene/game/ui/HealthBar.js" \
 --js "./../../src/scene/game/ui/TimeBar.js" \

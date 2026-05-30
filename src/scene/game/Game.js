@@ -606,18 +606,26 @@ TerraTactics.scene.Game.prototype.update = function (step) {
         if (this.m_playerControls.player1.circle || this.m_playerControls.player2.circle) {
             this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
         }
-        if (this.m_victory.ended) {
-            return;
-        }
-        this.m_tick3SecSound.stop();
-        this.m_victory.play();
-        this.m_turnChangeSound.stop();
         if (!this.m_gameOverLoaded) {
+            if (!this.m_tick3SecSound.paused) {
+                this.m_tick3SecSound.stop();
+            }
+
+            if (!this.m_turnChangeSound.paused) {
+                this.m_turnChangeSound.stop();
+            }
+
+            if (this.m_victory.paused && !this.m_victory.ended) {
+                this.m_victory.play();
+            }
+
             for (var i = 0; i < this.m_mapCopyFront.length; i++) {
                 this.stage.m_map.front.setTileValueAt(i, this.m_mapCopyFront[i]);
             }
+
+            this.m_gameOverLoaded = true;
         }
-        this.m_gameOverLoaded = true;
+
         return;
     }
 
