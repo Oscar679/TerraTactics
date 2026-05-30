@@ -571,7 +571,7 @@ TerraTactics.scene.Game.prototype.m_displayWinner = function (text) {
         case "Player 2 Wins!":
             winner = "player2Win";
             break;
-        case "Draw!":
+        case "Draw":
             winner = "draw";
             break;
     }

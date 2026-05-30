@@ -45,8 +45,10 @@ TerraTactics.scene.LavaController.prototype.m_disposeTween = function () {
 };
 
 TerraTactics.scene.LavaController.prototype.m_checkCollisions = function (activePlayer, inactivePlayers) {
+    var lavaDeathLine = this.top + 14;
+
     if (activePlayer != null && activePlayer.character != null) {
-        if (activePlayer.character.bottom >= this.top + 18) {
+        if (activePlayer.character.bottom >= lavaDeathLine) {
             activePlayer.character.m_isTouchingLava = true;
             activePlayer.character.m_health = 0;
         }
@@ -54,7 +56,7 @@ TerraTactics.scene.LavaController.prototype.m_checkCollisions = function (active
 
     for (var i = 0; i < inactivePlayers.length; i++) {
         if (inactivePlayers[i].character !== null) {
-            if (inactivePlayers[i].character.bottom >= this.top + 18) {
+            if (inactivePlayers[i].character.bottom >= lavaDeathLine) {
                 inactivePlayers[i].character.m_isTouchingLava = true;
                 inactivePlayers[i].character.m_health = 0;
             }

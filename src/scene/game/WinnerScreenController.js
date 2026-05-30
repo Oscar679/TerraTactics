@@ -1,4 +1,19 @@
 
+//------------------------------------------------------------------------------
+// Constructor scope
+//------------------------------------------------------------------------------
+
+/**
+ * Creates a new object.
+ *
+ * @constructor
+ * @extends rune.display.Sprite
+ *
+ * @class
+ * @classdesc
+ *
+ * Displays the game result screen.
+ */
 TerraTactics.scene.WinnerScreenController = function (x, y, gameScene, winner) {
     rune.display.Sprite.call(this, x, y, 288, 192, winner);
     this.m_gameScene = gameScene;

@@ -163,13 +163,13 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
 TerraTactics.scene.RoleMenu.prototype.m_confirmRole = function (player, role) {
     switch (role) {
         case 0:
-            this.m_selectedRoles[player] = "ninja";
+            this.m_selectedRoles[player] = "sniper";
             break;
         case 1:
             this.m_selectedRoles[player] = "bomber";
             break;
         case 2:
-            this.m_selectedRoles[player] = "sniper";
+            this.m_selectedRoles[player] = "ninja";
             break;
         default:
             break;
