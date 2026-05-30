@@ -62,8 +62,3 @@ TerraTactics.scene.LavaController.prototype.m_checkCollisions = function (active
     }
 };
 
-Object.defineProperty(TerraTactics.scene.LavaController.prototype, "lava", {
-    get: function () {
-        return this;
-    }
-});

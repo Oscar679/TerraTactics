@@ -31,12 +31,6 @@ Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "justUp", {
     }
 });
 
-Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "down", {
-    get: function () {
-        return this.m_pressed("DOWN");
-    }
-});
-
 Object.defineProperty(TerraTactics.util.MappingKeyboard.prototype, "justDown", {
     get: function () {
         return this.m_justPressed("DOWN");
@@ -135,15 +129,3 @@ TerraTactics.util.MappingKeyboard.prototype.m_justPressed = function (key) {
     return keyboard !== null ? keyboard.justPressed(key) : false;
 };
 
-/**
- * Reads a just-released key.
- *
- * @param {string} key Key name.
- *
- * @returns {boolean}
- * @private
- */
-TerraTactics.util.MappingKeyboard.prototype.m_justReleased = function (key) {
-    var keyboard = this.m_getKeyboard();
-    return keyboard !== null ? keyboard.justReleased(key) : false;
-};

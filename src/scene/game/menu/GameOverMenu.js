@@ -126,7 +126,6 @@ TerraTactics.scene.GameOverMenu.prototype.update = function (step) {
             try {
                 window.close();
             } catch (err) {
-                console.log('Exit requested');
             }
         }
     }

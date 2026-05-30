@@ -172,18 +172,6 @@ Object.defineProperty(TerraTactics.scene.Characters.prototype, "winnerText", {
     }
 });
 
-Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldWidth", {
-    get: function () {
-        return this.m_stage.m_map.widthInTiles * this.m_stage.m_map.tileWidth;
-    }
-});
-
-Object.defineProperty(TerraTactics.scene.Characters.prototype, "worldHeight", {
-    get: function () {
-        return this.m_stage.m_map.heightInTiles * this.m_stage.m_map.tileHeight;
-    }
-});
-
 Object.defineProperty(TerraTactics.scene.Characters.prototype, "leftWall", {
     get: function () {
         return 0;

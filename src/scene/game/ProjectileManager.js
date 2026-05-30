@@ -54,8 +54,6 @@ TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (ta
 
 TerraTactics.scene.ProjectileManager.prototype.m_applyExplosion = function (x, y) {
     var explosionGraphic = this.m_gameScene.m_explosionGraphic;
-    console.log("graphic position:" + explosionGraphic.x + "," + explosionGraphic.y);
-    console.log("bullet position:" + x + "," + y);
     this.m_gameScene.stage.addChild(explosionGraphic);
     explosionGraphic.moveTo(x, y);
 
@@ -72,11 +70,7 @@ TerraTactics.scene.ProjectileManager.prototype.m_applyExplosion = function (x, y
 };
 
 TerraTactics.scene.ProjectileManager.prototype.m_bulletHit = function (weapon, target) {
-    console.log(this.m_bullet);
     if (weapon === "grenade") {
-        console.log("is grenade");
-        console.log(this.m_bullet);
-        console.log(target);
         this.m_applyExplosion(target.x, target.y - 15);
     }
     this.m_gameScene.stage.removeChild(this.m_bullet);
@@ -159,7 +153,6 @@ TerraTactics.scene.ProjectileManager.prototype.radiusDamage = function (bullet, 
     for (var i = 0; i < inactivePlayers.length; i++) {
         if (inactivePlayers[i].character !== null) {
             var distance = rune.util.Math.distance(this.m_bullet.x, this.m_bullet.y, inactivePlayers[i].character.x, inactivePlayers[i].character.y);
-            console.log(distance);
             if (distance <= 24) {
                 this.m_gameScene.m_characters.m_damageTaken(inactivePlayers[i].character, this.m_bullet.m_damage * 0.8);
                 this.m_knockback(inactivePlayers[i].character, this.m_bullet);

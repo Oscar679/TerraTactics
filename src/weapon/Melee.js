@@ -59,7 +59,6 @@ TerraTactics.scene.Melee.prototype.init = function () {
 //overwrite superclass method
 TerraTactics.scene.Melee.prototype.m_fireProjectile = function (player, targetX, targetY, scene) {
     var gameScene = scene;
-    console.log(player.weapon);
     var projectile = this.m_getProjectileData(player, targetX, targetY);
     this.m_playFireSound();
     var stats = this.m_getRoleSpecificStats(player);

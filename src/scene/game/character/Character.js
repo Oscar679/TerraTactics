@@ -29,7 +29,6 @@ TerraTactics.scene.Character = function (x, y, role) {
     this.m_velocityY = 0;
     this.m_gravity = 0.2;
     this.m_jumpStrength = 3.5;
-    this.m_collided = false;
     this.m_movingLeft = false;
     this.m_movingRight = false;
     this.m_isJumping = false;
@@ -121,25 +120,9 @@ Object.defineProperty(TerraTactics.scene.Character.prototype, "weapon", {
     }
 });
 
-Object.defineProperty(TerraTactics.scene.Character.prototype, "collided", {
-    get: function () {
-        return this.m_collided;
-    },
-    set: function (value) {
-        this.m_collided = value;
-    }
-});
-
 Object.defineProperty(TerraTactics.scene.Character.prototype, "role", {
     get: function () {
         return this.m_role;
-    }
-});
-
-Object.defineProperty(TerraTactics.scene.Character.prototype, "getCurrentCooldown", {
-    get: function () {
-        var weapon = this.weapon;
-        return this.m_weaponState.cooldowns[weapon] || 0;
     }
 });
 

@@ -54,37 +54,9 @@ TerraTactics.util.MappingGamepad.AIM_DEADZONE = 0.25;
 // Public getter and setter methods
 //------------------------------------------------------------------------------
 
-/**
- * Up.
- *
- * @member {boolean} up
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "up", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_pressed(TerraTactics.util.MappingGamepad.BUTTON_DPAD_UP);
-    }
-});
-
-/**
- * Up alias kept for older game code.
- *
- * @member {boolean} leftUp
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "leftUp", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return this.up;
     }
 });
 
@@ -94,205 +66,55 @@ Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "circle", {
     }
 });
 
-/**
- * Up, once per press.
- *
- * @member {boolean} justUp
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "justUp", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_DPAD_UP);
     }
 });
 
-/**
- * Down.
- *
- * @member {boolean} down
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "down", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return this.m_pressed(TerraTactics.util.MappingGamepad.BUTTON_DPAD_DOWN);
-    }
-});
-
-/**
- * Down, once per press.
- *
- * @member {boolean} justDown
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "justDown", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_DPAD_DOWN);
     }
 });
 
-/**
- * Right.
- *
- * @member {boolean} right
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "right", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_pressed(TerraTactics.util.MappingGamepad.BUTTON_DPAD_RIGHT);
     }
 });
 
-/**
- * Right, once per press.
- *
- * @member {boolean} justRight
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "justRight", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_DPAD_RIGHT);
     }
 });
 
-/**
- * Left.
- *
- * @member {boolean} left
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "left", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_pressed(TerraTactics.util.MappingGamepad.BUTTON_DPAD_LEFT);
     }
 });
 
-/**
- * Left, once per press.
- *
- * @member {boolean} justLeft
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "justLeft", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_DPAD_LEFT);
     }
 });
 
-/**
- * Jump.
- *
- * @member {boolean} jump
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "jump", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_CROSS);
     }
 });
 
-/**
- * Fire.
- *
- * @member {boolean} fire
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "fire", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return this.m_pressed(TerraTactics.util.MappingGamepad.BUTTON_SQUARE);
-    }
-});
-
-/**
- * Fire, once when pressed.
- *
- * @member {boolean} firePressed
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "firePressed", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_SQUARE);
     }
 });
 
-/**
- * Fire, once when released.
- *
- * @member {boolean} fireReleased
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "fireReleased", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return this.m_justReleased(TerraTactics.util.MappingGamepad.BUTTON_SQUARE);
-    }
-});
-
-/**
- * Confirm.
- *
- * @member {boolean} confirm
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "confirm", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_CROSS) ||
             this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_OPTIONS);
@@ -306,52 +128,19 @@ Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "confirmHeld",
     }
 });
 
-/**
- * Previous weapon.
- *
- * @member {boolean} weaponPrevious
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "weaponPrevious", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_L1);
     }
 });
 
-/**
- * Next weapon.
- *
- * @member {boolean} weaponNext
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "weaponNext", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         return this.m_justPressed(TerraTactics.util.MappingGamepad.BUTTON_R1);
     }
 });
 
-/**
- * Left stick x-axis.
- *
- * @member {number} aimX
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "aimX", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         var gamepads = navigator.getGamepads ? navigator.getGamepads() : null;
         var gamepad = gamepads !== null ? gamepads[this.m_playerID] : null;
@@ -360,75 +149,12 @@ Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "aimX", {
     }
 });
 
-/**
- * Left stick y-axis.
- *
- * @member {number} aimY
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "aimY", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
     get: function () {
         var gamepads = navigator.getGamepads ? navigator.getGamepads() : null;
         var gamepad = gamepads !== null ? gamepads[this.m_playerID] : null;
 
         return gamepad !== null && gamepad.axes ? gamepad.axes[1] || 0 : 0;
-    }
-});
-
-/**
- * Whether the left stick is currently aiming.
- *
- * @member {boolean} aiming
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "aiming", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return Math.abs(this.aimX) > TerraTactics.util.MappingGamepad.AIM_DEADZONE ||
-            Math.abs(this.aimY) > TerraTactics.util.MappingGamepad.AIM_DEADZONE;
-    }
-});
-
-/**
- * Walk left alias.
- *
- * @member {boolean} walkLeft
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "walkLeft", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return this.left;
-    }
-});
-
-/**
- * Walk right alias.
- *
- * @member {boolean} walkRight
- * @memberof TerraTactics.util.MappingGamepad
- * @readonly
- */
-Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "walkRight", {
-    /**
-     * @this TerraTactics.util.MappingGamepad
-     * @ignore
-     */
-    get: function () {
-        return this.right;
     }
 });
 
@@ -458,28 +184,6 @@ TerraTactics.util.MappingGamepad.prototype.m_getGamepad = function () {
     }
 
     return null;
-};
-
-/**
- * Gets a boolean stick property.
- *
- * @param {string} property Stick property name.
- *
- * @returns {boolean}
- * @private
- */
-TerraTactics.util.MappingGamepad.prototype.m_stick = function (property) {
-    var gamepad = this.m_getGamepad();
-
-    if (gamepad !== null) {
-        try {
-            return gamepad[property] === true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    return false;
 };
 
 /**
@@ -534,20 +238,6 @@ TerraTactics.util.MappingGamepad.prototype.m_justPressed = function (button) {
  * @returns {boolean}
  * @private
  */
-TerraTactics.util.MappingGamepad.prototype.m_justReleased = function (button) {
-    var gamepad = this.m_getGamepad();
-
-    if (gamepad !== null) {
-        try {
-            return gamepad.justReleased(button);
-        } catch (error) {
-            return false;
-        }
-    }
-
-    return false;
-};
-
 Object.defineProperty(TerraTactics.util.MappingGamepad.prototype, "anyButton", {
     get: function () {
         var gamepads = navigator.getGamepads ? navigator.getGamepads() : null;

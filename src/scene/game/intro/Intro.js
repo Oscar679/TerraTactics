@@ -71,7 +71,6 @@ TerraTactics.scene.Intro.prototype.init = function () {
     var m_this = this;
 
     this.m_onKeyDown = function (e) {
-        console.log(e.key);
         m_this.m_continue();
     }
 

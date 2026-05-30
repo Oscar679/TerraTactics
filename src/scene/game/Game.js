@@ -24,7 +24,6 @@ TerraTactics.scene.Game = function (role) {
      */
     rune.scene.Scene.call(this);
     this.m_roles = role;
-    console.log(this.m_roles);
 };
 
 //------------------------------------------------------------------------------
@@ -160,7 +159,6 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_animateClouds([this.m_cloud1, this.m_cloud2, this.m_cloud3, this.m_cloud4]);
 
     this.m_lavaController = new TerraTactics.scene.LavaController(this);
-    this.m_lava = this.m_lavaController.lava;
 
     this.m_artboard = new rune.display.Artboard(0, 0, 400, 225);
     this.m_camera.addChild(this.m_artboard);
@@ -251,7 +249,6 @@ TerraTactics.scene.Game.prototype.init = function () {
 
     this.m_currentPlayerText = null;
 
-    console.log(this.stage.m_map);
 
     //add arrows to characters
     this.m_activeArrow = new rune.display.Sprite(0, 0, 48, 48, "arrowdown");
@@ -356,14 +353,6 @@ TerraTactics.scene.Game.prototype.m_padNumber = function (number) {
 
 TerraTactics.scene.Game.prototype.m_selectWeapon = function (weapon) {
     this.m_weaponSelector.m_selectWeapon(weapon);
-};
-
-TerraTactics.scene.Game.prototype.m_getWeaponIndex = function (weapon) {
-    return this.m_weaponSelector.m_getWeaponIndex(weapon);
-};
-
-TerraTactics.scene.Game.prototype.m_selectWeaponAt = function (index, direction) {
-    this.m_weaponSelector.m_selectWeaponAt(index, direction);
 };
 
 TerraTactics.scene.Game.prototype.m_updateAttackCooldowns = function () {
