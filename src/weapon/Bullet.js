@@ -12,7 +12,7 @@
  * @class
  * @classdesc
  * 
- * Options scene.
+ * Projectile with movement, damage and knockback.
  */
 TerraTactics.scene.Bullet = function (x, y, vx, vy, damage, knockback, type) {
 

@@ -17,7 +17,7 @@ TerraTactics.util.Sound.play = function (sound, reset) {
     if (playRequest !== undefined) {
         playRequest.catch(function (error) {
             if (error.name !== "AbortError") {
-                console.error(error);
+                throw error;
             }
         });
     }

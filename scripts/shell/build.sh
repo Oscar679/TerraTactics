@@ -15,7 +15,6 @@ npx google-closure-compiler \
 --js "./../../src/util/MappingKeyboard.js" \
 --js "./../../src/util/Controls.js" \
 --js "./../../src/util/Sound.js" \
---js "./../../src/scene/game/intro/Intro.js" \
 --js "./../../src/scene/game/menu/MainMenu.js" \
 --js "./../../src/scene/game/menu/InstructionMenu.js" \
 --js "./../../src/scene/game/menu/ControllerMenu.js" \
