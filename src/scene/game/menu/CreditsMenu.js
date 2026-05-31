@@ -13,7 +13,7 @@
  *
  * Instruction menu scene.
  */
-TerraTactics.scene.InstructionMenu = function () {
+TerraTactics.scene.CreditsMenu = function () {
 
 
     // Super call
@@ -30,8 +30,8 @@ TerraTactics.scene.InstructionMenu = function () {
 // Inheritance
 //------------------------------------------------------------------------------
 
-TerraTactics.scene.InstructionMenu.prototype = Object.create(rune.scene.Scene.prototype);
-TerraTactics.scene.InstructionMenu.prototype.constructor = TerraTactics.scene.InstructionMenu;
+TerraTactics.scene.CreditsMenu.prototype = Object.create(rune.scene.Scene.prototype);
+TerraTactics.scene.CreditsMenu.prototype.constructor = TerraTactics.scene.CreditsMenu;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -43,13 +43,13 @@ TerraTactics.scene.InstructionMenu.prototype.constructor = TerraTactics.scene.In
  *
  * @returns {undefined}
  */
-TerraTactics.scene.InstructionMenu.prototype.init = function () {
+TerraTactics.scene.CreditsMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
     this.m_player1Controls = new TerraTactics.util.Controls(0);
     this.m_player2Controls = new TerraTactics.util.Controls(1);
 
-    this.m_background = new rune.display.Sprite(0, 0, 400, 225, "instructions");
+    this.m_background = new rune.display.Sprite(0, 0, 400, 225, "1Credits");
     this.stage.addChild(this.m_background);
 
     this.m_delayFinished = false;
@@ -72,7 +72,7 @@ TerraTactics.scene.InstructionMenu.prototype.init = function () {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.InstructionMenu.prototype.update = function (step) {
+TerraTactics.scene.CreditsMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
     if (this.m_delayFinished) {
@@ -90,6 +90,6 @@ TerraTactics.scene.InstructionMenu.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-TerraTactics.scene.InstructionMenu.prototype.dispose = function () {
+TerraTactics.scene.CreditsMenu.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };
