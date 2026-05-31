@@ -11,7 +11,7 @@
  * @class
  * @classdesc
  *
- * Instruction menu scene.
+ * Credits menu scene.
  */
 TerraTactics.scene.CreditsMenu = function () {
 
