@@ -39,6 +39,8 @@ TerraTactics.scene.PowerUps = function (gameScene) {
 
     this.m_stage.addChild(healthPowerUp);
     this.m_stage.addChild(speedPowerUp);
+
+    this.m_soundId = "PWRupsound";
 };
 
 //------------------------------------------------------------------------------
@@ -96,13 +98,26 @@ TerraTactics.scene.PowerUps.prototype.m_spawnPowerUp = function (type, x, y) {
     powerUp.grounded = false;
 };
 
+TerraTactics.scene.PowerUps.prototype.m_playSound = function (soundId) {
+    var sound = null;
+
+    if (soundId === null || soundId === undefined) {
+        return;
+    }
+
+    sound = rune.system.Application.instance.sounds.sound.get(soundId, true);
+    sound.volume = 0.3;
+    TerraTactics.util.Sound.play(sound, true);
+};
+
 TerraTactics.scene.PowerUps.prototype.m_applyPowerUp = function (powerUp, player) {
     switch (powerUp.type) {
         case "health":
             var currentHealth = player.health;
             if (currentHealth + 30 > player.maxHealth) {
                 player.health = player.maxHealth;
-                return;
+
+                break;
             }
             player.health = currentHealth + 30; // Magic Number
             break;
@@ -112,6 +127,7 @@ TerraTactics.scene.PowerUps.prototype.m_applyPowerUp = function (powerUp, player
             break;
         default:
     }
+    this.m_playSound(this.m_soundId);
 };
 
 TerraTactics.scene.PowerUps.prototype.m_deSpawnPowerUp = function (powerUp) {

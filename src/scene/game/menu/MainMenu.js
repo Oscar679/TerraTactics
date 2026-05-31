@@ -76,7 +76,20 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 
     this.m_selectedIndex = 0;
     this.m_menuItems = [this.m_playGame, this.m_credits, this.m_instructions, this.m_exitGame];
+
+    this.m_soundId = "menuselection";
     this.m_updateSelection();
+};
+
+TerraTactics.scene.MainMenu.prototype.m_playSound = function (soundId) {
+    var sound = null;
+
+    if (soundId === null || soundId === undefined) {
+        return;
+    }
+
+    sound = rune.system.Application.instance.sounds.sound.get("menuselection", true);
+    TerraTactics.util.Sound.play(sound, true);
 };
 
 TerraTactics.scene.MainMenu.prototype.m_updateSelection = function () {
@@ -117,6 +130,7 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
         if (this.m_selectedIndex < 0) {
             this.m_selectedIndex = this.m_menuItems.length - 1;
         }
+        this.m_playSound(this.m_soundId);
         this.m_updateSelection();
     }
 
@@ -126,6 +140,7 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
         if (this.m_selectedIndex >= this.m_menuItems.length) {
             this.m_selectedIndex = 0;
         }
+        this.m_playSound(this.m_soundId);
         this.m_updateSelection();
     }
     if (this.m_player1Controls.confirmHeld || this.m_player2Controls.confirmHeld) {
