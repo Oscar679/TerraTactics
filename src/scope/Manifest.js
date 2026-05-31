@@ -7,12 +7,12 @@
  * 
  * @namespace TerraTactics
  */
-var TerraTactics = function() {
+var TerraTactics = function () {
 
     //--------------------------------------------------------------------------
     // Public static scope
     //--------------------------------------------------------------------------
-    
+
     /**
      * Public scope.
      *
@@ -24,7 +24,7 @@ var TerraTactics = function() {
     //--------------------------------------------------------------------------
     // Package structure
     //--------------------------------------------------------------------------
-    
+
     /**
      * This package contains classes that represent data, or that are used to 
      * manage data. Data can consist of concrete information, or of raw data 
@@ -35,7 +35,7 @@ var TerraTactics = function() {
      * @since 1.0
      */
     m_this.data = {};
-    
+
     /**
      * This package includes the scenes that make up the application. Scenes 
      * are used to represent graphical parts (also known as views) of an 
@@ -64,7 +64,7 @@ var TerraTactics = function() {
      * @since 1.0
      */
     m_this.util = {};
-    
+
     //--------------------------------------------------------------------------
     // Return public scope object
     //--------------------------------------------------------------------------
@@ -86,9 +86,9 @@ var TerraTactics = function() {
  *
  * @ignore
  */
-TerraTactics.bootstrap = function(callback) {
+TerraTactics.bootstrap = function (callback) {
     var app = new TerraTactics.system.Main();
-        app.start(callback);
-        
+    app.start(callback);
+
     return app;
 };

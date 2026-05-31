@@ -12,12 +12,12 @@
  * 
  * Entry point class.
  */
-TerraTactics.system.Main = function() {
+TerraTactics.system.Main = function () {
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
      * Extend (Rune) Application.
      */
@@ -27,10 +27,10 @@ TerraTactics.system.Main = function() {
         build: "1.0.0",
         scene: TerraTactics.scene.MainMenu,
         resources: TerraTactics.data.Requests,
-        useGamepads:true,
-        useKeyboard:true,
+        useGamepads: true,
+        useKeyboard: true,
         framerate: 60,
-        debug: true
+        debug: false
     });
 };
 

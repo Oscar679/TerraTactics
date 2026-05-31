@@ -24,7 +24,7 @@ TerraTactics.scene.Health = function (x, y, gameScene) {
     /**
      * Calls the constructor method of the super class.
      */
-   TerraTactics.scene.PowerUp.call(this);
+    TerraTactics.scene.PowerUp.call(this);
     this.m_x = x;
     this.m_y = y;
     this.m_gameScene = gameScene;
@@ -50,7 +50,7 @@ TerraTactics.scene.Health.prototype.constructor = TerraTactics.scene.Health;
  */
 TerraTactics.scene.Health.prototype.init = function () {
     rune.display.Sprite.call(this, this.m_x, this.m_y, 48, 48, "health");
-    
+
     this.scaleX = 0.4;
     this.scaleY = 0.4;
 };
@@ -64,7 +64,7 @@ TerraTactics.scene.Health.prototype.init = function () {
  * @returns {undefined}
  */
 TerraTactics.scene.Health.prototype.update = function (step) {
-   TerraTactics.scene.PowerUp.prototype.update.call(this, step);
+    TerraTactics.scene.PowerUp.prototype.update.call(this, step);
 };
 
 /**
