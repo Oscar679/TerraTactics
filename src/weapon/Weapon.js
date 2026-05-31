@@ -168,7 +168,7 @@ TerraTactics.scene.Weapon.prototype.m_playSound = function (soundId) {
     }
 
     sound = rune.system.Application.instance.sounds.sound.get(soundId, true);
-    sound.play(true);
+    TerraTactics.util.Sound.play(sound, true);
 };
 
 TerraTactics.scene.Weapon.prototype.m_playFireSound = function () {

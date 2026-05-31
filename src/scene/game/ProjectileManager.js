@@ -53,8 +53,9 @@ TerraTactics.scene.ProjectileManager.prototype.m_fireActiveWeapon = function (ta
 };
 
 TerraTactics.scene.ProjectileManager.prototype.m_applyExplosion = function (x, y) {
+    var c = this.m_gameScene.cameras.getCameraAt(0);
     var explosionGraphic = this.m_gameScene.m_explosionGraphic;
-    this.m_gameScene.stage.addChild(explosionGraphic);
+    c.addChild(explosionGraphic);
     explosionGraphic.moveTo(x, y);
 
     this.m_explosionTimer = this.m_gameScene.timers.create({

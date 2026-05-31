@@ -1,4 +1,8 @@
 
+/**
+ * Manages weapons.
+ */
+
 TerraTactics.data = TerraTactics.data || {};
 
 TerraTactics.data.Weapons = {

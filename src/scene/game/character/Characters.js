@@ -98,7 +98,7 @@ TerraTactics.scene.Characters.prototype.adjustCooldowns = function (character) {
 TerraTactics.scene.Characters.prototype.m_damageTaken = function (character, damage) {
     var char = character;
     character.m_health -= damage;
-    this.m_ouchSound.play();
+    TerraTactics.util.Sound.play(this.m_ouchSound);
     this.m_gameScene.timers.create({
         duration: 250,
         repeat: 3,
@@ -125,13 +125,11 @@ TerraTactics.scene.Characters.prototype.m_damageTaken = function (character, dam
 
 TerraTactics.scene.Characters.prototype.m_playJumpSound = function () {
     if (this.m_isWalkSoundPlaying) {
-        if (!this.m_walkSound.paused) {
-            this.m_walkSound.stop();
-        }
+        TerraTactics.util.Sound.stop(this.m_walkSound);
         this.m_isWalkSoundPlaying = false;
     }
 
-    this.m_jumpSound.play(true);
+    TerraTactics.util.Sound.play(this.m_jumpSound, true);
 };
 
 TerraTactics.scene.Characters.prototype.m_setWinnerText = function (playerEntry) {
@@ -207,7 +205,7 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         if (character !== null) {
             if (character.m_isTouchingLava) {
                 character.m_isTouchingLava = false;
-                this.m_lavaShizzle.play();
+                TerraTactics.util.Sound.play(this.m_lavaShizzle);
             }
         }
     }
@@ -252,14 +250,12 @@ TerraTactics.scene.Characters.prototype.update = function (tilemapLayer) {
         activePlayer.character != null) {
         if ((activePlayer.character.m_movingLeft || activePlayer.character.m_movingRight) && !activePlayer.character.m_isJumping) {
             if (!this.m_isWalkSoundPlaying) {
-                this.m_walkSound.play(true);
+                TerraTactics.util.Sound.play(this.m_walkSound, true);
                 this.m_isWalkSoundPlaying = true;
             }
         } else {
             if (this.m_isWalkSoundPlaying) {
-                if (!this.m_walkSound.paused) {
-                    this.m_walkSound.stop();
-                }
+                TerraTactics.util.Sound.stop(this.m_walkSound);
                 this.m_isWalkSoundPlaying = false;
             }
         }

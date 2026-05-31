@@ -56,7 +56,7 @@ TerraTactics.scene.Game.prototype.init = function () {
     this.m_themeMusic = this.m_soundChannel.get("theme_music");
     this.m_themeMusic.loop = true;
     this.m_themeMusic.volume = 0.5;
-    this.m_themeMusic.play();
+    TerraTactics.util.Sound.play(this.m_themeMusic);
 
     // load tilemap
     this.stage.m_map.load("map");
@@ -456,7 +456,7 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
             this.m_roundTime--;
             this.m_roundTimeString.text = this.m_padNumber(this.m_roundTime);
             if (this.m_roundTime <= 3 && this.m_roundTime > 0) {
-                this.m_tick3SecSound.play();
+                TerraTactics.util.Sound.play(this.m_tick3SecSound);
             }
         },
         onComplete: this.m_onRoundTimerComplete,
@@ -467,7 +467,7 @@ TerraTactics.scene.Game.prototype.m_startRoundTimer = function () {
 };
 
 TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
-    this.m_tick3SecSound.stop();
+    TerraTactics.util.Sound.stop(this.m_tick3SecSound);
     this.m_roundTimer = null;
 
     if (this.m_activePlayer != null && this.m_activePlayer.character != null) {
@@ -486,15 +486,13 @@ TerraTactics.scene.Game.prototype.m_onRoundTimerComplete = function () {
 };
 
 TerraTactics.scene.Game.prototype.m_endTurn = function () {
-    if (this.m_tick3SecSound !== null) {
-        this.m_tick3SecSound.stop();
-    }
+    TerraTactics.util.Sound.stop(this.m_tick3SecSound);
 
     if (this.m_gameEnd === true) {
         return;
     }
 
-    this.m_turnChangeSound.play();
+    TerraTactics.util.Sound.play(this.m_turnChangeSound);
     this.m_cancelAim();
     this.m_characters.switchTurn();
     this.m_activePlayer = this.m_characters.getActive();
@@ -607,16 +605,12 @@ TerraTactics.scene.Game.prototype.update = function (step) {
             this.application.scenes.load([new TerraTactics.scene.MainMenu()]);
         }
         if (!this.m_gameOverLoaded) {
-            if (!this.m_tick3SecSound.paused) {
-                this.m_tick3SecSound.stop();
-            }
+            TerraTactics.util.Sound.stop(this.m_tick3SecSound);
 
-            if (!this.m_turnChangeSound.paused) {
-                this.m_turnChangeSound.stop();
-            }
+            TerraTactics.util.Sound.stop(this.m_turnChangeSound);
 
             if (this.m_victory.paused && !this.m_victory.ended) {
-                this.m_victory.play();
+                TerraTactics.util.Sound.play(this.m_victory);
             }
 
             for (var i = 0; i < this.m_mapCopyFront.length; i++) {
@@ -692,7 +686,7 @@ TerraTactics.scene.Game.prototype.update = function (step) {
  * @returns {undefined}
  */
 TerraTactics.scene.Game.prototype.dispose = function () {
-    this.m_themeMusic.stop();
-    this.m_victory.stop();
+    TerraTactics.util.Sound.stop(this.m_themeMusic);
+    TerraTactics.util.Sound.stop(this.m_victory);
     rune.scene.Scene.prototype.dispose.call(this);
 };
