@@ -52,26 +52,30 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
     this.m_player1Controls = new TerraTactics.util.Controls(0);
     this.m_player2Controls = new TerraTactics.util.Controls(1);
 
-    this.m_playGame = new rune.display.Sprite(160, 50, 96, 96, "PlayGame");
-    this.m_instructions = new rune.display.Sprite(160, 100, 96, 96, "gameRules");
-    this.m_exitGame = new rune.display.Sprite(160, 150, 96, 96, "ExitGame");
+    this.m_playGame = new rune.display.Sprite(160, 25, 96, 96, "PlayGame");
+    this.m_credits = new rune.display.Sprite(160, 75, 96, 96, "selectedCredits");
+    this.m_instructions = new rune.display.Sprite(160, 125, 96, 96, "gameRules");
+    this.m_exitGame = new rune.display.Sprite(160, 175, 96, 96, "ExitGame");
 
     this.m_playGame.animation.create("idle", [0], 1, true);
+    this.m_credits.animation.create("idle", [0], 1, true);
     this.m_instructions.animation.create("idle", [0], 1, true);
     this.m_exitGame.animation.create("idle", [0], 1, true);
 
     this.m_playGame.animation.create("selected", [1, 2], 6, true);
+    this.m_credits.animation.create("selected", [1, 2], 6, true);
     this.m_instructions.animation.create("selected", [1, 2], 6, true);
     this.m_exitGame.animation.create("selected", [1, 2], 6, true);
 
     this.stage.addChild(this.m_playGame);
+    this.stage.addChild(this.m_credits);
     this.stage.addChild(this.m_instructions);
     this.stage.addChild(this.m_exitGame);
 
     this.m_yAxisLocked = false;
 
     this.m_selectedIndex = 0;
-    this.m_menuItems = [this.m_playGame, this.m_instructions, this.m_exitGame];
+    this.m_menuItems = [this.m_playGame, this.m_credits, this.m_instructions, this.m_exitGame];
     this.m_updateSelection();
 };
 
@@ -130,10 +134,14 @@ TerraTactics.scene.MainMenu.prototype.update = function (step) {
         }
 
         if (this.m_selectedIndex === 1) {
-            this.application.scenes.load([new TerraTactics.scene.InstructionMenu()]);
+            this.application.scenes.load([new TerraTactics.scene.CreditsMenu()]);
         }
 
         if (this.m_selectedIndex === 2) {
+            this.application.scenes.load([new TerraTactics.scene.InstructionMenu()]);
+        }
+
+        if (this.m_selectedIndex === 3) {
             try {
                 window.close();
             } catch (err) {

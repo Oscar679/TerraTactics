@@ -30,7 +30,7 @@ TerraTactics.system.Main = function () {
         useGamepads: true,
         useKeyboard: true,
         framerate: 60,
-        debug: false
+        debug: true
     });
 };
 
