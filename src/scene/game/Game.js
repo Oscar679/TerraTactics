@@ -114,13 +114,13 @@ TerraTactics.scene.Game.prototype.init = function () {
     var globalTimerCenterX = this.totalTimeBar.x + this.totalTimeBar.width * this.totalTimeBar.scaleX / 2;
     var roundTimerCenterX = this.roundTimeBar.x + this.roundTimeBar.width * this.roundTimeBar.scaleX / 2;
 
-    this.m_timeString.centerX += 14;
+    this.m_timeString.centerX += 8;
     this.m_timeString.centerY = 25;
     this.m_roundTimeString.centerX += 20;
     this.m_roundTimeString.centerY = 25;
 
     this.m_globalTitle.centerY = 14;
-    this.m_globalTitle.centerX += 14;
+    this.m_globalTitle.centerX += 8;
 
     this.m_roundTitle.centerY = 14;
     this.m_roundTitle.centerX += 14;
