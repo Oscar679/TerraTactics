@@ -143,6 +143,12 @@ Object.defineProperty(TerraTactics.util.Controls.prototype, "anyButton", {
     }
 });
 
+Object.defineProperty(TerraTactics.util.Controls.prototype, "anyButtonHeld", {
+    get: function () {
+        return this.m_gamepad.anyButton;
+    }
+});
+
 Object.defineProperty(TerraTactics.util.Controls.prototype, "confirmHeld", {
     get: function () {
         return this.m_keyboard.confirm || this.m_gamepad.confirmHeld;

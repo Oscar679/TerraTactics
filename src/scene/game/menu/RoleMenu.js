@@ -155,7 +155,6 @@ TerraTactics.scene.RoleMenu.prototype.init = function () {
     this.stage.addChild(this.m_leftArrow2);
     this.stage.addChild(this.m_rightArrow2);
 
-    this.m_delayFinished = false;
     this.m_player1XAxisLocked = false;
     this.m_player2XAxisLocked = false;
 };
@@ -195,7 +194,7 @@ TerraTactics.scene.RoleMenu.prototype.m_updateUIStats = function (role1, role2) 
 };
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
+ * This method is automatically executed once per "tick". The method is used for
  * calculations such as application logic.
  *
  * @param {number} step Fixed time step.
@@ -205,11 +204,11 @@ TerraTactics.scene.RoleMenu.prototype.m_updateUIStats = function (role1, role2) 
 TerraTactics.scene.RoleMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    var p1Left = this.m_player1Controls.left || this.m_player1Controls.aimX < -0.5;
-    var p1Right = this.m_player1Controls.right || this.m_player1Controls.aimX > 0.5;
+    var p1Left = this.m_player1Controls.m_gamepad.left || this.m_player1Controls.aimX < -0.5;
+    var p1Right = this.m_player1Controls.m_gamepad.right || this.m_player1Controls.aimX > 0.5;
 
-    var p2Left = this.m_player2Controls.left || this.m_player2Controls.aimX < -0.5;
-    var p2Right = this.m_player2Controls.right || this.m_player2Controls.aimX > 0.5;
+    var p2Left = this.m_player2Controls.m_gamepad.left || this.m_player2Controls.aimX < -0.5;
+    var p2Right = this.m_player2Controls.m_gamepad.right || this.m_player2Controls.aimX > 0.5;
 
     if (!p1Left && !p1Right) {
         this.m_player1XAxisLocked = false;
@@ -232,18 +231,8 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
     }
 
     if (this.m_player1Locked && this.m_player2Locked) {
-        this.timers.create({
-            duration: 500,
-            repeat: 0,
-            onComplete: function () {
-                this.m_delayFinished = true;
-            },
-            scope: this
-        });
-        if (this.m_delayFinished) {
-            if (this.m_player1Controls.anyButton || this.m_player2Controls.anyButton) {
-                this.application.scenes.load([new TerraTactics.scene.Game(this.m_selectedRoles)]);
-            }
+        if (this.m_player1Controls.m_gamepad.confirm || this.m_player2Controls.m_gamepad.confirm) {
+            this.application.scenes.load([new TerraTactics.scene.Game(this.m_selectedRoles)]);
         }
     }
 
@@ -264,7 +253,7 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
             this.m_player1XAxisLocked = true;
         }
 
-        if (this.m_player1Controls.confirm) {
+        if (this.m_player1Controls.m_gamepad.confirm) {
             this.m_confirmRole("player1", this.m_selectedRolePlayer1);
         }
     }
@@ -286,7 +275,7 @@ TerraTactics.scene.RoleMenu.prototype.update = function (step) {
             this.m_player2XAxisLocked = true;
         }
 
-        if (this.m_player2Controls.confirm) {
+        if (this.m_player2Controls.m_gamepad.confirm) {
             this.m_confirmRole("player2", this.m_selectedRolePlayer2);
         }
     }

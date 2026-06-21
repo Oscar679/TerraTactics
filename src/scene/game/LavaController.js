@@ -15,9 +15,9 @@
  */
 TerraTactics.scene.LavaController = function (gameScene) {
     this.m_gameScene = gameScene;
-
+    var c = this.m_gameScene.cameras.getCameraAt(0);
     rune.display.Sprite.call(this, 0, 225, 400, 225, "lava");
-    this.m_gameScene.stage.addChild(this);
+    c.addChild(this);
 
     this.animation.create("idle", [0, 1, 2], 1.5, true);
     this.animation.play("idle");

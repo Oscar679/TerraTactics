@@ -51,6 +51,8 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 
     this.m_player1Controls = new TerraTactics.util.Controls(0);
     this.m_player2Controls = new TerraTactics.util.Controls(1);
+    this.application.inputs.reset();
+    this.m_waitingForInputRelease = true;
 
     this.m_playGame = new rune.display.Sprite(160, 25, 96, 96, "PlayGame");
     this.m_credits = new rune.display.Sprite(160, 75, 96, 96, "selectedCredits");
@@ -79,6 +81,10 @@ TerraTactics.scene.MainMenu.prototype.init = function () {
 
     this.m_soundId = "menuselection";
     this.m_updateSelection();
+};
+
+TerraTactics.scene.MainMenu.prototype.m_anyInputHeld = function () {
+    return this.m_player1Controls.anyButtonHeld || this.m_player2Controls.anyButtonHeld;
 };
 
 TerraTactics.scene.MainMenu.prototype.m_playSound = function (soundId) {
@@ -113,6 +119,11 @@ TerraTactics.scene.MainMenu.prototype.m_updateSelection = function () {
 TerraTactics.scene.MainMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     var aimYValue = 0;
+
+    if (this.m_waitingForInputRelease) {
+        this.m_waitingForInputRelease = this.m_anyInputHeld();
+        return;
+    }
 
     if (this.m_player1Controls.aimY < -0.5 || this.m_player1Controls.aimY > 0.5) {
         aimYValue = this.m_player1Controls.aimY;
